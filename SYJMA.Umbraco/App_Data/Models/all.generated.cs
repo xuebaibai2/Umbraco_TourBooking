@@ -8,7 +8,7 @@ using  Umbraco.Web;
 using  Umbraco.ModelsBuilder;
 using  Umbraco.ModelsBuilder.Umbraco;
 [assembly: PureLiveAssembly]
-[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "86a92140f4eb33db")]
+[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "de6992ec4feb1c42")]
 [assembly:System.Reflection.AssemblyVersion("0.0.0.1")]
 
 
@@ -556,6 +556,95 @@ namespace Umbraco.Web.PublishedContentModels
 
 		///<summary>
 		/// Program: Adult's Program / Tour
+		///</summary>
+		[ImplementPropertyType("program")]
+		public object Program
+		{
+			get { return this.GetPropertyValue("program"); }
+		}
+	}
+
+	/// <summary>University</summary>
+	[PublishedContentModel("university")]
+	public partial class University : PublishedContentModel
+	{
+#pragma warning disable 0109 // new is redundant
+		public new const string ModelTypeAlias = "university";
+		public new const PublishedItemType ModelItemType = PublishedItemType.Content;
+#pragma warning restore 0109
+
+		public University(IPublishedContent content)
+			: base(content)
+		{ }
+
+#pragma warning disable 0109 // new is redundant
+		public new static PublishedContentType GetModelContentType()
+		{
+			return PublishedContentType.Get(ModelItemType, ModelTypeAlias);
+		}
+#pragma warning restore 0109
+
+		public static PublishedPropertyType GetModelPropertyType<TValue>(Expression<Func<University, TValue>> selector)
+		{
+			return PublishedContentModelUtility.GetModelPropertyType(GetModelContentType(), selector);
+		}
+
+		///<summary>
+		/// Comments: Comments of university booking
+		///</summary>
+		[ImplementPropertyType("comments")]
+		public string Comments
+		{
+			get { return this.GetPropertyValue<string>("comments"); }
+		}
+
+		///<summary>
+		/// Name of Campus: Name of campus for university booking
+		///</summary>
+		[ImplementPropertyType("nameOfCampus")]
+		public string NameOfCampus
+		{
+			get { return this.GetPropertyValue<string>("nameOfCampus"); }
+		}
+
+		///<summary>
+		/// Name of University: Name of university for booking
+		///</summary>
+		[ImplementPropertyType("nameOfUniversity")]
+		public string NameOfUniversity
+		{
+			get { return this.GetPropertyValue<string>("nameOfUniversity"); }
+		}
+
+		///<summary>
+		/// Number of Staff: University staff number for booking
+		///</summary>
+		[ImplementPropertyType("numberOfStaff")]
+		public string NumberOfStaff
+		{
+			get { return this.GetPropertyValue<string>("numberOfStaff"); }
+		}
+
+		///<summary>
+		/// Number of Students: University students number for booking
+		///</summary>
+		[ImplementPropertyType("numberOfStudents")]
+		public string NumberOfStudents
+		{
+			get { return this.GetPropertyValue<string>("numberOfStudents"); }
+		}
+
+		///<summary>
+		/// Preferred Date: Preferred date for university booking
+		///</summary>
+		[ImplementPropertyType("preferredDate")]
+		public DateTime PreferredDate
+		{
+			get { return this.GetPropertyValue<DateTime>("preferredDate"); }
+		}
+
+		///<summary>
+		/// Program: Program for university
 		///</summary>
 		[ImplementPropertyType("program")]
 		public object Program

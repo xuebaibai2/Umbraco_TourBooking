@@ -23,68 +23,79 @@ namespace SYJMA.Umbraco.Controllers
             if (bookType.Equals("School"))
             {
                 SchoolModel school = new SchoolModel();
-                List<SelectListItem> subjectList = new List<SelectListItem>();
-                List<SelectListItem> yearList = new List<SelectListItem>();
-                //var dropdownSubjectList = DataType.SchoolSubjectDropdownList().PreValuesAsDictionary.Values;
-                //foreach (var item in dropdownSubjectList)
-                //{
-                //    subjectList.Add(new SelectListItem { Text = item.Value, Value = item.Value });
-                //}
-
-                //var dropdownYearList = DataType.SchoolYearDropdownList().PreValuesAsDictionary.Values;
-                //foreach (var item in dropdownYearList)
-                //{
-                //    yearList.Add(new SelectListItem { Text = item.Value, Value = item.Value });
-                //}
-
-                school.SubjectList = GetDropdownListByListType(DataType.GetSchoolSubjectDropdownList_Values());
-                school.YearList = GetDropdownListByListType(DataType.GetSchoolYearDropdownList_Values());
+                school.SubjectList = DataType.GetSchoolSubjectDropdownList();
+                school.YearList = DataType.GetSchoolYearDropdownList();
                 return PartialView("_SchoolVisit", school);
             }
-            //else if (bookType.Equals("Adult"))
-            //{
-            //    AdultModel adult = new AdultModel();
-            //    List<SelectListItem> programList = new List<SelectListItem>();
-            //    var dropdownProgramList 
-            //}
-
+            else if (bookType.Equals("Adult"))
+            {
+                AdultModel adult = new AdultModel();
+                adult.ListOfProgram = DataType.GetAdultProgramDropdownList();
+                return PartialView("_AdultVisit", adult);
+            }
+            else if (bookType.Equals("University"))
+            {
+                UniversityModel uni = new UniversityModel();
+                uni.ListOfProgram = DataType.GetUniProgramDropdownList();
+                return PartialView("_UniversityVisit",uni);
+            }
             // Return page not found
             return null;
         }
-
-        private List<SelectListItem> GetDropdownListByListType(ICollection<PreValue> dropdownList)
-        {
-            List<SelectListItem> tempList = new List<SelectListItem>();
-            foreach (var item in dropdownList)
-            {
-                tempList.Add(new SelectListItem { Text = item.Value, Value = item.Value});
-            }
-            return tempList;
-        }
-
-        private const int SCHOOLVISIT_CONTENTID = 1081;
 
         public ActionResult PostInitialPage_School(SchoolModel school)
         {
             var schoolRecord = Services.ContentService.CreateContent(school.SchoolName + " - " + school.SubjectArea, CurrentPage.Id, "School");
 
-            int selectedYearId = DataType.GetSchoolYearDropdownList_PreValuesAsDictionary()
-                .Where(m => m.Value.Value.Equals(school.Year))
-                .Select(m => m.Value.Id).First();
-
-            int selectedSubjectId = DataType.GetSchoolSubjectDropdownList_PreValuesAsDictionary()
-                .Where(m => m.Value.Value.Equals(school.SubjectArea))
-                .Select(m => m.Value.Id).First();
+            int selectedYearId = DataType.GetSchoolYearDropdownList_SelectedID(school);
+            int selectedSubjectId = DataType.GetSchoolSubjectDropdownList_SelectedID(school);
 
             schoolRecord.SetValue("nameOfSchool",school.SchoolName);
             schoolRecord.SetValue("year", selectedYearId);
-            schoolRecord.SetValue("preferredDateSchool", Convert.ToDateTime(school.PreferredDate, new System.Globalization.CultureInfo("en-AU", true)));
+            schoolRecord.SetValue("preferredDateSchool", GetDateTime(school));
             schoolRecord.SetValue("subjectArea", selectedSubjectId);
             schoolRecord.SetValue("numberOfStudents",school.StudentsNumber);
             schoolRecord.SetValue("numberOfStaff",school.StaffNumber);
             schoolRecord.SetValue("comments",school.Comments);
             Services.ContentService.SaveAndPublishWithStatus(schoolRecord);
             return RedirectToCurrentUmbracoPage();
+        }
+
+        public ActionResult PostInitialPage_Adult(AdultModel adult)
+        {
+            var adultRecord = Services.ContentService.CreateContent(adult.GroupName + " - " + adult.Program, CurrentPage.Id, "Adult");
+
+            int selectedProgramId = DataType.GetAdultProgramDropdownList_SelectedID(adult);
+
+            adultRecord.SetValue("nameOfGroup",adult.GroupName);
+            adultRecord.SetValue("program",selectedProgramId);
+            adultRecord.SetValue("preferredDateAdult", GetDateTime(adult));
+            adultRecord.SetValue("numberOfAdults", adult.AdultNumber);
+            adultRecord.SetValue("comments", adult.Comments);
+            Services.ContentService.SaveAndPublishWithStatus(adultRecord);
+            return RedirectToCurrentUmbracoPage();
+        }
+
+        public ActionResult PostInitialPage_Uni(UniversityModel uni)
+        {
+            var uniRecord = Services.ContentService.CreateContent(uni.UniName + " - " + uni.Program, CurrentPage.Id, "University");
+
+            int selectedProgramId = DataType.GetUniProgramDropdownList_SelectedID(uni);
+
+            uniRecord.SetValue("nameOfUniversity", uni.UniName);
+            uniRecord.SetValue("nameOfCampus", uni.CampusName);
+            uniRecord.SetValue("program", selectedProgramId);
+            uniRecord.SetValue("preferredDate", GetDateTime(uni));
+            uniRecord.SetValue("numberOfStudents", uni.StudentNumber);
+            uniRecord.SetValue("numberOfStaff", uni.StaffNumber);
+            uniRecord.SetValue("comments", uni.Comments);
+            Services.ContentService.SaveAndPublishWithStatus(uniRecord);
+            return RedirectToCurrentUmbracoPage();
+        }
+
+        private DateTime GetDateTime(InitialModel viewModel)
+        {
+            return Convert.ToDateTime(viewModel.PreferredDate, new System.Globalization.CultureInfo("en-AU", true));
         }
 	}
 }

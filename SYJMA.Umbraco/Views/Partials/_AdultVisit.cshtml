@@ -4,10 +4,11 @@
 @* Date Pciker jQuery *@
 <script src="~/Scripts/DatePicker.js"></script>
 
+@using (Html.BeginUmbracoForm<InitialController>("PostInitialPage_Adult"))
 {
     <div class="row">
         <div class="form-group col-md-12">
-            @Html.Label("Name", "Name of School ")
+            @Html.Label("Name", "Name of Group ")
             @Html.TextBoxFor(m => m.GroupName, new { @id = "Name", @class = "form-control" })
         </div>
 
@@ -21,7 +22,7 @@
             @Html.TextBoxFor(m => m.PreferredDate, new { @id = "datepicker", @class = "form-control" })
         </div>
 
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-12">
             @Html.Label("adultNo", "Number of Adult ")
             @Html.TextBoxFor(m => m.AdultNumber, new { @id = "adultNo", @class = "form-control" })
         </div>

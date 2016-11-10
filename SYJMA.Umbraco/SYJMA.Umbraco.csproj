@@ -435,6 +435,7 @@
     <Content Include="Config\applications.config" />
     <Content Include="Config\404handlers.config" />
     <Content Include="Views\Partials\_AdultVisit.cshtml" />
+    <Content Include="Views\Partials\_UniversityVisit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

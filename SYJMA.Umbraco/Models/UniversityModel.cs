@@ -10,6 +10,7 @@ namespace SYJMA.Umbraco.Models
     {
         public string UniName { get; set; }
         public string Program { get; set; }
+        public string CampusName { get; set; }
         public int StaffNumber { get; set; }
         public int StudentNumber { get; set; }
         public IEnumerable<SelectListItem> ListOfProgram { get; set; }
