@@ -1,0 +1,9 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage<ContentModels.InitialIdentification>
+@using ContentModels = Umbraco.Web.PublishedContentModels;
+@{
+	Layout = "Master.cshtml";
+    string bookType = CurrentPage.bookType;
+}
+
+<h3 class="well">@CurrentPage.bookTypeDescription</h3>
+@Html.Action("InitialIdentification", "Initial", new { bookType = bookType})

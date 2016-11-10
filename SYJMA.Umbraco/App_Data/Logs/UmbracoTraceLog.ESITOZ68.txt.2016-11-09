@@ -1,0 +1,41 @@
+﻿ 2016-11-09 03:19:31,401 [P11392/D16/T159] INFO  umbraco.BusinessLogic.Log - Log scrubbed.  Removed all items older than 2016-11-08 03:19:31
+ 2016-11-09 07:19:31,355 [P11392/D16/T159] INFO  umbraco.BusinessLogic.Log - Log scrubbed.  Removed all items older than 2016-11-08 07:19:31
+ 2016-11-09 09:14:57,552 [P11392/D16/T268] INFO  Umbraco.Core.Security.BackOfficeSignInManager - Event Id: 0, state: Login attempt succeeded for username admin from IP address ::1
+ 2016-11-09 09:14:57,553 [P11392/D16/T268] INFO  Umbraco.Core.Security.BackOfficeSignInManager - Event Id: 0, state: User: admin logged in from IP address ::1
+ 2016-11-09 09:14:59,015 [P11392/D16/T268] INFO  Umbraco.Core.PluginManager - Starting resolution types of umbraco.interfaces.IApplication
+ 2016-11-09 09:14:59,070 [P11392/D16/T268] INFO  Umbraco.Core.PluginManager - Completed resolution of types of umbraco.interfaces.IApplication, found 0 (took 54ms)
+ 2016-11-09 09:15:01,829 [P11392/D16/T268] INFO  Umbraco.Core.PluginManager - Starting resolution types of Umbraco.Web.Trees.TreeController
+ 2016-11-09 09:15:01,836 [P11392/D16/T268] INFO  Umbraco.Core.PluginManager - Completed resolution of types of Umbraco.Web.Trees.TreeController, found 0 (took 7ms)
+ 2016-11-09 09:15:01,838 [P11392/D16/T268] INFO  Umbraco.Core.PluginManager - Starting resolution types of umbraco.interfaces.ITree
+ 2016-11-09 09:15:01,849 [P11392/D16/T268] INFO  Umbraco.Core.PluginManager - Completed resolution of types of umbraco.interfaces.ITree, found 0 (took 10ms)
+ 2016-11-09 09:15:55,269 [P11392/D16/T253] INFO  Umbraco.Core.PluginManager - Starting resolution types of umbraco.interfaces.IAction
+ 2016-11-09 09:15:55,300 [P11392/D16/T253] INFO  Umbraco.Core.PluginManager - Completed resolution of types of umbraco.interfaces.IAction, found 0 (took 30ms)
+ 2016-11-09 09:21:35,530 [P11392/D16/T122] WARN  Umbraco.Web.Models.Mapping.PreValueDisplayResolver - Could not find persisted pre-value for field editor
+ 2016-11-09 09:21:35,530 [P11392/D16/T122] WARN  Umbraco.Web.Models.Mapping.PreValueDisplayResolver - Could not find persisted pre-value for field hideLabel
+ 2016-11-09 09:23:06,874 [P11392/D16/T221] INFO  Umbraco.Core.PluginManager - Starting resolution types of Umbraco.Web.Editors.IEditorValidator
+ 2016-11-09 09:23:06,884 [P11392/D16/T221] INFO  Umbraco.Core.PluginManager - Completed resolution of types of Umbraco.Web.Editors.IEditorValidator, found 0 (took 9ms)
+ 2016-11-09 09:23:07,016 [P11392/D16/T221] INFO  Umbraco.Core.PluginManager - Starting resolution types of umbraco.interfaces.ICacheRefresher
+ 2016-11-09 09:23:07,031 [P11392/D16/T221] INFO  Umbraco.Core.PluginManager - Completed resolution of types of umbraco.interfaces.ICacheRefresher, found 0 (took 15ms)
+ 2016-11-09 09:23:07,630 [P11392/D16/T258] WARN  Umbraco.Web.Models.Mapping.PreValueDisplayResolver - Could not find persisted pre-value for field editor
+ 2016-11-09 09:23:07,630 [P11392/D16/T258] WARN  Umbraco.Web.Models.Mapping.PreValueDisplayResolver - Could not find persisted pre-value for field hideLabel
+ 2016-11-09 09:23:08,836 [P11392/D16/T265] INFO  Umbraco.Core.PluginManager - Starting resolution types of Umbraco.Web.HealthCheck.HealthCheck
+ 2016-11-09 09:23:08,871 [P11392/D16/T265] INFO  Umbraco.Core.PluginManager - Completed resolution of types of Umbraco.Web.HealthCheck.HealthCheck, found 0 (took 34ms)
+ 2016-11-09 09:24:07,361 [P11392/D16/T263] WARN  Umbraco.Web.Models.Mapping.PreValueDisplayResolver - Could not find persisted pre-value for field editor
+ 2016-11-09 09:24:07,361 [P11392/D16/T263] WARN  Umbraco.Web.Models.Mapping.PreValueDisplayResolver - Could not find persisted pre-value for field hideLabel
+ 2016-11-09 09:26:44,612 [P11392/D16/T263] WARN  Umbraco.Web.Models.Mapping.PreValueDisplayResolver - Could not find persisted pre-value for field editor
+ 2016-11-09 09:26:44,612 [P11392/D16/T263] WARN  Umbraco.Web.Models.Mapping.PreValueDisplayResolver - Could not find persisted pre-value for field hideLabel
+ 2016-11-09 09:36:16,180 [P11392/D16/T124] WARN  Umbraco.Web.Models.Mapping.PreValueDisplayResolver - Could not find persisted pre-value for field editor
+ 2016-11-09 09:36:16,180 [P11392/D16/T124] WARN  Umbraco.Web.Models.Mapping.PreValueDisplayResolver - Could not find persisted pre-value for field hideLabel
+ 2016-11-09 09:37:47,740 [P11392/D16/T251] WARN  Umbraco.Web.Models.Mapping.PreValueDisplayResolver - Could not find persisted pre-value for field editor
+ 2016-11-09 09:37:47,740 [P11392/D16/T251] WARN  Umbraco.Web.Models.Mapping.PreValueDisplayResolver - Could not find persisted pre-value for field hideLabel
+ 2016-11-09 09:43:41,372 [P11392/D16/T127] INFO  Umbraco.Core.PluginManager - Starting resolution types of Umbraco.Web.Trees.TreeController
+ 2016-11-09 09:43:41,372 [P11392/D16/T127] INFO  Umbraco.Core.PluginManager - Completed resolution of types of Umbraco.Web.Trees.TreeController, found 0 (took 0ms)
+ 2016-11-09 09:43:41,400 [P11392/D16/T237] INFO  Umbraco.Core.PluginManager - Starting resolution types of umbraco.interfaces.ITree
+ 2016-11-09 09:43:41,465 [P11392/D16/T237] INFO  Umbraco.Core.PluginManager - Completed resolution of types of umbraco.interfaces.ITree, found 0 (took 64ms)
+ 2016-11-09 10:06:15,536 [P11392/D16/T233] INFO  Umbraco.Core.Logging.OwinLogger - Event Id: 0, state: User logged will be logged out due to timeout: admin, IP Address: ::1
+ 2016-11-09 10:06:15,552 [P11392/D16/T230] INFO  Umbraco.Core.Logging.OwinLogger - Event Id: 0, state: User logged will be logged out due to timeout: admin, IP Address: ::1
+ 2016-11-09 10:24:30,853 [P11392/D16/T215] INFO  Umbraco.Core.Security.BackOfficeSignInManager - Event Id: 0, state: Login attempt succeeded for username admin from IP address ::1
+ 2016-11-09 10:24:30,853 [P11392/D16/T215] INFO  Umbraco.Core.Security.BackOfficeSignInManager - Event Id: 0, state: User: admin logged in from IP address ::1
+ 2016-11-09 10:44:01,523 [P11392/D16/T215] INFO  Umbraco.Core.Logging.OwinLogger - Event Id: 0, state: User logged will be logged out due to timeout: admin, IP Address: ::1
+ 2016-11-09 11:19:31,323 [P11392/D16/T225] INFO  umbraco.BusinessLogic.Log - Log scrubbed.  Removed all items older than 2016-11-08 11:19:31
+ 2016-11-09 15:32:27,768 [P11392/D16/T213] INFO  umbraco.BusinessLogic.Log - Log scrubbed.  Removed all items older than 2016-11-08 15:32:27
