@@ -16,6 +16,17 @@ namespace SYJMA.Umbraco.Controllers
         private const int SCHOOL_YEAR_DROPDOWNLIST_KEY = 1056;
         private const int ADULT_PROGRAM_DROPDOWNLIST_KEY = 1060;
         private const int UNI_PROGRAM_DROPDOWNLIST_KEY = 1063;
+        private const int SCHOOL_PROGRAM_RADIOBOX_KEY = 1103;
+
+        public void TEST()
+        {
+            List<string> teststring = new List<string>();
+            teststring.Add("third");
+            //teststring.Add("second");
+
+            ApplicationContext.Services.DataTypeService.SavePreValues(1104, teststring);
+            
+        }
 
 
         /// <summary>
@@ -24,9 +35,19 @@ namespace SYJMA.Umbraco.Controllers
         /// <returns>List of school subject select items</returns>
         public List<SelectListItem> GetSchoolSubjectDropdownList()
         {
+            //Conver Datatype name to Id
+            int id = ApplicationContext.Current.Services.DataTypeService.GetAllDataTypeDefinitions().First(x => "SchoolSubjectDropdown".InvariantEquals(x.Name)).Id;
+
             var schoolSubject_Prevalues = ApplicationContext.Services.DataTypeService.
                 GetPreValuesCollectionByDataTypeId(SCHOOL_SUBJECT_DROPDOWNLIST_KEY).PreValuesAsDictionary.Values;
             return GetDropdownListByListType(schoolSubject_Prevalues);
+        }
+
+        public List<SelectListItem> GetSchoolProgramRadioBtnList()
+        {
+            var schoolProgram_Prevalues = ApplicationContext.Services.DataTypeService
+                .GetPreValuesCollectionByDataTypeId(SCHOOL_PROGRAM_RADIOBOX_KEY).PreValuesAsDictionary.Values;
+            return GetDropdownListByListType(schoolProgram_Prevalues);
         }
 
         /// <summary>

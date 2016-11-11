@@ -19,8 +19,8 @@ using Umbraco.ModelsBuilder;
 using Umbraco.ModelsBuilder.Umbraco;
 
 [assembly: PureLiveAssembly]
-[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "de6992ec4feb1c42")]
-[assembly:System.Reflection.AssemblyVersion("0.0.0.1")]
+[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "2a552d7726d30a6a")]
+[assembly:System.Reflection.AssemblyVersion("0.0.0.2")]
 
 namespace Umbraco.Web.PublishedContentModels
 {
@@ -173,218 +173,21 @@ namespace Umbraco.Web.PublishedContentModels
 		}
 
 		///<summary>
+		/// Book Type: Type of booking
+		///</summary>
+		[ImplementPropertyType("bookType")]
+		public object BookType
+		{
+			get { return this.GetPropertyValue("bookType"); }
+		}
+
+		///<summary>
 		/// Calendar Header: Calendar page header
 		///</summary>
 		[ImplementPropertyType("calendarHeader")]
 		public IHtmlString CalendarHeader
 		{
 			get { return this.GetPropertyValue<IHtmlString>("calendarHeader"); }
-		}
-
-		///<summary>
-		/// CalendarType: Type of  Page
-		///</summary>
-		[ImplementPropertyType("calendarType")]
-		public object CalendarType
-		{
-			get { return this.GetPropertyValue("calendarType"); }
-		}
-	}
-
-	/// <summary>Initial Identification Record</summary>
-	[PublishedContentModel("initialIdentificationRecord")]
-	public partial class InitialIdentificationRecord : Master
-	{
-#pragma warning disable 0109 // new is redundant
-		public new const string ModelTypeAlias = "initialIdentificationRecord";
-		public new const PublishedItemType ModelItemType = PublishedItemType.Content;
-#pragma warning restore 0109
-
-		public InitialIdentificationRecord(IPublishedContent content)
-			: base(content)
-		{ }
-
-#pragma warning disable 0109 // new is redundant
-		public new static PublishedContentType GetModelContentType()
-		{
-			return PublishedContentType.Get(ModelItemType, ModelTypeAlias);
-		}
-#pragma warning restore 0109
-
-		public static PublishedPropertyType GetModelPropertyType<TValue>(Expression<Func<InitialIdentificationRecord, TValue>> selector)
-		{
-			return PublishedContentModelUtility.GetModelPropertyType(GetModelContentType(), selector);
-		}
-
-		///<summary>
-		/// Comments_A: Adult booking comments
-		///</summary>
-		[ImplementPropertyType("comments_A")]
-		public string Comments_A
-		{
-			get { return this.GetPropertyValue<string>("comments_A"); }
-		}
-
-		///<summary>
-		/// Comments_S: School booking comments
-		///</summary>
-		[ImplementPropertyType("comments_S")]
-		public string Comments_S
-		{
-			get { return this.GetPropertyValue<string>("comments_S"); }
-		}
-
-		///<summary>
-		/// Comments_U: University booking comments
-		///</summary>
-		[ImplementPropertyType("comments_U")]
-		public string Comments_U
-		{
-			get { return this.GetPropertyValue<string>("comments_U"); }
-		}
-
-		///<summary>
-		/// Name of Campus: Name of campus for university booking
-		///</summary>
-		[ImplementPropertyType("nameOfCampus")]
-		public string NameOfCampus
-		{
-			get { return this.GetPropertyValue<string>("nameOfCampus"); }
-		}
-
-		///<summary>
-		/// Name of Group: Name of booking group
-		///</summary>
-		[ImplementPropertyType("nameOfGroup")]
-		public string NameOfGroup
-		{
-			get { return this.GetPropertyValue<string>("nameOfGroup"); }
-		}
-
-		///<summary>
-		/// Name of School: Name of school
-		///</summary>
-		[ImplementPropertyType("nameOfSchool")]
-		public string NameOfSchool
-		{
-			get { return this.GetPropertyValue<string>("nameOfSchool"); }
-		}
-
-		///<summary>
-		/// Name of University: Name of university
-		///</summary>
-		[ImplementPropertyType("nameOfUniversity")]
-		public string NameOfUniversity
-		{
-			get { return this.GetPropertyValue<string>("nameOfUniversity"); }
-		}
-
-		///<summary>
-		/// Number of Adults: Number of adult for booking
-		///</summary>
-		[ImplementPropertyType("numberOfAdults")]
-		public string NumberOfAdults
-		{
-			get { return this.GetPropertyValue<string>("numberOfAdults"); }
-		}
-
-		///<summary>
-		/// Number of Staff: Number of staff for booking
-		///</summary>
-		[ImplementPropertyType("numberOfStaff")]
-		public string NumberOfStaff
-		{
-			get { return this.GetPropertyValue<string>("numberOfStaff"); }
-		}
-
-		///<summary>
-		/// Number of Staff_U: University Staff number for booking
-		///</summary>
-		[ImplementPropertyType("numberOfStaff_U")]
-		public string NumberOfStaff_U
-		{
-			get { return this.GetPropertyValue<string>("numberOfStaff_U"); }
-		}
-
-		///<summary>
-		/// Number of Students: Number of students for booking
-		///</summary>
-		[ImplementPropertyType("numberOfStudents")]
-		public string NumberOfStudents
-		{
-			get { return this.GetPropertyValue<string>("numberOfStudents"); }
-		}
-
-		///<summary>
-		/// Number of Students_U: University Students number for booking
-		///</summary>
-		[ImplementPropertyType("numberOfStudents_U")]
-		public string NumberOfStudents_U
-		{
-			get { return this.GetPropertyValue<string>("numberOfStudents_U"); }
-		}
-
-		///<summary>
-		/// Preferred Date Adult: Preferred date for adult booking
-		///</summary>
-		[ImplementPropertyType("preferredDateAdult")]
-		public DateTime PreferredDateAdult
-		{
-			get { return this.GetPropertyValue<DateTime>("preferredDateAdult"); }
-		}
-
-		///<summary>
-		/// Preferred Date School: Preferred date for school booking
-		///</summary>
-		[ImplementPropertyType("preferredDateSchool")]
-		public DateTime PreferredDateSchool
-		{
-			get { return this.GetPropertyValue<DateTime>("preferredDateSchool"); }
-		}
-
-		///<summary>
-		/// Preferred Date University: Preferred date for university booking
-		///</summary>
-		[ImplementPropertyType("preferredDateUniversity")]
-		public DateTime PreferredDateUniversity
-		{
-			get { return this.GetPropertyValue<DateTime>("preferredDateUniversity"); }
-		}
-
-		///<summary>
-		/// Program_A: Adult's Program / Tour Required
-		///</summary>
-		[ImplementPropertyType("program_A")]
-		public object Program_A
-		{
-			get { return this.GetPropertyValue("program_A"); }
-		}
-
-		///<summary>
-		/// Program_U: Program for university booking
-		///</summary>
-		[ImplementPropertyType("program_U")]
-		public object Program_U
-		{
-			get { return this.GetPropertyValue("program_U"); }
-		}
-
-		///<summary>
-		/// Subject Area: School subject area
-		///</summary>
-		[ImplementPropertyType("subjectArea")]
-		public object SubjectArea
-		{
-			get { return this.GetPropertyValue("subjectArea"); }
-		}
-
-		///<summary>
-		/// Year: Year level of school
-		///</summary>
-		[ImplementPropertyType("year")]
-		public object Year
-		{
-			get { return this.GetPropertyValue("year"); }
 		}
 	}
 

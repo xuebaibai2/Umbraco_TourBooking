@@ -1,0 +1,20 @@
+﻿@using SYJMA.Umbraco.Controllers;
+@inherits Umbraco.Web.Mvc.UmbracoViewPage<SYJMA.Umbraco.Models.SchoolModel>
+
+@using (Html.BeginUmbracoForm<CalendarFormController>("PostCalendarForm_School"))
+{
+    <div class="row">
+        <div class="form-group col-md-5">
+            @*@Html.Label("program", "Programs ")*@
+            <b>Programs </b>
+            <br />
+
+            @foreach (var item in Model.ProgramList)
+            {
+                <div class="radio">
+                    <label>@Html.RadioButtonFor(m => m.Program, item.Value)@item.Value</label>
+                </div>
+            }
+        </div>
+    </div>
+}

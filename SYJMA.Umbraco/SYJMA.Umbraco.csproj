@@ -396,6 +396,7 @@
     <Content Include="Views\Partials\_SchoolVisit.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\CalendarFormController.cs" />
     <Compile Include="Controllers\DataTypeController.cs" />
     <Compile Include="Controllers\InitialController.cs" />
     <Compile Include="Models\AdultModel.cs" />
@@ -436,6 +437,8 @@
     <Content Include="Config\404handlers.config" />
     <Content Include="Views\Partials\_AdultVisit.cshtml" />
     <Content Include="Views\Partials\_UniversityVisit.cshtml" />
+    <Content Include="Views\CalendarForm.cshtml" />
+    <Content Include="Views\Partials\_SchoolCalendar.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -444,6 +447,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Views\CalendarForm\" />
     <Folder Include="Views\Content\" />
     <Folder Include="Views\DataType\" />
     <Folder Include="Views\Initial\" />
