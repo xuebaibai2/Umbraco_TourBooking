@@ -19,8 +19,8 @@ using Umbraco.ModelsBuilder;
 using Umbraco.ModelsBuilder.Umbraco;
 
 [assembly: PureLiveAssembly]
-[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "fb2e90752119b541")]
-[assembly:System.Reflection.AssemblyVersion("0.0.0.3")]
+[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "4436a27354427a4b")]
+[assembly:System.Reflection.AssemblyVersion("0.0.0.1")]
 
 namespace Umbraco.Web.PublishedContentModels
 {
@@ -217,12 +217,57 @@ namespace Umbraco.Web.PublishedContentModels
 		}
 
 		///<summary>
+		/// AdditionalDetails: Additional Details or Requirements
+		///</summary>
+		[ImplementPropertyType("additionalDetails")]
+		public string AdditionalDetails
+		{
+			get { return this.GetPropertyValue<string>("additionalDetails"); }
+		}
+
+		///<summary>
+		/// CafeRequirement: Is Cafe Catering Required
+		///</summary>
+		[ImplementPropertyType("cafeRequirement")]
+		public string CafeRequirement
+		{
+			get { return this.GetPropertyValue<string>("cafeRequirement"); }
+		}
+
+		///<summary>
 		/// Comments: School booking Comments
 		///</summary>
 		[ImplementPropertyType("comments")]
 		public string Comments
 		{
 			get { return this.GetPropertyValue<string>("comments"); }
+		}
+
+		///<summary>
+		/// Content Knowledge
+		///</summary>
+		[ImplementPropertyType("contentKnowledge")]
+		public string ContentKnowledge
+		{
+			get { return this.GetPropertyValue<string>("contentKnowledge"); }
+		}
+
+		///<summary>
+		/// Daytime Number: Group Coordinator Daytime Number
+		///</summary>
+		[ImplementPropertyType("daytimeNumber")]
+		public string DaytimeNumber
+		{
+			get { return this.GetPropertyValue<string>("daytimeNumber"); }
+		}
+
+		///<summary>
+		/// Email: Group Coordinator Email
+		///</summary>
+		[ImplementPropertyType("email")]
+		public string Email
+		{
+			get { return this.GetPropertyValue<string>("email"); }
 		}
 
 		///<summary>
@@ -244,6 +289,15 @@ namespace Umbraco.Web.PublishedContentModels
 		}
 
 		///<summary>
+		/// Event Price Student: Student Booking Price
+		///</summary>
+		[ImplementPropertyType("eventPriceStudent")]
+		public string EventPriceStudent
+		{
+			get { return this.GetPropertyValue<string>("eventPriceStudent"); }
+		}
+
+		///<summary>
 		/// Event Start: Event start time
 		///</summary>
 		[ImplementPropertyType("eventStart")]
@@ -259,6 +313,60 @@ namespace Umbraco.Web.PublishedContentModels
 		public string EventTitle
 		{
 			get { return this.GetPropertyValue<string>("eventTitle"); }
+		}
+
+		///<summary>
+		/// First Name: Group Coordinator Firstname
+		///</summary>
+		[ImplementPropertyType("firstName")]
+		public string FirstName
+		{
+			get { return this.GetPropertyValue<string>("firstName"); }
+		}
+
+		///<summary>
+		/// Invoice Email: Invoice Receiver's Email
+		///</summary>
+		[ImplementPropertyType("invoiceEmail")]
+		public string InvoiceEmail
+		{
+			get { return this.GetPropertyValue<string>("invoiceEmail"); }
+		}
+
+		///<summary>
+		/// Invoice First Name: Invoice Receiver's First Name
+		///</summary>
+		[ImplementPropertyType("invoiceFirstName")]
+		public string InvoiceFirstName
+		{
+			get { return this.GetPropertyValue<string>("invoiceFirstName"); }
+		}
+
+		///<summary>
+		/// Invoice Surename: Invoice Receiver's Surename
+		///</summary>
+		[ImplementPropertyType("invoiceSurename")]
+		public string InvoiceSurename
+		{
+			get { return this.GetPropertyValue<string>("invoiceSurename"); }
+		}
+
+		///<summary>
+		/// Invoice Title: Invoice Receiver's Title
+		///</summary>
+		[ImplementPropertyType("invoiceTitle")]
+		public string InvoiceTitle
+		{
+			get { return this.GetPropertyValue<string>("invoiceTitle"); }
+		}
+
+		///<summary>
+		/// Mobile: Group Coordinator Mobile Number
+		///</summary>
+		[ImplementPropertyType("mobile")]
+		public string Mobile
+		{
+			get { return this.GetPropertyValue<string>("mobile"); }
 		}
 
 		///<summary>
@@ -289,6 +397,15 @@ namespace Umbraco.Web.PublishedContentModels
 		}
 
 		///<summary>
+		/// Per Cost: Cost per Students Attending
+		///</summary>
+		[ImplementPropertyType("perCost")]
+		public string PerCost
+		{
+			get { return this.GetPropertyValue<string>("perCost"); }
+		}
+
+		///<summary>
 		/// Preferred Date School: Preferred date for school booking
 		///</summary>
 		[ImplementPropertyType("preferredDateSchool")]
@@ -313,6 +430,33 @@ namespace Umbraco.Web.PublishedContentModels
 		public object SubjectArea
 		{
 			get { return this.GetPropertyValue("subjectArea"); }
+		}
+
+		///<summary>
+		/// Surename: Group Coordinator Surename
+		///</summary>
+		[ImplementPropertyType("surename")]
+		public string Surename
+		{
+			get { return this.GetPropertyValue<string>("surename"); }
+		}
+
+		///<summary>
+		/// Title: Group Coordinator Title
+		///</summary>
+		[ImplementPropertyType("title")]
+		public string Title
+		{
+			get { return this.GetPropertyValue<string>("title"); }
+		}
+
+		///<summary>
+		/// Total Cost: Total Cost of the booking
+		///</summary>
+		[ImplementPropertyType("totalCost")]
+		public string TotalCost
+		{
+			get { return this.GetPropertyValue<string>("totalCost"); }
 		}
 
 		///<summary>
@@ -565,6 +709,50 @@ namespace Umbraco.Web.PublishedContentModels
 
 		///<summary>
 		/// Book Type: Booking Type
+		///</summary>
+		[ImplementPropertyType("bookType")]
+		public object BookType
+		{
+			get { return this.GetPropertyValue("bookType"); }
+		}
+
+		///<summary>
+		/// Page Header
+		///</summary>
+		[ImplementPropertyType("pageHeader")]
+		public string PageHeader
+		{
+			get { return this.GetPropertyValue<string>("pageHeader"); }
+		}
+	}
+
+	/// <summary>Addition Booking Detail</summary>
+	[PublishedContentModel("additionBookingDetail")]
+	public partial class AdditionBookingDetail : Master
+	{
+#pragma warning disable 0109 // new is redundant
+		public new const string ModelTypeAlias = "additionBookingDetail";
+		public new const PublishedItemType ModelItemType = PublishedItemType.Content;
+#pragma warning restore 0109
+
+		public AdditionBookingDetail(IPublishedContent content)
+			: base(content)
+		{ }
+
+#pragma warning disable 0109 // new is redundant
+		public new static PublishedContentType GetModelContentType()
+		{
+			return PublishedContentType.Get(ModelItemType, ModelTypeAlias);
+		}
+#pragma warning restore 0109
+
+		public static PublishedPropertyType GetModelPropertyType<TValue>(Expression<Func<AdditionBookingDetail, TValue>> selector)
+		{
+			return PublishedContentModelUtility.GetModelPropertyType(GetModelContentType(), selector);
+		}
+
+		///<summary>
+		/// Book Type
 		///</summary>
 		[ImplementPropertyType("bookType")]
 		public object BookType

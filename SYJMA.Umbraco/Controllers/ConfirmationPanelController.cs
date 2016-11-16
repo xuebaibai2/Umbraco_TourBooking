@@ -16,15 +16,20 @@ namespace SYJMA.Umbraco.Controllers
 
         public PartialViewResult ConfirmationPanel(string bookType, string id)
         {
+            int result;
+            if (!Int32.TryParse(id, out result))
+            {
+                return PartialView("_Error");
+            }
             if (bookType.Equals("School"))
             {
-                SchoolModel school = contentController.GetSchoolModelById(Convert.ToInt32(id)) != null 
-                    ? contentController.GetSchoolModelById(Convert.ToInt32(id)) : null;
+                SchoolModel school = contentController.GetSchoolModelById(Convert.ToInt32(id));
                 if (school == null)
                 {
                     return PartialView("_Error");
                 }
-                return PartialView("_SchoolConfirmPanel", school);
+                ViewBag.parentUrl = CurrentPage.Parent.Url+"?id="+id;
+                return PartialView("~/Views/Partials/School/_SchoolConfirmPanel.cshtml", school);
             }
             else if (bookType.Equals("Adult"))
             {

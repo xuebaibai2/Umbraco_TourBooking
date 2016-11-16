@@ -29,7 +29,7 @@ namespace SYJMA.Umbraco.Controllers
                 school.type = "School";
                 school.SubjectList = dataTypeController.GetSchoolSubjectDropdownList();
                 school.YearList = dataTypeController.GetSchoolYearDropdownList();
-                return PartialView("_SchoolVisit", school);
+                return PartialView("~/Views/Partials/School/_SchoolVisit.cshtml", school);
             }
             else if (bookType.Equals("Adult"))
             {

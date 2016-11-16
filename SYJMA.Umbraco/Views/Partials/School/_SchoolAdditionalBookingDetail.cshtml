@@ -1,0 +1,47 @@
+﻿@using SYJMA.Umbraco.Controllers;
+@inherits Umbraco.Web.Mvc.UmbracoViewPage<SYJMA.Umbraco.Models.SchoolModel>
+
+@using (Html.BeginUmbracoForm<AdditionalBookingDetailController>("PostAdditionalBooking_School"))
+{
+    
+    <div class="row">
+        <div class="form-group col-md-12">
+            @Html.Label("knowledge", "Prior Content Knowledge of your students (eg books read or films watched).")
+            @Html.TextAreaFor(x => x.Event.AdditionalInfo.ContentKnowledge, new { @id = "knowledge", @class = "form-control" })
+        </div>
+
+        <div class="form-group col-md-4">
+            @Html.Label("totalCost", "Total Cost")
+            @Html.TextBoxFor(x => x.Event.AdditionalInfo.TotalCost, new { @id = "totalCost", @class = "form-control", @disabled = "disabled" })
+        </div>
+        <div class="form-group col-md-8">
+            @Html.Label("perCost", "Cost per Students Attending")
+            @Html.TextBoxFor(x => x.Event.AdditionalInfo.PerCost, new { @id = "perCost", @class = "form-control", @disabled = "disabled" })
+            <small class="form-text text-muted help-block">Explanatory text for above field</small>
+        </div>
+        <div class="form-group col-md-12">
+            @Html.Label("additional", "Additional Details or Requirements")
+            @Html.TextBoxFor(x => x.Event.AdditionalInfo.AdditionalDetail, new { @id = "additional", @class = "form-control" })
+        </div>
+        <div class="form-group col-md-4">
+            @Html.Label("cafe", "Café Catering Required? ")
+            @Html.CheckBoxFor(x => x.Event.AdditionalInfo.CafeRequire, new { @id = "cafe" })
+            <a href="#">Link to Menu</a>
+        </div>
+        <div class="form-group col-md-8">
+            Risk Assessment Form <a href="#">Link</a>
+        </div>
+        <div class="form-group col-md-12">
+            @Html.Label("officer", "SJM Officer Email / Phone")
+            @Html.TextBoxFor(x => x.Event.AdditionalInfo.OfficerEmailPhone, new { @id = "officer", @class = "form-control", @disabled = "disabled" })
+        </div>
+
+        @Html.HiddenFor(x => x.Event.AdditionalInfo.PerCost)
+        @Html.HiddenFor(x => x.Event.AdditionalInfo.TotalCost)
+
+        <div class="col-md-12">
+            <a href="@ViewBag.parentUrl" class="btn btn-md btn-primary pull-left">Back</a>
+            <input type="submit" name="submit" value="Next" class="btn btn-md btn-primary pull-right" />
+        </div>
+    </div>
+}

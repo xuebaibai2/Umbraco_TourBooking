@@ -6,7 +6,7 @@
             right: 'month next'
         },
         defaultView: 'agendaWeek',
-        defaultDate: new Date(), // Selected date
+        //defaultDate: new Date(), // Selected date
         editable: true,
         eventLimit: true, // allow "more" link when too many events
         allDaySlot: false,
@@ -14,7 +14,7 @@
         maxTime: '17:00',
         firstDay: 1,
         weekends: false,
-        contentHeight: 200,
+        height: 428,
         timezone: 'local',
         titleFormat: 'D MMM YYYY',
         eventStartEditable: false,
@@ -30,6 +30,7 @@
             //$('#selectedEventEnd').val(calEvent.end.format('DD-MM-YYYY kk:mm'));
             $('#selectedEventStart').val(calEvent.start.format());
             $('#selectedEventEnd').val(calEvent.end.format());
+            $('#selectedEventStudentPrice').val(calEvent.studentPrice);
         }
     });
 
@@ -42,7 +43,7 @@
 function addEvents(url) {
     $.ajax({
         type: 'POST',
-        url: '/umbraco/Surface/DataType/GetJsonData?eventName=' + url,
+        url: '/umbraco/Surface/JSONData/GetJsonData?eventName=' + url,
         success: function (result) {
             removeEvents();
             addEvent(result);

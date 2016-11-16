@@ -1,24 +1,7 @@
 ﻿@using SYJMA.Umbraco.Controllers;
 @inherits Umbraco.Web.Mvc.UmbracoViewPage<SYJMA.Umbraco.Models.SchoolModel>
 
-<script>
-    $(document).ready(function () {
-        $('#checkbox').change(function () {
-            var c = this.checked ? true : false;
-            //$(".invoice").toggle();
-            if (c) {
-                $('#title_i').val($('#title').val());
-
-                $('#title').on('input', function () {
-                    //alert(c);
-                    $('#title_i').val($('#title').val());
-                })
-            } else {
-                $('#title_i').val('');
-            }
-        });
-    });
-</script>
+<script src="~/Scripts/toggleField_replicateData.js"></script>
 
 
 @using (Html.BeginUmbracoForm<BookingDetailController>("PostBooking_School"))
@@ -45,12 +28,12 @@
             @Html.TextBoxFor(x => x.Event.GroupCoordinator.Email, new { @id = "email", @class = "form-control" })
         </div>
 
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-4">
             @Html.Label("mobile", "Mobile Number *")
             @Html.TextBoxFor(x => x.Event.GroupCoordinator.Mobile, new { @id = "mobile", @class = "form-control" })
         </div>
 
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-8">
             @Html.Label("daytime", "Daytime Number")
             @Html.TextBoxFor(x => x.Event.GroupCoordinator.DaytimeNumber, new { @id = "daytime", @class = "form-control" })
         </div>
@@ -75,11 +58,17 @@
                 @Html.Label("surename_i", "Surename *")
                 @Html.TextBoxFor(x => x.Event.GroupCoordinator.Invoice.SureName, new { @id = "surename_i", @class = "form-control" })
             </div>
+
+            <div class="form-group col-md-12">
+                @Html.Label("email_i", "Email *")
+                @Html.TextBoxFor(x => x.Event.GroupCoordinator.Invoice.Email, new { @id = "email_i", @class = "form-control" })
+            </div>
         </div>
 
-        <div class="form-group col-md-12">
-            @Html.Label("invoice", "Please provide details of who to send the invoice to")
-            @Html.TextAreaFor(x => x.Event.GroupCoordinator.Invoice.Receiver, new { @id = "invoice", @class = "form-control" })
+        <div class="col-md-12">
+            <a href="@ViewBag.parentUrl" class="btn btn-md btn-primary pull-left">Back</a>
+            <input type="submit" name="submit" value="Next" class="btn btn-md btn-primary pull-right" />
         </div>
+
     </div>
 }

@@ -11,7 +11,9 @@ namespace SYJMA.Umbraco.Models
         public string title { get; set; }
         public string start { get; set; }
         public string end { get; set; }
+        public float studentPrice { get; set; }
         public GroupCoordinator GroupCoordinator { get; set; }
+        public AdditionalInfoModel AdditionalInfo{ get; set; }
 
         public string GetDateDescription()
         {

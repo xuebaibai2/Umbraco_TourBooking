@@ -392,6 +392,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\moment.min.js" />
+    <Content Include="Scripts\toggleField_replicateData.js" />
     <Content Include="Web.config" />
     <Content Include="Views\Home.cshtml" />
     <Content Include="Views\Master.cshtml" />
@@ -399,15 +400,18 @@
     <Content Include="Views\InitialIdentification.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Partials\_SchoolVisit.cshtml" />
+    <Content Include="Views\Partials\School\_SchoolVisit.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\AdditionalBookingDetailController.cs" />
     <Compile Include="Controllers\BookingDetailController.cs" />
     <Compile Include="Controllers\CalendarFormController.cs" />
     <Compile Include="Controllers\ConfirmationPanelController.cs" />
     <Compile Include="Controllers\ContentController.cs" />
     <Compile Include="Controllers\DataTypeController.cs" />
     <Compile Include="Controllers\InitialController.cs" />
+    <Compile Include="Controllers\JSONDataController.cs" />
+    <Compile Include="Models\AdditionalInfoModel.cs" />
     <Compile Include="Models\AdultModel.cs" />
     <Compile Include="Models\EventCalendar.cs" />
     <Compile Include="Models\GroupCoordinator.cs" />
@@ -452,12 +456,14 @@
     <Content Include="Views\Partials\_AdultVisit.cshtml" />
     <Content Include="Views\Partials\_UniversityVisit.cshtml" />
     <Content Include="Views\CalendarForm.cshtml" />
-    <Content Include="Views\Partials\_SchoolCalendar.cshtml" />
+    <Content Include="Views\Partials\School\_SchoolCalendar.cshtml" />
     <Content Include="Views\Partials\_Error.cshtml" />
     <Content Include="Views\ConfirmationPanel.cshtml" />
-    <Content Include="Views\Partials\_SchoolConfirmPanel.cshtml" />
+    <Content Include="Views\Partials\School\_SchoolConfirmPanel.cshtml" />
     <Content Include="Views\BookingDetail.cshtml" />
     <Content Include="Views\Partials\School\_SchoolBookingDetail.cshtml" />
+    <Content Include="Views\AdditionBookingDetail.cshtml" />
+    <Content Include="Views\Partials\School\_SchoolAdditionalBookingDetail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -466,12 +472,14 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Views\AdditionalBookingDetail\" />
     <Folder Include="Views\BookingDetail\" />
     <Folder Include="Views\CalendarForm\" />
     <Folder Include="Views\ConfirmationPanel\" />
     <Folder Include="Views\Content\" />
     <Folder Include="Views\DataType\" />
     <Folder Include="Views\Initial\" />
+    <Folder Include="Views\JSONData\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

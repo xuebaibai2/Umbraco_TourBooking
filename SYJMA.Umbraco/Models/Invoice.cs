@@ -10,6 +10,6 @@ namespace SYJMA.Umbraco.Models
         public string Title { get; set; }
         public string FirstName { get; set; }
         public string SureName { get; set; }
-        public string Receiver { get; set; }
+        public string Email { get; set; }
     }
 }

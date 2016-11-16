@@ -16,14 +16,20 @@ namespace SYJMA.Umbraco.Controllers
 
         public PartialViewResult BookingDetail(string bookType, string id)
         {
+            int result;
+            if (!Int32.TryParse(id, out result))
+            {
+                return PartialView("_Error");
+            }
+
             if (bookType.Equals("School"))
             {
-                SchoolModel school = contentController.GetSchoolModelById(Convert.ToInt32(id)) != null
-                    ? contentController.GetSchoolModelById(Convert.ToInt32(id)) : null;
+                SchoolModel school = contentController.GetSchoolModelById(Convert.ToInt32(id));
                 if (school == null)
                 {
                     return PartialView("_Error");
                 }
+                ViewBag.parentUrl = CurrentPage.Parent.Url + "?id=" + id;
                 return PartialView("~/Views/Partials/School/_SchoolBookingDetail.cshtml", school);
             }
             else if (bookType.Equals("Adult"))
@@ -39,12 +45,24 @@ namespace SYJMA.Umbraco.Controllers
 
         public ActionResult PostBooking_School(SchoolModel school)
         {
-            school = contentController.GetSchoolModelById(school.Id);
+            var schoolRecord = Services.ContentService.GetById(school.Id);
+            schoolRecord.SetValue("title", school.Event.GroupCoordinator.Title);
+            schoolRecord.SetValue("firstName", school.Event.GroupCoordinator.FirstName);
+            schoolRecord.SetValue("surename", school.Event.GroupCoordinator.SureName);
+            schoolRecord.SetValue("email", school.Event.GroupCoordinator.Email);
+            schoolRecord.SetValue("mobile", school.Event.GroupCoordinator.Mobile);
+            schoolRecord.SetValue("daytimeNumber", school.Event.GroupCoordinator.DaytimeNumber);
+
+            schoolRecord.SetValue("invoiceTitle", school.Event.GroupCoordinator.Invoice.Title);
+            schoolRecord.SetValue("invoiceFirstName", school.Event.GroupCoordinator.Invoice.FirstName);
+            schoolRecord.SetValue("invoiceSurename", school.Event.GroupCoordinator.Invoice.SureName);
+            schoolRecord.SetValue("invoiceEmail", school.Event.GroupCoordinator.Invoice.Email);
+            Services.ContentService.Save(schoolRecord);
 
             NameValueCollection routeValues = new NameValueCollection();
             routeValues.Add("id", school.Id.ToString());
 
-            return RedirectToUmbracoPage(contentController.GetContentIDFromSelf("", CurrentPage), routeValues);
+            return RedirectToUmbracoPage(contentController.GetContentIDFromSelf("SchoolAdditionalDetail", CurrentPage), routeValues);
         }
 	}
 }

@@ -21,55 +21,6 @@ namespace SYJMA.Umbraco.Controllers
         private const int UNI_PROGRAM_DROPDOWNLIST_KEY = 1063;
 
         
-        /// <summary>
-        /// Retrieve data throught web services and return JSON data
-        /// </summary>
-        /// <param name="eventName"></param>
-        /// <returns></returns>
-        public JsonResult GetJsonData(string eventName)
-        {
-            var jsonResult = string.Empty;
-            using (WebClient wc = new WebClient())
-            {
-                try
-                {
-                    jsonResult = wc.DownloadString(CONSTID.API_HOST + eventName);
-                }
-                catch (Exception)
-                {
-                    return null;
-                }
-                var result = JsonConvert.DeserializeObject<IEnumerable<EventCalendar>>(jsonResult);
-                return Json(result);
-            }
-        }
-
-
-
-        ///// <summary>
-        ///// Get User defined datatype id by datatype name
-        ///// </summary>
-        ///// <param name="dataTypeName"></param>
-        ///// <returns>The Id of user defined datatype</returns>
-        //private int GetDatatTypeID(string dataTypeName)
-        //{
-        //    return ApplicationContext.Current.Services.DataTypeService
-        //        .GetAllDataTypeDefinitions()
-        //        .First(x => dataTypeName.InvariantEquals(x.Name)).Id;
-        //}
-
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        ///// <param name="dataTypeName"></param>
-        ///// <returns></returns>
-        //private IDataTypeDefinition GetDataTypeDefinition(string dataTypeName)
-        //{
-        //    return ApplicationContext.Current.Services.DataTypeService.
-        //        GetAllDataTypeDefinitions()
-        //        .First(x => dataTypeName.InvariantEquals(x.Name));
-        //}
-
 
 
         /// <summary>
@@ -95,19 +46,7 @@ namespace SYJMA.Umbraco.Controllers
                 .First(x => datatypeName.InvariantEquals(x.Name)).Id;
         }
 
-        public List<SelectListItem> GetSchoolProgramList()
-        {
-            List<SelectListItem> schoolProgramList = new List<SelectListItem>();
 
-            string resultString = GetSerializedJsonData("getAllSchoolProgram");
-            List<EventCalendar> wrapper = GetDeserializedJsonDataList<EventCalendar>(resultString).ToList();
-
-            foreach (var item in wrapper)
-            {
-                schoolProgramList.Add(new SelectListItem() { Text = item.title, Value = item.title });
-            }
-            return schoolProgramList;
-        }
 
         /// <summary>
         /// Get User Defined Datatype SchoolYear Dropdown List values
@@ -234,25 +173,6 @@ namespace SYJMA.Umbraco.Controllers
             return tempList;
         }
 
-        /// <summary>
-        /// Retrieve Jsondata by eventTitle and conver it to serialized string format
-        /// </summary>
-        /// <param name="eventTitle"></param>
-        /// <returns>String format Json Data</returns>
-        private string GetSerializedJsonData(string eventTitle)
-        {
-            return new JavaScriptSerializer().Serialize(GetJsonData(eventTitle).Data);
-        }
 
-        /// <summary>
-        /// Convert Serialized Json Data to a List of Object
-        /// </summary>
-        /// <typeparam name="T">Type of converted list object</typeparam>
-        /// <param name="serializedData"></param>
-        /// <returns>IEnumerable List of converted Object of Generic type</returns>
-        private IEnumerable<T> GetDeserializedJsonDataList<T>(string serializedData)
-        {
-            return new JavaScriptSerializer().Deserialize<List<T>>(serializedData);
-        }
     }
 }
