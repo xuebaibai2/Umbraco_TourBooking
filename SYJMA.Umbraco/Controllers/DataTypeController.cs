@@ -20,9 +20,6 @@ namespace SYJMA.Umbraco.Controllers
         private const int ADULT_PROGRAM_DROPDOWNLIST_KEY = 1060;
         private const int UNI_PROGRAM_DROPDOWNLIST_KEY = 1063;
 
-        
-
-
         /// <summary>
         /// Get User Defined Datatype SchoolSubject Dropdown List values
         /// </summary>
@@ -30,7 +27,7 @@ namespace SYJMA.Umbraco.Controllers
         public List<SelectListItem> GetSchoolSubjectDropdownList()
         {
             var schoolSubject_Prevalues = ApplicationContext.Services.DataTypeService.
-                GetPreValuesCollectionByDataTypeId(GetDateTypeIDByName(CONSTID.SCHOOL_SUBJECT_DROPDOWNLIST_NAME))
+                GetPreValuesCollectionByDataTypeId(GetDateTypeIDByName(CONSTVALUE.SCHOOL_SUBJECT_DROPDOWNLIST_NAME))
                 .PreValuesAsDictionary.Values;
             return GetDropdownListByListType(schoolSubject_Prevalues);
         }
@@ -55,7 +52,7 @@ namespace SYJMA.Umbraco.Controllers
         public List<SelectListItem> GetSchoolYearDropdownList()
         {
             var schoolYear_Prevalues = ApplicationContext.Services.DataTypeService.
-                GetPreValuesCollectionByDataTypeId(GetDateTypeIDByName(CONSTID.SCHOOL_YEAR_DROPDOWNLIST_NAME))
+                GetPreValuesCollectionByDataTypeId(GetDateTypeIDByName(CONSTVALUE.SCHOOL_YEAR_DROPDOWNLIST_NAME))
                 .PreValuesAsDictionary.Values;
             return GetDropdownListByListType(schoolYear_Prevalues);
         }
@@ -90,7 +87,7 @@ namespace SYJMA.Umbraco.Controllers
         public int GetSchoolSubjectDropdownList_SelectedID(SchoolModel school)
         {
             return ApplicationContext.Services.DataTypeService
-                .GetPreValuesCollectionByDataTypeId(GetDateTypeIDByName(CONSTID.SCHOOL_SUBJECT_DROPDOWNLIST_NAME))
+                .GetPreValuesCollectionByDataTypeId(GetDateTypeIDByName(CONSTVALUE.SCHOOL_SUBJECT_DROPDOWNLIST_NAME))
                 .PreValuesAsDictionary
                 .Where(m => m.Value.Value.Equals(school.SubjectArea))
                 .Select(m => m.Value.Id)
@@ -121,7 +118,7 @@ namespace SYJMA.Umbraco.Controllers
         public int GetSchoolYearDropdownList_SelectedID(SchoolModel school)
         {
             return ApplicationContext.Services.DataTypeService
-                .GetPreValuesCollectionByDataTypeId(GetDateTypeIDByName(CONSTID.SCHOOL_YEAR_DROPDOWNLIST_NAME))
+                .GetPreValuesCollectionByDataTypeId(GetDateTypeIDByName(CONSTVALUE.SCHOOL_YEAR_DROPDOWNLIST_NAME))
                 .PreValuesAsDictionary
                 .Where(m => m.Value.Value.Equals(school.Year))
                 .Select(m => m.Value.Id)
@@ -172,7 +169,5 @@ namespace SYJMA.Umbraco.Controllers
             }
             return tempList;
         }
-
-
     }
 }

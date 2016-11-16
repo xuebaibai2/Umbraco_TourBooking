@@ -16,6 +16,7 @@ namespace SYJMA.Umbraco.Controllers
     {
         private DataTypeController dataTypeController = new DataTypeController();
         private ContentController contentController = new ContentController();
+
         /// <summary>
         /// Render partial view for Initial Identification Page
         /// </summary>

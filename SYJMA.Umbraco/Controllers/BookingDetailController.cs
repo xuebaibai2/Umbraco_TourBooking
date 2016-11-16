@@ -14,6 +14,12 @@ namespace SYJMA.Umbraco.Controllers
         private DataTypeController dataTypeController = new DataTypeController();
         private ContentController contentController = new ContentController();
 
+        /// <summary>
+        /// Render Partial View based on the bookType and book model id
+        /// </summary>
+        /// <param name="bookType"></param>
+        /// <param name="id"></param>
+        /// <returns>Partial view based on the booktype and the model</returns>
         public PartialViewResult BookingDetail(string bookType, string id)
         {
             int result;
@@ -43,6 +49,11 @@ namespace SYJMA.Umbraco.Controllers
             return null;
         }
 
+        /// <summary>
+        /// Retrieve data from privious page, insert data to umbraco and redirect to next page
+        /// </summary>
+        /// <param name="school"></param>
+        /// <returns>Redirect to next page</returns>
         public ActionResult PostBooking_School(SchoolModel school)
         {
             var schoolRecord = Services.ContentService.GetById(school.Id);

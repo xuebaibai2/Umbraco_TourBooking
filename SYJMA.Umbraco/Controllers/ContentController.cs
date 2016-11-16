@@ -14,6 +14,11 @@ namespace SYJMA.Umbraco.Controllers
     {
         DataTypeController dataType = new DataTypeController();
 
+        /// <summary>
+        /// Get School object from Umbraco record  
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>School Model</returns>
         public SchoolModel GetSchoolModelById(int id)
         {
             var data = ApplicationContext.Services.ContentService.GetById(id);
@@ -21,7 +26,7 @@ namespace SYJMA.Umbraco.Controllers
             {
                 return null;
             }
-            else if (!data.Parent().Name.Equals(CONSTID.SCHOOL_VISITS_CONTENT))
+            else if (!data.Parent().Name.Equals(CONSTVALUE.SCHOOL_VISITS_CONTENT))
             {
                 return null;
             }
@@ -30,8 +35,8 @@ namespace SYJMA.Umbraco.Controllers
                 int recordId = Convert.ToInt32(data.GetValue("year"));
                 int subjectId = Convert.ToInt32(data.GetValue("subjectArea"));
 
-                string yearValue = dataType.GetDropdownListValue(recordId, CONSTID.SCHOOL_YEAR_DROPDOWNLIST_NAME);
-                string subjectArea = dataType.GetDropdownListValue(subjectId, CONSTID.SCHOOL_SUBJECT_DROPDOWNLIST_NAME);
+                string yearValue = dataType.GetDropdownListValue(recordId, CONSTVALUE.SCHOOL_YEAR_DROPDOWNLIST_NAME);
+                string subjectArea = dataType.GetDropdownListValue(subjectId, CONSTVALUE.SCHOOL_SUBJECT_DROPDOWNLIST_NAME);
 
                 EventCalendar eventCalendar = GetEventCalendar(data);
 
@@ -51,17 +56,27 @@ namespace SYJMA.Umbraco.Controllers
             }
         }
 
+        /// <summary>
+        /// Get Invoice object from Umbraco record 
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns>Invoice Model</returns>
         private Invoice GetInvoice(IContent data)
         {
             return new Invoice()
-                            {
-                                Title = Convert.ToString(data.GetValue("invoiceTitle") ?? ""),
-                                FirstName = Convert.ToString(data.GetValue("invoiceFirstName") ?? ""),
-                                SureName = Convert.ToString(data.GetValue("invoiceSurename") ?? ""),
-                                Email = Convert.ToString(data.GetValue("invoiceEmail") ?? "")
-                            };
+            {
+                Title = Convert.ToString(data.GetValue("invoiceTitle") ?? ""),
+                FirstName = Convert.ToString(data.GetValue("invoiceFirstName") ?? ""),
+                SureName = Convert.ToString(data.GetValue("invoiceSurename") ?? ""),
+                Email = Convert.ToString(data.GetValue("invoiceEmail") ?? "")
+            };
         }
 
+        /// <summary>
+        /// Get GroupCoordinator object from Umbraco record 
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns>GroupCoordinator Model</returns>
         private GroupCoordinator GetGroupCoordinator(IContent data)
         {
             return new GroupCoordinator()
@@ -76,6 +91,11 @@ namespace SYJMA.Umbraco.Controllers
             };
         }
 
+        /// <summary>
+        /// Get EventCalendar object from Umbraco record 
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns>Event Calendar Model</returns>
         private EventCalendar GetEventCalendar(IContent data)
         {
             return new EventCalendar()
@@ -90,6 +110,11 @@ namespace SYJMA.Umbraco.Controllers
             };
         }
 
+        /// <summary>
+        /// Get AdditionalInfo object from Umbraco record 
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns>AdditionalInfo Model</returns>
         private AdditionalInfoModel GetAdditionalinfo(IContent data)
         {
             return new AdditionalInfoModel()
@@ -102,12 +127,24 @@ namespace SYJMA.Umbraco.Controllers
             };
         }
 
+        /// <summary>
+        /// Search Content ID by content name from parent path
+        /// </summary>
+        /// <param name="contentName"></param>
+        /// <param name="page">The current published content</param>
+        /// <returns>Content ID</returns>
         public int GetContentIDFromParent(string contentName, IPublishedContent page)
         {
             return Services.ContentService.GetChildren(page.Parent.Id)
                 .First(x => x.Name == contentName).Id;
         }
 
+        /// <summary>
+        /// Get Content ID based on content name
+        /// </summary>
+        /// <param name="contentName"></param>
+        /// <param name="page">The current published content</param>
+        /// <returns>Content ID</returns>
         public int GetContentIDFromSelf(string contentName, IPublishedContent page)
         {
             return Services.ContentService.GetChildren(page.Id)

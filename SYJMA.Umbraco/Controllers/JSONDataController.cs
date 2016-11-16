@@ -26,7 +26,7 @@ namespace SYJMA.Umbraco.Controllers
             {
                 try
                 {
-                    jsonResult = wc.DownloadString(CONSTID.API_HOST + eventName);
+                    jsonResult = wc.DownloadString(CONSTVALUE.API_HOST + eventName);
                 }
                 catch (Exception)
                 {
@@ -58,6 +58,10 @@ namespace SYJMA.Umbraco.Controllers
             return new JavaScriptSerializer().Deserialize<List<T>>(serializedData);
         }
 
+        /// <summary>
+        /// Get All School Program List from API Call
+        /// </summary>
+        /// <returns></returns>
         public List<SelectListItem> GetSchoolProgramList()
         {
             List<SelectListItem> schoolProgramList = new List<SelectListItem>();
