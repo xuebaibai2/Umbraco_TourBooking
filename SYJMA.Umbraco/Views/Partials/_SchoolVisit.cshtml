@@ -44,6 +44,7 @@
             @Html.TextAreaFor(m => m.Comments, new { @id = "comment", @class = "form-control" })
         </div>
 
+        @Html.HiddenFor(x => x.type)
         <input type="submit" name="submit" value="Next" class="btn btn-md btn-primary pull-right" />
     </div>
     

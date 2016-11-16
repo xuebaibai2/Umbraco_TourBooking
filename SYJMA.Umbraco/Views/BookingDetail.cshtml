@@ -1,0 +1,8 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage<ContentModels.BookingDetail>
+@using ContentModels = Umbraco.Web.PublishedContentModels;
+@{
+	Layout = "Master.cshtml";
+    string bookType = CurrentPage.bookType;
+}
+<h3 class="well">@CurrentPage.pageHeader</h3>
+@Html.Action("BookingDetail", "BookingDetail", new {bookType = bookType, id = Request.QueryString.Get("id")})

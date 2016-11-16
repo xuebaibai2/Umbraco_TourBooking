@@ -402,15 +402,21 @@
     <Content Include="Views\Partials\_SchoolVisit.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\BookingDetailController.cs" />
     <Compile Include="Controllers\CalendarFormController.cs" />
+    <Compile Include="Controllers\ConfirmationPanelController.cs" />
+    <Compile Include="Controllers\ContentController.cs" />
     <Compile Include="Controllers\DataTypeController.cs" />
     <Compile Include="Controllers\InitialController.cs" />
     <Compile Include="Models\AdultModel.cs" />
     <Compile Include="Models\EventCalendar.cs" />
+    <Compile Include="Models\GroupCoordinator.cs" />
     <Compile Include="Models\InitialModel.cs" />
+    <Compile Include="Models\Invoice.cs" />
     <Compile Include="Models\SchoolModel.cs" />
     <Compile Include="Models\UniversityModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utility\CONSTID.cs" />
     <Compile Include="Utility\JSON.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -447,6 +453,11 @@
     <Content Include="Views\Partials\_UniversityVisit.cshtml" />
     <Content Include="Views\CalendarForm.cshtml" />
     <Content Include="Views\Partials\_SchoolCalendar.cshtml" />
+    <Content Include="Views\Partials\_Error.cshtml" />
+    <Content Include="Views\ConfirmationPanel.cshtml" />
+    <Content Include="Views\Partials\_SchoolConfirmPanel.cshtml" />
+    <Content Include="Views\BookingDetail.cshtml" />
+    <Content Include="Views\Partials\School\_SchoolBookingDetail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -455,7 +466,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Views\BookingDetail\" />
     <Folder Include="Views\CalendarForm\" />
+    <Folder Include="Views\ConfirmationPanel\" />
     <Folder Include="Views\Content\" />
     <Folder Include="Views\DataType\" />
     <Folder Include="Views\Initial\" />

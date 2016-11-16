@@ -1,18 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using SYJMA.Umbraco.Models;
+using umbraco.NodeFactory;
 using Umbraco.Core.Models;
+using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Web.Mvc;
 
 namespace SYJMA.Umbraco.Controllers
 {
     public class InitialController : SurfaceController
     {
-        private DataTypeController DataType = new DataTypeController();
-
+        private DataTypeController dataTypeController = new DataTypeController();
+        private ContentController contentController = new ContentController();
         /// <summary>
         /// Render partial view for Initial Identification Page
         /// </summary>
@@ -23,21 +26,24 @@ namespace SYJMA.Umbraco.Controllers
             if (bookType.Equals("School"))
             {
                 SchoolModel school = new SchoolModel();
-                school.SubjectList = DataType.GetSchoolSubjectDropdownList();
-                school.YearList = DataType.GetSchoolYearDropdownList();
+                school.type = "School";
+                school.SubjectList = dataTypeController.GetSchoolSubjectDropdownList();
+                school.YearList = dataTypeController.GetSchoolYearDropdownList();
                 return PartialView("_SchoolVisit", school);
             }
             else if (bookType.Equals("Adult"))
             {
                 AdultModel adult = new AdultModel();
-                adult.ProgramList = DataType.GetAdultProgramDropdownList();
+                adult.type = "Adult";
+                adult.ProgramList = dataTypeController.GetAdultProgramDropdownList();
                 return PartialView("_AdultVisit", adult);
             }
             else if (bookType.Equals("University"))
             {
                 UniversityModel uni = new UniversityModel();
-                uni.ProgramList = DataType.GetUniProgramDropdownList();
-                return PartialView("_UniversityVisit",uni);
+                uni.type = "University";
+                uni.ProgramList = dataTypeController.GetUniProgramDropdownList();
+                return PartialView("_UniversityVisit", uni);
             }
             // Return page not found
             return null;
@@ -52,19 +58,26 @@ namespace SYJMA.Umbraco.Controllers
         {
             var schoolRecord = Services.ContentService.CreateContent(school.SchoolName + " - " + school.SubjectArea, CurrentPage.Id, "School");
 
-            int selectedYearId = DataType.GetSchoolYearDropdownList_SelectedID(school);
-            int selectedSubjectId = DataType.GetSchoolSubjectDropdownList_SelectedID(school);
-
-            schoolRecord.SetValue("nameOfSchool",school.SchoolName);
+            int selectedYearId = dataTypeController.GetSchoolYearDropdownList_SelectedID(school);
+            int selectedSubjectId = dataTypeController.GetSchoolSubjectDropdownList_SelectedID(school);
+            
+            schoolRecord.SetValue("nameOfSchool", school.SchoolName);
             schoolRecord.SetValue("year", selectedYearId);
             schoolRecord.SetValue("preferredDateSchool", GetDateTime(school));
             schoolRecord.SetValue("subjectArea", selectedSubjectId);
-            schoolRecord.SetValue("numberOfStudents",school.StudentsNumber);
-            schoolRecord.SetValue("numberOfStaff",school.StaffNumber);
-            schoolRecord.SetValue("comments",school.Comments);
+            schoolRecord.SetValue("numberOfStudents", school.StudentsNumber);
+            schoolRecord.SetValue("numberOfStaff", school.StaffNumber);
+            schoolRecord.SetValue("comments", school.Comments);
             Services.ContentService.SaveAndPublishWithStatus(schoolRecord);
-            return RedirectToCurrentUmbracoPage();
+            school.Id = schoolRecord.Id;
+            schoolRecord.SetValue("recordId", school.Id);
+            Services.ContentService.Save(schoolRecord);
+
+            NameValueCollection routeValues = new NameValueCollection();
+            routeValues.Add("id", school.Id.ToString());
+            return RedirectToUmbracoPage(contentController.GetContentIDFromParent("School Calendar Form",CurrentPage), routeValues);
         }
+
 
         /// <summary>
         /// Receive post data form from Adult partialview and save into Adult Visits content as a record
@@ -75,10 +88,10 @@ namespace SYJMA.Umbraco.Controllers
         {
             var adultRecord = Services.ContentService.CreateContent(adult.GroupName + " - " + adult.Program, CurrentPage.Id, "Adult");
 
-            int selectedProgramId = DataType.GetAdultProgramDropdownList_SelectedID(adult);
+            int selectedProgramId = dataTypeController.GetAdultProgramDropdownList_SelectedID(adult);
 
-            adultRecord.SetValue("nameOfGroup",adult.GroupName);
-            adultRecord.SetValue("program",selectedProgramId);
+            adultRecord.SetValue("nameOfGroup", adult.GroupName);
+            adultRecord.SetValue("program", selectedProgramId);
             adultRecord.SetValue("preferredDateAdult", GetDateTime(adult));
             adultRecord.SetValue("numberOfAdults", adult.AdultNumber);
             adultRecord.SetValue("comments", adult.Comments);
@@ -95,7 +108,7 @@ namespace SYJMA.Umbraco.Controllers
         {
             var uniRecord = Services.ContentService.CreateContent(uni.UniName + " - " + uni.Program, CurrentPage.Id, "University");
 
-            int selectedProgramId = DataType.GetUniProgramDropdownList_SelectedID(uni);
+            int selectedProgramId = dataTypeController.GetUniProgramDropdownList_SelectedID(uni);
 
             uniRecord.SetValue("nameOfUniversity", uni.UniName);
             uniRecord.SetValue("nameOfCampus", uni.CampusName);
@@ -117,5 +130,5 @@ namespace SYJMA.Umbraco.Controllers
         {
             return Convert.ToDateTime(viewModel.PreferredDate, new System.Globalization.CultureInfo("en-AU", true));
         }
-	}
+    }
 }

@@ -19,8 +19,8 @@ using Umbraco.ModelsBuilder;
 using Umbraco.ModelsBuilder.Umbraco;
 
 [assembly: PureLiveAssembly]
-[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "2a552d7726d30a6a")]
-[assembly:System.Reflection.AssemblyVersion("0.0.0.2")]
+[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "fb2e90752119b541")]
+[assembly:System.Reflection.AssemblyVersion("0.0.0.3")]
 
 namespace Umbraco.Web.PublishedContentModels
 {
@@ -226,6 +226,42 @@ namespace Umbraco.Web.PublishedContentModels
 		}
 
 		///<summary>
+		/// Event End: Event end time
+		///</summary>
+		[ImplementPropertyType("eventEnd")]
+		public string EventEnd
+		{
+			get { return this.GetPropertyValue<string>("eventEnd"); }
+		}
+
+		///<summary>
+		/// Event Id: Booking event id
+		///</summary>
+		[ImplementPropertyType("eventId")]
+		public string EventId
+		{
+			get { return this.GetPropertyValue<string>("eventId"); }
+		}
+
+		///<summary>
+		/// Event Start: Event start time
+		///</summary>
+		[ImplementPropertyType("eventStart")]
+		public string EventStart
+		{
+			get { return this.GetPropertyValue<string>("eventStart"); }
+		}
+
+		///<summary>
+		/// Event Title: Booking event title
+		///</summary>
+		[ImplementPropertyType("eventTitle")]
+		public string EventTitle
+		{
+			get { return this.GetPropertyValue<string>("eventTitle"); }
+		}
+
+		///<summary>
 		/// Name of School: Name of booking school
 		///</summary>
 		[ImplementPropertyType("nameOfSchool")]
@@ -259,6 +295,15 @@ namespace Umbraco.Web.PublishedContentModels
 		public DateTime PreferredDateSchool
 		{
 			get { return this.GetPropertyValue<DateTime>("preferredDateSchool"); }
+		}
+
+		///<summary>
+		/// Record Id: Record Id
+		///</summary>
+		[ImplementPropertyType("recordId")]
+		public string RecordId
+		{
+			get { return this.GetPropertyValue<string>("recordId"); }
 		}
 
 		///<summary>
@@ -437,6 +482,103 @@ namespace Umbraco.Web.PublishedContentModels
 		public object Program
 		{
 			get { return this.GetPropertyValue("program"); }
+		}
+
+		///<summary>
+		/// Record Id: Record Id
+		///</summary>
+		[ImplementPropertyType("recordId")]
+		public string RecordId
+		{
+			get { return this.GetPropertyValue<string>("recordId"); }
+		}
+	}
+
+	/// <summary>Confirmation panel</summary>
+	[PublishedContentModel("confirmationPanel")]
+	public partial class ConfirmationPanel : Master
+	{
+#pragma warning disable 0109 // new is redundant
+		public new const string ModelTypeAlias = "confirmationPanel";
+		public new const PublishedItemType ModelItemType = PublishedItemType.Content;
+#pragma warning restore 0109
+
+		public ConfirmationPanel(IPublishedContent content)
+			: base(content)
+		{ }
+
+#pragma warning disable 0109 // new is redundant
+		public new static PublishedContentType GetModelContentType()
+		{
+			return PublishedContentType.Get(ModelItemType, ModelTypeAlias);
+		}
+#pragma warning restore 0109
+
+		public static PublishedPropertyType GetModelPropertyType<TValue>(Expression<Func<ConfirmationPanel, TValue>> selector)
+		{
+			return PublishedContentModelUtility.GetModelPropertyType(GetModelContentType(), selector);
+		}
+
+		///<summary>
+		/// Book Type: Type of booking
+		///</summary>
+		[ImplementPropertyType("bookType")]
+		public object BookType
+		{
+			get { return this.GetPropertyValue("bookType"); }
+		}
+
+		///<summary>
+		/// Page Header: Page Description
+		///</summary>
+		[ImplementPropertyType("pageHeader")]
+		public string PageHeader
+		{
+			get { return this.GetPropertyValue<string>("pageHeader"); }
+		}
+	}
+
+	/// <summary>Booking Detail</summary>
+	[PublishedContentModel("bookingDetail")]
+	public partial class BookingDetail : Master
+	{
+#pragma warning disable 0109 // new is redundant
+		public new const string ModelTypeAlias = "bookingDetail";
+		public new const PublishedItemType ModelItemType = PublishedItemType.Content;
+#pragma warning restore 0109
+
+		public BookingDetail(IPublishedContent content)
+			: base(content)
+		{ }
+
+#pragma warning disable 0109 // new is redundant
+		public new static PublishedContentType GetModelContentType()
+		{
+			return PublishedContentType.Get(ModelItemType, ModelTypeAlias);
+		}
+#pragma warning restore 0109
+
+		public static PublishedPropertyType GetModelPropertyType<TValue>(Expression<Func<BookingDetail, TValue>> selector)
+		{
+			return PublishedContentModelUtility.GetModelPropertyType(GetModelContentType(), selector);
+		}
+
+		///<summary>
+		/// Book Type: Booking Type
+		///</summary>
+		[ImplementPropertyType("bookType")]
+		public object BookType
+		{
+			get { return this.GetPropertyValue("bookType"); }
+		}
+
+		///<summary>
+		/// Page Header
+		///</summary>
+		[ImplementPropertyType("pageHeader")]
+		public string PageHeader
+		{
+			get { return this.GetPropertyValue<string>("pageHeader"); }
 		}
 	}
 

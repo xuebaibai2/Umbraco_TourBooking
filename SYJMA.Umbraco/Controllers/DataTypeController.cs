@@ -1,32 +1,75 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
+using Newtonsoft.Json;
 using SYJMA.Umbraco.Models;
+using SYJMA.Umbraco.Utility;
 using Umbraco.Core;
 using Umbraco.Core.Models;
+using Umbraco.Core.Services;
 using Umbraco.Web.Mvc;
 
 namespace SYJMA.Umbraco.Controllers
 {
     public class DataTypeController : SurfaceController
     {
-        private const int SCHOOL_SUBJECT_DROPDOWNLIST_KEY = 1057;
-        private const int SCHOOL_YEAR_DROPDOWNLIST_KEY = 1056;
         private const int ADULT_PROGRAM_DROPDOWNLIST_KEY = 1060;
         private const int UNI_PROGRAM_DROPDOWNLIST_KEY = 1063;
-        private const int SCHOOL_PROGRAM_RADIOBOX_KEY = 1103;
 
-        public void TEST()
+        
+        /// <summary>
+        /// Retrieve data throught web services and return JSON data
+        /// </summary>
+        /// <param name="eventName"></param>
+        /// <returns></returns>
+        public JsonResult GetJsonData(string eventName)
         {
-            List<string> teststring = new List<string>();
-            teststring.Add("third");
-            //teststring.Add("second");
-
-            ApplicationContext.Services.DataTypeService.SavePreValues(1104, teststring);
-            
+            var jsonResult = string.Empty;
+            using (WebClient wc = new WebClient())
+            {
+                try
+                {
+                    jsonResult = wc.DownloadString(CONSTID.API_HOST + eventName);
+                }
+                catch (Exception)
+                {
+                    return null;
+                }
+                var result = JsonConvert.DeserializeObject<IEnumerable<EventCalendar>>(jsonResult);
+                return Json(result);
+            }
         }
+
+
+
+        ///// <summary>
+        ///// Get User defined datatype id by datatype name
+        ///// </summary>
+        ///// <param name="dataTypeName"></param>
+        ///// <returns>The Id of user defined datatype</returns>
+        //private int GetDatatTypeID(string dataTypeName)
+        //{
+        //    return ApplicationContext.Current.Services.DataTypeService
+        //        .GetAllDataTypeDefinitions()
+        //        .First(x => dataTypeName.InvariantEquals(x.Name)).Id;
+        //}
+
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        ///// <param name="dataTypeName"></param>
+        ///// <returns></returns>
+        //private IDataTypeDefinition GetDataTypeDefinition(string dataTypeName)
+        //{
+        //    return ApplicationContext.Current.Services.DataTypeService.
+        //        GetAllDataTypeDefinitions()
+        //        .First(x => dataTypeName.InvariantEquals(x.Name));
+        //}
+
 
 
         /// <summary>
@@ -35,19 +78,35 @@ namespace SYJMA.Umbraco.Controllers
         /// <returns>List of school subject select items</returns>
         public List<SelectListItem> GetSchoolSubjectDropdownList()
         {
-            //Conver Datatype name to Id
-            int id = ApplicationContext.Current.Services.DataTypeService.GetAllDataTypeDefinitions().First(x => "SchoolSubjectDropdown".InvariantEquals(x.Name)).Id;
-
             var schoolSubject_Prevalues = ApplicationContext.Services.DataTypeService.
-                GetPreValuesCollectionByDataTypeId(SCHOOL_SUBJECT_DROPDOWNLIST_KEY).PreValuesAsDictionary.Values;
+                GetPreValuesCollectionByDataTypeId(GetDateTypeIDByName(CONSTID.SCHOOL_SUBJECT_DROPDOWNLIST_NAME))
+                .PreValuesAsDictionary.Values;
             return GetDropdownListByListType(schoolSubject_Prevalues);
         }
 
-        public List<SelectListItem> GetSchoolProgramRadioBtnList()
+        /// <summary>
+        /// Get user defiend datatype id by datatype name
+        /// </summary>
+        /// <param name="datatypeName"></param>
+        /// <returns>The Id of the user defined umbraco datatype</returns>
+        private int GetDateTypeIDByName(string datatypeName)
         {
-            var schoolProgram_Prevalues = ApplicationContext.Services.DataTypeService
-                .GetPreValuesCollectionByDataTypeId(SCHOOL_PROGRAM_RADIOBOX_KEY).PreValuesAsDictionary.Values;
-            return GetDropdownListByListType(schoolProgram_Prevalues);
+            return ApplicationContext.Current.Services.DataTypeService.GetAllDataTypeDefinitions()
+                .First(x => datatypeName.InvariantEquals(x.Name)).Id;
+        }
+
+        public List<SelectListItem> GetSchoolProgramList()
+        {
+            List<SelectListItem> schoolProgramList = new List<SelectListItem>();
+
+            string resultString = GetSerializedJsonData("getAllSchoolProgram");
+            List<EventCalendar> wrapper = GetDeserializedJsonDataList<EventCalendar>(resultString).ToList();
+
+            foreach (var item in wrapper)
+            {
+                schoolProgramList.Add(new SelectListItem() { Text = item.title, Value = item.title });
+            }
+            return schoolProgramList;
         }
 
         /// <summary>
@@ -57,7 +116,8 @@ namespace SYJMA.Umbraco.Controllers
         public List<SelectListItem> GetSchoolYearDropdownList()
         {
             var schoolYear_Prevalues = ApplicationContext.Services.DataTypeService.
-                GetPreValuesCollectionByDataTypeId(SCHOOL_YEAR_DROPDOWNLIST_KEY).PreValuesAsDictionary.Values;
+                GetPreValuesCollectionByDataTypeId(GetDateTypeIDByName(CONSTID.SCHOOL_YEAR_DROPDOWNLIST_NAME))
+                .PreValuesAsDictionary.Values;
             return GetDropdownListByListType(schoolYear_Prevalues);
         }
 
@@ -91,10 +151,26 @@ namespace SYJMA.Umbraco.Controllers
         public int GetSchoolSubjectDropdownList_SelectedID(SchoolModel school)
         {
             return ApplicationContext.Services.DataTypeService
-                .GetPreValuesCollectionByDataTypeId(SCHOOL_SUBJECT_DROPDOWNLIST_KEY)
+                .GetPreValuesCollectionByDataTypeId(GetDateTypeIDByName(CONSTID.SCHOOL_SUBJECT_DROPDOWNLIST_NAME))
                 .PreValuesAsDictionary
                 .Where(m => m.Value.Value.Equals(school.SubjectArea))
                 .Select(m => m.Value.Id)
+                .First();
+        }
+
+        /// <summary>
+        /// Get selected dropdown list value based on its id and dropdown list id
+        /// </summary>
+        /// <param name="listSelectedId"></param>
+        /// <param name="dropdownListName"></param>
+        /// <returns>The value of user selected from dropdown list</returns>
+        public string GetDropdownListValue(int listSelectedId, string dropdownListName)
+        {
+            return ApplicationContext.Services.DataTypeService
+                .GetPreValuesCollectionByDataTypeId(GetDateTypeIDByName(dropdownListName))
+                .PreValuesAsDictionary
+                .Where(m => m.Value.Id == listSelectedId)
+                .Select(m => m.Value.Value)
                 .First();
         }
 
@@ -106,7 +182,7 @@ namespace SYJMA.Umbraco.Controllers
         public int GetSchoolYearDropdownList_SelectedID(SchoolModel school)
         {
             return ApplicationContext.Services.DataTypeService
-                .GetPreValuesCollectionByDataTypeId(SCHOOL_YEAR_DROPDOWNLIST_KEY)
+                .GetPreValuesCollectionByDataTypeId(GetDateTypeIDByName(CONSTID.SCHOOL_YEAR_DROPDOWNLIST_NAME))
                 .PreValuesAsDictionary
                 .Where(m => m.Value.Value.Equals(school.Year))
                 .Select(m => m.Value.Id)
@@ -123,8 +199,8 @@ namespace SYJMA.Umbraco.Controllers
             return ApplicationContext.Services.DataTypeService
                 .GetPreValuesCollectionByDataTypeId(ADULT_PROGRAM_DROPDOWNLIST_KEY)
                 .PreValuesAsDictionary
-                .Where(m=>m.Value.Value.Equals(adult.Program))
-                .Select(m=>m.Value.Id)
+                .Where(m => m.Value.Value.Equals(adult.Program))
+                .Select(m => m.Value.Id)
                 .First();
         }
 
@@ -143,8 +219,6 @@ namespace SYJMA.Umbraco.Controllers
                 .First();
         }
 
-
-
         /// <summary>
         /// Get a List of select items based on the required user defined dropdown list on umbraco
         /// </summary>
@@ -158,6 +232,27 @@ namespace SYJMA.Umbraco.Controllers
                 tempList.Add(new SelectListItem { Text = item.Value, Value = item.Value });
             }
             return tempList;
+        }
+
+        /// <summary>
+        /// Retrieve Jsondata by eventTitle and conver it to serialized string format
+        /// </summary>
+        /// <param name="eventTitle"></param>
+        /// <returns>String format Json Data</returns>
+        private string GetSerializedJsonData(string eventTitle)
+        {
+            return new JavaScriptSerializer().Serialize(GetJsonData(eventTitle).Data);
+        }
+
+        /// <summary>
+        /// Convert Serialized Json Data to a List of Object
+        /// </summary>
+        /// <typeparam name="T">Type of converted list object</typeparam>
+        /// <param name="serializedData"></param>
+        /// <returns>IEnumerable List of converted Object of Generic type</returns>
+        private IEnumerable<T> GetDeserializedJsonDataList<T>(string serializedData)
+        {
+            return new JavaScriptSerializer().Deserialize<List<T>>(serializedData);
         }
     }
 }

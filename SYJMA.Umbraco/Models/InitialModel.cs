@@ -12,6 +12,9 @@ namespace SYJMA.Umbraco.Models
         public string PreferredDate { get; set; }
         public string Comments { get; set; }
         public string Program { get; set; }
+        public string type { get; set; }
+        public EventCalendar Event { get; set; }
         public IEnumerable<SelectListItem> ProgramList { get; set; }
+        public IEnumerable<EventCalendar> EventList { get; set; }
     }
 }

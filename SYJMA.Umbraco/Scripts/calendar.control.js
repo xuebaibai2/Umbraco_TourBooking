@@ -1,28 +1,17 @@
 ﻿$(document).ready(function () {
-
     $('#calendar').fullCalendar({
         header: {
-            left: 'prev',
+            left: 'prev agendaWeek',
             center: 'title',
-            right: 'next'
+            right: 'month next'
         },
         defaultView: 'agendaWeek',
         defaultDate: new Date(), // Selected date
         editable: true,
         eventLimit: true, // allow "more" link when too many events
-        //events: {
-        //	url: 'php/get-events.php',
-        //	error: function() {
-        //		$('#script-warning').show();
-        //	}
-        //},
-        //loading: function(bool) {
-        //	$('#loading').toggle(bool);
-        //},
         allDaySlot: false,
         minTime: '9:00',
         maxTime: '17:00',
-        events: 'http://demo2054938.mockable.io/1',
         firstDay: 1,
         weekends: false,
         contentHeight: 200,
@@ -31,9 +20,40 @@
         eventStartEditable: false,
         eventDurationEditable: false,
         eventClick: function (calEvent, jsEvent, view) {
-            alert('Event: ' + calEvent.title + ' \nTime: ' + calEvent.start.toString('dd-mm-yyyy') + '\nID: ' + calEvent.id);
+            
+            $('#selectionConfirm').html(
+                'You have chosen <b>' + calEvent.title + '</b> from ' + calEvent.start.format('hha') + ' until ' + calEvent.end.format('hha') + ' on ' + calEvent.start.format('DD MMMM YYYY') + '.  Click Next to confirm.'
+        );
+            $('#selectedEventId').val(calEvent.id);
+            $('#selectedEventTitle').val(calEvent.title);
+            //$('#selectedEventStart').val(calEvent.start.format('DD-MM-YYYY kk:mm'));
+            //$('#selectedEventEnd').val(calEvent.end.format('DD-MM-YYYY kk:mm'));
+            $('#selectedEventStart').val(calEvent.start.format());
+            $('#selectedEventEnd').val(calEvent.end.format());
         }
-
     });
 
+    $('#calendarForm input').on('change', function () {
+        addEvents($('input[name=Program]:checked', '#calendarForm').val());
+        $('#selectionConfirm').html('');
+    });
 });
+
+function addEvents(url) {
+    $.ajax({
+        type: 'POST',
+        url: '/umbraco/Surface/DataType/GetJsonData?eventName=' + url,
+        success: function (result) {
+            removeEvents();
+            addEvent(result);
+        }
+    });
+}
+
+function removeEvents() {
+    $('#calendar').fullCalendar('removeEvents')
+}
+
+function addEvent(events) {
+    $('#calendar').fullCalendar('addEventSource', events);
+}

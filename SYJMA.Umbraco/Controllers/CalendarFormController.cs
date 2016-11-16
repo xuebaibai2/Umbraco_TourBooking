@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -12,14 +13,20 @@ namespace SYJMA.Umbraco.Controllers
 {
     public class CalendarFormController : SurfaceController
     {
-        private DataTypeController DataType = new DataTypeController();
+        private DataTypeController dataTypeController = new DataTypeController();
+        private ContentController contentController = new ContentController();
 
-        public PartialViewResult CalendarForm(string bookType)
+        public PartialViewResult CalendarForm(string bookType, string id)
         {
             if (bookType.Equals("School"))
             {
-                SchoolModel school = new SchoolModel();
-                school.ProgramList = DataType.GetSchoolProgramRadioBtnList();
+                SchoolModel school = contentController.GetSchoolModelById(Convert.ToInt32(id))!= null 
+                    ? contentController.GetSchoolModelById(Convert.ToInt32(id)) : null;
+                if (school == null)
+                {
+                    return PartialView("_Error");
+                }
+                school.ProgramList = dataTypeController.GetSchoolProgramList();
                 return PartialView("_SchoolCalendar", school);
             }
             else if (bookType.Equals("Adult"))
@@ -35,26 +42,20 @@ namespace SYJMA.Umbraco.Controllers
 
         public ActionResult PostCalendarForm_School(SchoolModel school)
         {
-            return RedirectToCurrentUmbracoPage();
+            var schoolRecord = Services.ContentService.GetById(school.Id);
+            schoolRecord.SetValue("eventTitle",school.Event.title);
+            schoolRecord.SetValue("eventId",school.Event.id);
+            schoolRecord.SetValue("eventStart",school.Event.start);
+            schoolRecord.SetValue("eventEnd",school.Event.end);
+            Services.ContentService.Save(schoolRecord);
+
+            NameValueCollection routeValues = new NameValueCollection();
+            routeValues.Add("id", school.Id.ToString());
+
+            return RedirectToUmbracoPage(contentController.GetContentIDFromSelf("SchoolConfirm", CurrentPage), routeValues);
         }
 
-        private const string API_HOST = "http://demo2054938.mockable.io/";
-        public ActionResult GetJsonData(string eventName)
-        {
-            var jsonResult = string.Empty;
-            using (WebClient wc = new WebClient())
-            {
-                try
-                {
-                    jsonResult = wc.DownloadString(API_HOST + eventName);
-                }
-                catch (Exception)
-                {
-                    return null;
-                }
-                var result = JsonConvert.DeserializeObject<IEnumerable<EventCalendar>>(jsonResult);
-                return Json(result);
-            }
-        }
+
+        
 	}
 }

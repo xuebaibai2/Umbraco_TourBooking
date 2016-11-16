@@ -1,0 +1,85 @@
+﻿@using SYJMA.Umbraco.Controllers;
+@inherits Umbraco.Web.Mvc.UmbracoViewPage<SYJMA.Umbraco.Models.SchoolModel>
+
+<script>
+    $(document).ready(function () {
+        $('#checkbox').change(function () {
+            var c = this.checked ? true : false;
+            //$(".invoice").toggle();
+            if (c) {
+                $('#title_i').val($('#title').val());
+
+                $('#title').on('input', function () {
+                    //alert(c);
+                    $('#title_i').val($('#title').val());
+                })
+            } else {
+                $('#title_i').val('');
+            }
+        });
+    });
+</script>
+
+
+@using (Html.BeginUmbracoForm<BookingDetailController>("PostBooking_School"))
+{
+    <div class="row">
+        <h2>Your Details (Group Coordinator)</h2>
+        <div class="form-group col-md-4">
+            @Html.Label("title", "Title")
+            @Html.TextBoxFor(x => x.Event.GroupCoordinator.Title, new { @id = "title", @class = "form-control" })
+        </div>
+
+        <div class="form-group col-md-4">
+            @Html.Label("firstname", "Firtst Name *")
+            @Html.TextBoxFor(x => x.Event.GroupCoordinator.FirstName, new { @id = "firstname", @class = "form-control" })
+        </div>
+
+        <div class="form-group col-md-4">
+            @Html.Label("surename", "Surename *")
+            @Html.TextBoxFor(x => x.Event.GroupCoordinator.SureName, new { @id = "surename", @class = "form-control" })
+        </div>
+
+        <div class="form-group col-md-12">
+            @Html.Label("email", "Email *")
+            @Html.TextBoxFor(x => x.Event.GroupCoordinator.Email, new { @id = "email", @class = "form-control" })
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.Label("mobile", "Mobile Number *")
+            @Html.TextBoxFor(x => x.Event.GroupCoordinator.Mobile, new { @id = "mobile", @class = "form-control" })
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.Label("daytime", "Daytime Number")
+            @Html.TextBoxFor(x => x.Event.GroupCoordinator.DaytimeNumber, new { @id = "daytime", @class = "form-control" })
+        </div>
+        <h2>Invoicing Details</h2>
+        <div class="form-group col-md-12">
+            <input type="checkbox" name="checkbox" value="ticked" id="checkbox" />
+            Same as above?
+        </div>
+
+        <div class="invoice">
+            <div class="form-group col-md-4">
+                @Html.Label("title_i", "Title")
+                @Html.TextBoxFor(x => x.Event.GroupCoordinator.Invoice.Title, new { @id = "title_i", @class = "form-control" })
+            </div>
+
+            <div class="form-group col-md-4">
+                @Html.Label("firstname_i", "Firtst Name *")
+                @Html.TextBoxFor(x => x.Event.GroupCoordinator.Invoice.FirstName, new { @id = "firstname_i", @class = "form-control" })
+            </div>
+
+            <div class="form-group col-md-4">
+                @Html.Label("surename_i", "Surename *")
+                @Html.TextBoxFor(x => x.Event.GroupCoordinator.Invoice.SureName, new { @id = "surename_i", @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group col-md-12">
+            @Html.Label("invoice", "Please provide details of who to send the invoice to")
+            @Html.TextAreaFor(x => x.Event.GroupCoordinator.Invoice.Receiver, new { @id = "invoice", @class = "form-control" })
+        </div>
+    </div>
+}
