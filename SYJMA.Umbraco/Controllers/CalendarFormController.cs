@@ -40,7 +40,7 @@ namespace SYJMA.Umbraco.Controllers
                 }
 
                 ViewBag.parentUrl = "/school-visits/";
-                school.ProgramList = jsonDataController.GetSchoolProgramList();
+                school.ProgramList = jsonDataController.GetJsonData_EventName();
                 return PartialView("~/Views/Partials/School/_SchoolCalendar.cshtml", school);
             }
             else if (bookType.Equals("Adult"))

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
@@ -19,7 +20,7 @@ namespace SYJMA.Umbraco.Controllers
         /// </summary>
         /// <param name="eventName"></param>
         /// <returns></returns>
-        public JsonResult GetJsonData(string eventName)
+        public JsonResult GetJsonData_Event(string eventName)
         {
             var jsonResult = string.Empty;
             using (WebClient wc = new WebClient())
@@ -27,9 +28,14 @@ namespace SYJMA.Umbraco.Controllers
                 List<EventCalendar> result = new List<EventCalendar>();
                 try
                 {
-                    jsonResult = wc.DownloadString(CONSTVALUE.API_HOST + eventName);
+                    string credentials = Convert.ToBase64String(
+                        Encoding.ASCII.GetBytes(CONSTVALUE.API_USERNAME + ":" + CONSTVALUE.API_PASSWORD));
+                    wc.Headers[HttpRequestHeader.Authorization] = string.Format(
+                        "Basic {0}", credentials);
+
+                    jsonResult = wc.DownloadString(CONSTVALUE.GET_EVENTFROMNAME + eventName);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     return null;
                 }
@@ -45,27 +51,34 @@ namespace SYJMA.Umbraco.Controllers
                         studentPrice = e.ATTENDEECOST
                     });
                 }
-
                 return Json(result);
             }
         }
-
-        /// <summary>
-        /// Get All School Program List from API Call
-        /// </summary>
-        /// <returns></returns>
-        public List<SelectListItem> GetSchoolProgramList()
+        public List<SelectListItem> GetJsonData_EventName()
         {
+            var jsonResult = string.Empty;
             List<SelectListItem> schoolProgramList = new List<SelectListItem>();
-
-            string resultString = GetSerializedJsonData("getAllSchoolProgram");
-            List<EventCalendar> wrapper = GetDeserializedJsonDataList<EventCalendar>(resultString).ToList();
-
-            foreach (var item in wrapper)
+            using (WebClient wc = new WebClient())
             {
-                schoolProgramList.Add(new SelectListItem() { Text = item.title, Value = item.title });
+                try
+                {
+                    string credentials = Convert.ToBase64String(
+                        Encoding.ASCII.GetBytes(CONSTVALUE.API_USERNAME + ":" + CONSTVALUE.API_PASSWORD));
+                    wc.Headers[HttpRequestHeader.Authorization] = string.Format(
+                        "Basic {0}", credentials);
+                    jsonResult = wc.DownloadString(CONSTVALUE.Get_AllEventName);
+                }
+                catch (Exception ex)
+                {
+                    return null;
+                }
+                List<string> tempList = new JavaScriptSerializer().Deserialize<List<string>>(jsonResult);
+                foreach (var item in tempList)
+                {
+                    schoolProgramList.Add(new SelectListItem() { Text = item, Value = item });
+                }
+                return schoolProgramList;
             }
-            return schoolProgramList;
         }
 
         #region 'Private Region'
@@ -76,7 +89,7 @@ namespace SYJMA.Umbraco.Controllers
         /// <returns>String format Json Data</returns>
         private string GetSerializedJsonData(string eventTitle)
         {
-            return new JavaScriptSerializer().Serialize(GetJsonData(eventTitle).Data);
+            return new JavaScriptSerializer().Serialize(GetJsonData_Event(eventTitle).Data);
         }
 
         /// <summary>
@@ -92,5 +105,5 @@ namespace SYJMA.Umbraco.Controllers
 
         #endregion
 
-	}
+    }
 }
