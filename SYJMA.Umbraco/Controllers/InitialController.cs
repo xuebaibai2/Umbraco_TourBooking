@@ -122,6 +122,7 @@ namespace SYJMA.Umbraco.Controllers
             return RedirectToCurrentUmbracoPage();
         }
 
+        #region 'Private Region'
         /// <summary>
         /// Convert string format of datetime to DateTime datatype
         /// </summary>
@@ -131,5 +132,6 @@ namespace SYJMA.Umbraco.Controllers
         {
             return Convert.ToDateTime(viewModel.PreferredDate, new System.Globalization.CultureInfo("en-AU", true));
         }
+        #endregion
     }
 }

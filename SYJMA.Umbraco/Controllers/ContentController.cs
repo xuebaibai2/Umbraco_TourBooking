@@ -57,6 +57,32 @@ namespace SYJMA.Umbraco.Controllers
         }
 
         /// <summary>
+        /// Search Content ID by content name from parent path
+        /// </summary>
+        /// <param name="contentName"></param>
+        /// <param name="page">The current published content</param>
+        /// <returns>Content ID</returns>
+        public int GetContentIDFromParent(string contentName, IPublishedContent page)
+        {
+            return Services.ContentService.GetChildren(page.Parent.Id)
+                .First(x => x.Name == contentName).Id;
+        }
+
+        /// <summary>
+        /// Get Content ID based on content name
+        /// </summary>
+        /// <param name="contentName"></param>
+        /// <param name="page">The current published content</param>
+        /// <returns>Content ID</returns>
+        public int GetContentIDFromSelf(string contentName, IPublishedContent page)
+        {
+            return Services.ContentService.GetChildren(page.Id)
+                .First(x => x.Name == contentName).Id;
+        }
+
+        #region 'Private Region'
+
+        /// <summary>
         /// Get Invoice object from Umbraco record 
         /// </summary>
         /// <param name="data"></param>
@@ -127,29 +153,7 @@ namespace SYJMA.Umbraco.Controllers
             };
         }
 
-        /// <summary>
-        /// Search Content ID by content name from parent path
-        /// </summary>
-        /// <param name="contentName"></param>
-        /// <param name="page">The current published content</param>
-        /// <returns>Content ID</returns>
-        public int GetContentIDFromParent(string contentName, IPublishedContent page)
-        {
-            return Services.ContentService.GetChildren(page.Parent.Id)
-                .First(x => x.Name == contentName).Id;
-        }
-
-        /// <summary>
-        /// Get Content ID based on content name
-        /// </summary>
-        /// <param name="contentName"></param>
-        /// <param name="page">The current published content</param>
-        /// <returns>Content ID</returns>
-        public int GetContentIDFromSelf(string contentName, IPublishedContent page)
-        {
-            return Services.ContentService.GetChildren(page.Id)
-                .First(x => x.Name == contentName).Id;
-        }
+        #endregion
 
     }
 }

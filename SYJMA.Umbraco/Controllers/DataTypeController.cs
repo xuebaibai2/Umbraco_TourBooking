@@ -155,6 +155,7 @@ namespace SYJMA.Umbraco.Controllers
                 .First();
         }
 
+        #region 'Private Region'
         /// <summary>
         /// Get a List of select items based on the required user defined dropdown list on umbraco
         /// </summary>
@@ -169,5 +170,7 @@ namespace SYJMA.Umbraco.Controllers
             }
             return tempList;
         }
+
+        #endregion
     }
 }

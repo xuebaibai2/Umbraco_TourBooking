@@ -54,17 +54,6 @@ namespace SYJMA.Umbraco.Controllers
         }
 
         /// <summary>
-        /// Get total student ticket price
-        /// </summary>
-        /// <param name="studentNumber"></param>
-        /// <param name="pricePerStudent"></param>
-        /// <returns>Total price in float type</returns>
-        private float GetTotalPrice(int studentNumber, float pricePerStudent)
-        {
-            return studentNumber * pricePerStudent;
-        }
-
-        /// <summary>
         /// Retrieve data from privious page, insert data to umbraco and redirect to next page
         /// </summary>
         /// <param name="school"></param>
@@ -90,5 +79,18 @@ namespace SYJMA.Umbraco.Controllers
             return CurrentUmbracoPage();
             //return RedirectToUmbracoPage(contentController.GetContentIDFromSelf("", CurrentPage), routeValues);
         }
+
+        #region 'Private Region'
+        /// <summary>
+        /// Get total student ticket price
+        /// </summary>
+        /// <param name="studentNumber"></param>
+        /// <param name="pricePerStudent"></param>
+        /// <returns>Total price in float type</returns>
+        private float GetTotalPrice(int studentNumber, float pricePerStudent)
+        {
+            return studentNumber * pricePerStudent;
+        }
+        #endregion
     }
 }

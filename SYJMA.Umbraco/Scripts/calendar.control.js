@@ -6,7 +6,6 @@
             right: 'month next'
         },
         defaultView: 'agendaWeek',
-        //defaultDate: new Date(), // Selected date
         editable: true,
         eventLimit: true, // allow "more" link when too many events
         allDaySlot: false,
