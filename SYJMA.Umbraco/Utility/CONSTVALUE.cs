@@ -20,7 +20,8 @@ namespace SYJMA.Umbraco.Utility
         //public const string API_HOST = "http://demo2054938.mockable.io/";
         public const string API_HOST = "http://localhost:58015/Tour/";
         public const string GET_EVENTFROMNAME = "http://localhost:58015/Tour?tourname=";
-        public const string Get_AllEventName = "http://localhost:58015/Tour/AllNames";
+        public const string GET_ALLEVENTNAME = "http://localhost:58015/Tour/AllNames";
+        public const string GET_ATTENDEETYPE = "/TourAttendeeType";
 
         public const string API_USERNAME = "SYJMA";
         public const string API_PASSWORD = "slowghost30";

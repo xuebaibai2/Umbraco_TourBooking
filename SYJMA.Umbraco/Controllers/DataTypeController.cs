@@ -80,7 +80,7 @@ namespace SYJMA.Umbraco.Controllers
         }
 
         /// <summary>
-        /// Get the selected school subject item id based on selected item name
+        /// Get the selected school subject name id based on selected name name
         /// </summary>
         /// <param name="school"></param>
         /// <returns>subject id</returns>
@@ -111,7 +111,7 @@ namespace SYJMA.Umbraco.Controllers
         }
 
         /// <summary>
-        /// Get the selected school year item id based on selected item name
+        /// Get the selected school year name id based on selected name name
         /// </summary>
         /// <param name="school"></param>
         /// <returns>year id</returns>
@@ -126,7 +126,7 @@ namespace SYJMA.Umbraco.Controllers
         }
 
         /// <summary>
-        /// Get the selected school year item id based on selected item name
+        /// Get the selected school year name id based on selected name name
         /// </summary>
         /// <param name="adult"></param>
         /// <returns>program id</returns>
@@ -141,7 +141,7 @@ namespace SYJMA.Umbraco.Controllers
         }
 
         /// <summary>
-        /// Get the selected university program item id based on selected item name
+        /// Get the selected university program name id based on selected name name
         /// </summary>
         /// <param name="uni"></param>
         /// <returns>program id</returns>
@@ -159,7 +159,7 @@ namespace SYJMA.Umbraco.Controllers
         /// <summary>
         /// Get a List of select items based on the required user defined dropdown list on umbraco
         /// </summary>
-        /// <param name="dropdownListValues">Collection of user defined dropdown list's item</param>
+        /// <param name="dropdownListValues">Collection of user defined dropdown list's name</param>
         /// <returns></returns>
         private List<SelectListItem> GetDropdownListByListType(ICollection<PreValue> dropdownListValues)
         {

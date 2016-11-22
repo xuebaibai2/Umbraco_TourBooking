@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using Newtonsoft.Json;
 using SYJMA.Umbraco.Models;
+using SYJMA.Umbraco.Utility;
 using Umbraco.Web.Mvc;
 
 namespace SYJMA.Umbraco.Controllers
@@ -40,7 +41,7 @@ namespace SYJMA.Umbraco.Controllers
                 }
 
                 ViewBag.parentUrl = "/school-visits/";
-                school.ProgramList = jsonDataController.GetJsonData_EventName();
+                school.ProgramList = jsonDataController.GetEventNameList();
                 return PartialView("~/Views/Partials/School/_SchoolCalendar.cshtml", school);
             }
             else if (bookType.Equals("Adult"))
@@ -61,12 +62,16 @@ namespace SYJMA.Umbraco.Controllers
         /// <returns>Redirect to next page</returns>
         public ActionResult PostCalendarForm_School(SchoolModel school)
         {
+            school.Event.studentPrice = jsonDataController.GetJsonData_AttendeeCost(school.Event.id, ATTENDEETYPE.ATTENDEETYPE_STUDENT);
+            school.Event.staffPrice = jsonDataController.GetJsonData_AttendeeCost(school.Event.id, ATTENDEETYPE.ATTENDEETYPE_STAFF);
+
             var schoolRecord = Services.ContentService.GetById(school.Id);
             schoolRecord.SetValue("eventTitle",school.Event.title);
             schoolRecord.SetValue("eventId",school.Event.id);
             schoolRecord.SetValue("eventStart",school.Event.start);
             schoolRecord.SetValue("eventEnd",school.Event.end);
-            schoolRecord.SetValue("eventPriceStudent", school.Event.studentPrice);
+            schoolRecord.SetValue("eventPriceStudent", Convert.ToDecimal(school.Event.studentPrice));
+            schoolRecord.SetValue("eventPriceStaff", Convert.ToDecimal(school.Event.staffPrice));
             Services.ContentService.Save(schoolRecord);
 
             NameValueCollection routeValues = new NameValueCollection();

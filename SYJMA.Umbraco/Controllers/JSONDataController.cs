@@ -22,68 +22,62 @@ namespace SYJMA.Umbraco.Controllers
         /// <returns></returns>
         public JsonResult GetJsonData_Event(string eventName)
         {
-            var jsonResult = string.Empty;
-            using (WebClient wc = new WebClient())
+            List<EventCalendar> eventList = new List<EventCalendar>();
+            var jsonResult = GetJsonResultAsString(CONSTVALUE.GET_EVENTFROMNAME + eventName);
+            IEnumerable<API_TOUR> tourList = GetDeserializedJsonDataList<API_TOUR>(jsonResult); 
+            foreach (var tour in tourList)
             {
-                List<EventCalendar> result = new List<EventCalendar>();
-                try
+                eventList.Add(new EventCalendar
                 {
-                    string credentials = Convert.ToBase64String(
-                        Encoding.ASCII.GetBytes(CONSTVALUE.API_USERNAME + ":" + CONSTVALUE.API_PASSWORD));
-                    wc.Headers[HttpRequestHeader.Authorization] = string.Format(
-                        "Basic {0}", credentials);
-
-                    jsonResult = wc.DownloadString(CONSTVALUE.GET_EVENTFROMNAME + eventName);
-                }
-                catch (Exception ex)
-                {
-                    return null;
-                }
-                IEnumerable<REventCalendar> temp = JsonConvert.DeserializeObject<IEnumerable<REventCalendar>>(jsonResult);
-                foreach (var e in temp)
-                {
-                    result.Add(new EventCalendar
-                    {
-                        id = e.ID,
-                        title = e.NAME,
-                        start = e.AVAILABLEFROM,
-                        end = e.AVAILABLETO,
-                        studentPrice = e.ATTENDEECOST
-                    });
-                }
-                return Json(result);
+                    id = tour.ID,
+                    title = tour.NAME,
+                    start = tour.AVAILABLEFROM,
+                    end = tour.AVAILABLETO
+                    //studentPrice = tour.ATTENDEECOST // retrive data from API_TOURATTENDEETYPE model
+                });
             }
+            return Json(eventList);
         }
-        public List<SelectListItem> GetJsonData_EventName()
+
+        /// <summary>
+        /// Retrieve AttendeeCost based on Attendee Type and Event/Tour ID, if no value been retrieved than set cost as 0
+        /// </summary>
+        /// <param name="eventID"></param>
+        /// <param name="attendeeType"></param>
+        /// <returns></returns>
+        public float GetJsonData_AttendeeCost(string eventID, string attendeeType)
         {
-            var jsonResult = string.Empty;
-            List<SelectListItem> schoolProgramList = new List<SelectListItem>();
-            using (WebClient wc = new WebClient())
+            var attendeeTypeResult = GetJsonResultAsString(CONSTVALUE.API_HOST + eventID + CONSTVALUE.GET_ATTENDEETYPE);
+            if (attendeeTypeResult == null)
             {
-                try
-                {
-                    string credentials = Convert.ToBase64String(
-                        Encoding.ASCII.GetBytes(CONSTVALUE.API_USERNAME + ":" + CONSTVALUE.API_PASSWORD));
-                    wc.Headers[HttpRequestHeader.Authorization] = string.Format(
-                        "Basic {0}", credentials);
-                    jsonResult = wc.DownloadString(CONSTVALUE.Get_AllEventName);
-                }
-                catch (Exception ex)
-                {
-                    return null;
-                }
-                List<string> tempList = new JavaScriptSerializer().Deserialize<List<string>>(jsonResult);
-                foreach (var item in tempList)
-                {
-                    schoolProgramList.Add(new SelectListItem() { Text = item, Value = item });
-                }
-                return schoolProgramList;
+                return 0;
             }
+            IEnumerable<API_TOURATTENDEETYPE> attendeeTypeList = GetDeserializedJsonDataList<API_TOURATTENDEETYPE>(attendeeTypeResult);
+            return attendeeTypeList.Where(x => x.TYPE.Equals(attendeeType)).Select(x => x.COST).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Get all available event name as a SelectListItem List
+        /// </summary>
+        /// <returns></returns>
+        public List<SelectListItem> GetEventNameList()
+        {
+            List<SelectListItem> schoolProgramList = new List<SelectListItem>();
+            var jsonResult = GetJsonResultAsString(CONSTVALUE.GET_ALLEVENTNAME);
+            List<string> nameList = new JavaScriptSerializer().Deserialize<List<string>>(jsonResult);
+            foreach (var name in nameList)
+            {
+                schoolProgramList.Add(new SelectListItem()
+                {
+                    Text = name,
+                    Value = name
+                });
+            }
+            return schoolProgramList;
         }
 
         #region 'Private Region'
-        /// <summary>
-        /// Retrieve Jsondata by eventTitle and conver it to serialized string format
+        //GetJsonResult/// Retrieve Jsondata by eventTitle and conver it to serialized string format
         /// </summary>
         /// <param name="eventTitle"></param>
         /// <returns>String format Json Data</returns>
@@ -101,6 +95,40 @@ namespace SYJMA.Umbraco.Controllers
         private IEnumerable<T> GetDeserializedJsonDataList<T>(string serializedData)
         {
             return new JavaScriptSerializer().Deserialize<List<T>>(serializedData);
+        }
+
+        /// <summary>
+        /// Call rest API to retrieve JSON data in string format
+        /// </summary>
+        /// <param name="apiURL"></param>
+        /// <returns></returns>
+        private string GetJsonResultAsString(string apiURL)
+        {
+            var jsonResult = string.Empty;
+            using (WebClient wc = new WebClient())
+            {
+                try
+                {
+                    wc.Headers[HttpRequestHeader.Authorization] = GetClientCredential();
+                    jsonResult = wc.DownloadString(apiURL);
+                }
+                catch (Exception ex)
+                {
+                    return null;
+                }
+                return jsonResult;
+            }
+        }
+
+        /// <summary>
+        /// Get Rest API call Basic Auth credential
+        /// </summary>
+        /// <returns></returns>
+        private string GetClientCredential()
+        {
+            string credentials = Convert.ToBase64String(
+                        Encoding.ASCII.GetBytes(CONSTVALUE.API_USERNAME + ":" + CONSTVALUE.API_PASSWORD));
+            return string.Format("Basic {0}", credentials);
         }
 
         #endregion

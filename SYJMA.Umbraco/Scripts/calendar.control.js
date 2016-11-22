@@ -29,7 +29,6 @@
             //$('#selectedEventEnd').val(calEvent.end.format('DD-MM-YYYY kk:mm'));
             $('#selectedEventStart').val(calEvent.start.format());
             $('#selectedEventEnd').val(calEvent.end.format());
-            $('#selectedEventStudentPrice').val(calEvent.studentPrice);
         }
     });
 

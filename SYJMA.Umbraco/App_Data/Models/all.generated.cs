@@ -8,7 +8,7 @@ using  Umbraco.Web;
 using  Umbraco.ModelsBuilder;
 using  Umbraco.ModelsBuilder.Umbraco;
 [assembly: PureLiveAssembly]
-[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "4436a27354427a4b")]
+[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "ae883f6dd5b2fd56")]
 [assembly:System.Reflection.AssemblyVersion("0.0.0.1")]
 
 
@@ -302,6 +302,15 @@ namespace Umbraco.Web.PublishedContentModels
 		public string EventId
 		{
 			get { return this.GetPropertyValue<string>("eventId"); }
+		}
+
+		///<summary>
+		/// Event Price Staff: Staff Booking Price
+		///</summary>
+		[ImplementPropertyType("eventPriceStaff")]
+		public string EventPriceStaff
+		{
+			get { return this.GetPropertyValue<string>("eventPriceStaff"); }
 		}
 
 		///<summary>

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using SYJMA.Umbraco.Models;
+using SYJMA.Umbraco.Utility;
 using Umbraco.Web.Mvc;
 
 namespace SYJMA.Umbraco.Controllers
@@ -22,6 +23,7 @@ namespace SYJMA.Umbraco.Controllers
         /// <returns>Partial view based on the booktype and the model</returns>
         public PartialViewResult ConfirmationPanel(string bookType, string id)
         {
+            //If id is not an Integer type will redirect to error page
             int result;
             if (!Int32.TryParse(id, out result))
             {
