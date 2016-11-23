@@ -19,8 +19,8 @@ using Umbraco.ModelsBuilder;
 using Umbraco.ModelsBuilder.Umbraco;
 
 [assembly: PureLiveAssembly]
-[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "532143206e68ea16")]
-[assembly:System.Reflection.AssemblyVersion("0.0.0.1")]
+[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "231b1e88418427e")]
+[assembly:System.Reflection.AssemblyVersion("0.0.0.2")]
 
 namespace Umbraco.Web.PublishedContentModels
 {
@@ -334,12 +334,30 @@ namespace Umbraco.Web.PublishedContentModels
 		}
 
 		///<summary>
+		/// GroupCoordinatorSerialNumber: Group Coordinator Serial Number from ThankQ DB Contact Table
+		///</summary>
+		[ImplementPropertyType("groupCoordinatorSerialNumber")]
+		public string GroupCoordinatorSerialNumber
+		{
+			get { return this.GetPropertyValue<string>("groupCoordinatorSerialNumber"); }
+		}
+
+		///<summary>
 		/// Invoice Email: Invoice Receiver's Email
 		///</summary>
 		[ImplementPropertyType("invoiceEmail")]
 		public string InvoiceEmail
 		{
 			get { return this.GetPropertyValue<string>("invoiceEmail"); }
+		}
+
+		///<summary>
+		/// InvoiceeSerialNumber: Invoicee SerialNumber from ThankQ DB Contact Table
+		///</summary>
+		[ImplementPropertyType("invoiceeSerialNumber")]
+		public string InvoiceeSerialNumber
+		{
+			get { return this.GetPropertyValue<string>("invoiceeSerialNumber"); }
 		}
 
 		///<summary>
@@ -433,6 +451,15 @@ namespace Umbraco.Web.PublishedContentModels
 		}
 
 		///<summary>
+		/// SchoolSerialNumber: Serial Number of School from ThankQ DB
+		///</summary>
+		[ImplementPropertyType("schoolSerialNumber")]
+		public string SchoolSerialNumber
+		{
+			get { return this.GetPropertyValue<string>("schoolSerialNumber"); }
+		}
+
+		///<summary>
 		/// Subject Area: School subject area
 		///</summary>
 		[ImplementPropertyType("subjectArea")]
@@ -466,6 +493,15 @@ namespace Umbraco.Web.PublishedContentModels
 		public string TotalCost
 		{
 			get { return this.GetPropertyValue<string>("totalCost"); }
+		}
+
+		///<summary>
+		/// TourBookingID: Tour Booking ID from ThankQ DB
+		///</summary>
+		[ImplementPropertyType("tourBookingID")]
+		public string TourBookingID
+		{
+			get { return this.GetPropertyValue<string>("tourBookingID"); }
 		}
 
 		///<summary>

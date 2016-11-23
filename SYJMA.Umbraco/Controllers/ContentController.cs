@@ -32,12 +32,6 @@ namespace SYJMA.Umbraco.Controllers
             }
             else
             {
-                //int recordId = Convert.ToInt32(data.GetValue("year"));
-                //int subjectId = Convert.ToInt32(data.GetValue("subjectArea"));
-
-                //string yearValue = dataType.GetDropdownListValue(recordId, CONSTVALUE.SCHOOL_YEAR_DROPDOWNLIST_NAME);
-                //string subjectArea = dataType.GetDropdownListValue(subjectId, CONSTVALUE.SCHOOL_SUBJECT_DROPDOWNLIST_NAME);
-
                 EventCalendar eventCalendar = GetEventCalendar(data);
 
                 SchoolModel model = new SchoolModel()

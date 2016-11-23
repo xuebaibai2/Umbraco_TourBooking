@@ -7,6 +7,7 @@ namespace SYJMA.Umbraco.Models
 {
     public class GroupCoordinator
     {
+        public string SerialNumber { get; set; }
         public string Title { get; set; }
         public string FirstName { get; set; }
         public string SureName { get; set; }

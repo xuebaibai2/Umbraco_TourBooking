@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using Newtonsoft.Json;
 using SYJMA.Umbraco.Models;
+using SYJMA.Umbraco.Models.API;
 using SYJMA.Umbraco.Utility;
 using Umbraco.Web.Mvc;
 
@@ -15,6 +16,7 @@ namespace SYJMA.Umbraco.Controllers
 {
     public class JSONDataController : SurfaceController
     {
+        #region 'Get'
         /// <summary>
         /// Retrieve data throught web services and return JSON data
         /// </summary>
@@ -56,6 +58,18 @@ namespace SYJMA.Umbraco.Controllers
             return attendeeTypeList.Where(x => x.TYPE.Equals(attendeeType)).Select(x => x.COST).FirstOrDefault();
         }
 
+        public JsonResult GetSchoolNameList()
+        {
+            List<string> schooResultlList = new List<string>();
+            var jsonResult = GetJsonResultAsString(CONSTVALUE.GET_SCHOOLCONTACTS);
+            IEnumerable<API_CONTACT> schoolContactList = GetDeserializedJsonDataList<API_CONTACT>(jsonResult);
+            foreach (var school in schoolContactList)
+            {
+                schooResultlList.Add(school.KEYNAME);
+            }
+            return Json(schooResultlList);
+        }
+
         /// <summary>
         /// Get all available event name as a SelectListItem List
         /// </summary>
@@ -76,6 +90,10 @@ namespace SYJMA.Umbraco.Controllers
             return schoolProgramList;
         }
 
+        /// <summary>
+        /// Get all YEARGROUP record from thankQ DB LOOKUPVALUE table
+        /// </summary>
+        /// <returns></returns>
         public List<SelectListItem> GetYearGroupList()
         {
             List<SelectListItem> yearGroupList = new List<SelectListItem>();
@@ -92,6 +110,10 @@ namespace SYJMA.Umbraco.Controllers
             return yearGroupList;
         }
 
+        /// <summary>
+        /// Get all SUBJECTAREA record from thankQ DB LOOKUPVALUE table
+        /// </summary>
+        /// <returns></returns>
         public List<SelectListItem> GetSubjectAreaList()
         {
             List<SelectListItem> subjectAreaList = new List<SelectListItem>();
@@ -107,6 +129,27 @@ namespace SYJMA.Umbraco.Controllers
             }
             return subjectAreaList;
         }
+
+        
+
+        #endregion
+
+        #region 'POST'
+        public string PostNewContact<T>(Object obj)
+        {
+            API_CONTACT contact = new API_CONTACT();
+            if (typeof(T).Equals(new SchoolModel().GetType()))
+            {
+                SchoolModel model = (SchoolModel)obj;
+                contact.CONTACTTYPE = "Organisation";
+                contact.PRIMARYCATEGORY = "Schools"; // For university is University
+                contact.KEYNAME = model.SchoolName;
+            }
+            string data = new JavaScriptSerializer().Serialize(contact);
+            return PostAPI(CONSTVALUE.POST_CONTACT, data);
+        }
+        #endregion
+
 
         #region 'Private Region'
         //GetJsonResult/// Retrieve Jsondata by eventTitle and conver it to serialized string format
@@ -149,6 +192,26 @@ namespace SYJMA.Umbraco.Controllers
                     return null;
                 }
                 return jsonResult;
+            }
+        }
+
+        private string PostAPI(string apiURL, string data)
+        {
+            string serialNumber = string.Empty;
+            using (WebClient wc = new WebClient())
+            {
+                try
+                {
+                    wc.Headers[HttpRequestHeader.Authorization] = GetClientCredential();
+                    wc.Headers[HttpRequestHeader.ContentType] = "application/json";
+                    serialNumber = wc.UploadString(apiURL, data);
+                }
+                catch (Exception ex)
+                {
+                    return null;
+                    throw ex;
+                }
+                return serialNumber;
             }
         }
 

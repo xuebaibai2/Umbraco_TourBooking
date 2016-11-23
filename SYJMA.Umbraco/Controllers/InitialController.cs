@@ -29,8 +29,6 @@ namespace SYJMA.Umbraco.Controllers
             {
                 SchoolModel school = new SchoolModel();
                 school.type = "School";
-                //school.SubjectList = dataTypeController.GetSchoolSubjectDropdownList();
-                //school.YearList = dataTypeController.GetSchoolYearDropdownList();
                 school.SubjectList = jsonDataController.GetSubjectAreaList();
                 school.YearList = jsonDataController.GetYearGroupList();
                 return PartialView("~/Views/Partials/School/_SchoolVisit.cshtml", school);
@@ -60,8 +58,10 @@ namespace SYJMA.Umbraco.Controllers
         /// <returns>Redirect to page</returns>
         public ActionResult PostInitialPage_School(SchoolModel school)
         {
+            school.SerialNumber = jsonDataController.PostNewContact<SchoolModel>(school).Trim('"');
             var schoolRecord = Services.ContentService.CreateContent(school.SchoolName + " - " + school.SubjectArea, CurrentPage.Id, "School");
-            
+
+            schoolRecord.SetValue("schoolSerialNumber", school.SerialNumber);
             schoolRecord.SetValue("nameOfSchool", school.SchoolName);
             schoolRecord.SetValue("year", school.Year);
             schoolRecord.SetValue("preferredDateSchool", GetDateTime(school));
@@ -78,7 +78,6 @@ namespace SYJMA.Umbraco.Controllers
             routeValues.Add("id", school.Id.ToString());
             return RedirectToUmbracoPage(contentController.GetContentIDFromParent("School Calendar Form",CurrentPage), routeValues);
         }
-
 
         /// <summary>
         /// Receive post data form from Adult partialview and save into Adult Visits content as a record

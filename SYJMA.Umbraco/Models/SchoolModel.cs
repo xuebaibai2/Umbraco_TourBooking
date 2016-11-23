@@ -8,7 +8,7 @@ namespace SYJMA.Umbraco.Models
 {
     public class SchoolModel : InitialModel
     {
-
+        public string SerialNumber { get; set; }
         public string SchoolName { get; set; }
         public string Year { get; set; }
         public string SubjectArea { get; set; }
