@@ -16,6 +16,7 @@ namespace SYJMA.Umbraco.Controllers
     {
         private DataTypeController dataTypeController = new DataTypeController();
         private ContentController contentController = new ContentController();
+        private JSONDataController jsonDataController = new JSONDataController();
 
         /// <summary>
         /// Render partial view for Initial Identification Page
@@ -28,8 +29,10 @@ namespace SYJMA.Umbraco.Controllers
             {
                 SchoolModel school = new SchoolModel();
                 school.type = "School";
-                school.SubjectList = dataTypeController.GetSchoolSubjectDropdownList();
-                school.YearList = dataTypeController.GetSchoolYearDropdownList();
+                //school.SubjectList = dataTypeController.GetSchoolSubjectDropdownList();
+                //school.YearList = dataTypeController.GetSchoolYearDropdownList();
+                school.SubjectList = jsonDataController.GetSubjectAreaList();
+                school.YearList = jsonDataController.GetYearGroupList();
                 return PartialView("~/Views/Partials/School/_SchoolVisit.cshtml", school);
             }
             else if (bookType.Equals("Adult"))
@@ -58,14 +61,11 @@ namespace SYJMA.Umbraco.Controllers
         public ActionResult PostInitialPage_School(SchoolModel school)
         {
             var schoolRecord = Services.ContentService.CreateContent(school.SchoolName + " - " + school.SubjectArea, CurrentPage.Id, "School");
-
-            int selectedYearId = dataTypeController.GetSchoolYearDropdownList_SelectedID(school);
-            int selectedSubjectId = dataTypeController.GetSchoolSubjectDropdownList_SelectedID(school);
             
             schoolRecord.SetValue("nameOfSchool", school.SchoolName);
-            schoolRecord.SetValue("year", selectedYearId);
+            schoolRecord.SetValue("year", school.Year);
             schoolRecord.SetValue("preferredDateSchool", GetDateTime(school));
-            schoolRecord.SetValue("subjectArea", selectedSubjectId);
+            schoolRecord.SetValue("subjectArea", school.SubjectArea);
             schoolRecord.SetValue("numberOfStudents", school.StudentsNumber);
             schoolRecord.SetValue("numberOfStaff", school.StaffNumber);
             schoolRecord.SetValue("comments", school.Comments);

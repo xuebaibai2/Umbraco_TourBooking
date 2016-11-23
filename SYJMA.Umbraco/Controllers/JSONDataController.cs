@@ -64,7 +64,7 @@ namespace SYJMA.Umbraco.Controllers
         {
             List<SelectListItem> schoolProgramList = new List<SelectListItem>();
             var jsonResult = GetJsonResultAsString(CONSTVALUE.GET_ALLEVENTNAME);
-            List<string> nameList = new JavaScriptSerializer().Deserialize<List<string>>(jsonResult);
+            List<string> nameList = GetDeserializedJsonDataList<string>(jsonResult).ToList();
             foreach (var name in nameList)
             {
                 schoolProgramList.Add(new SelectListItem()
@@ -74,6 +74,38 @@ namespace SYJMA.Umbraco.Controllers
                 });
             }
             return schoolProgramList;
+        }
+
+        public List<SelectListItem> GetYearGroupList()
+        {
+            List<SelectListItem> yearGroupList = new List<SelectListItem>();
+            var jsonResult = GetJsonResultAsString(CONSTVALUE.GET_YEARGROUP);
+            List<string> yeargroupStringList = GetDeserializedJsonDataList<string>(jsonResult).ToList();
+            foreach (var year in yeargroupStringList)
+            {
+                yearGroupList.Add(new SelectListItem()
+                {
+                    Text = year,
+                    Value = year
+                });
+            }
+            return yearGroupList;
+        }
+
+        public List<SelectListItem> GetSubjectAreaList()
+        {
+            List<SelectListItem> subjectAreaList = new List<SelectListItem>();
+            var jsonResult = GetJsonResultAsString(CONSTVALUE.GET_SUBJECTAREA);
+            List<string> subjectAreaStringList = GetDeserializedJsonDataList<string>(jsonResult).ToList();
+            foreach (var subject in subjectAreaStringList)
+            {
+                subjectAreaList.Add(new SelectListItem()
+                {
+                    Text = subject,
+                    Value = subject 
+                });
+            }
+            return subjectAreaList;
         }
 
         #region 'Private Region'

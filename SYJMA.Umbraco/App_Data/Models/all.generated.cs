@@ -8,7 +8,7 @@ using  Umbraco.Web;
 using  Umbraco.ModelsBuilder;
 using  Umbraco.ModelsBuilder.Umbraco;
 [assembly: PureLiveAssembly]
-[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "ae883f6dd5b2fd56")]
+[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "532143206e68ea16")]
 [assembly:System.Reflection.AssemblyVersion("0.0.0.1")]
 
 
@@ -452,9 +452,9 @@ namespace Umbraco.Web.PublishedContentModels
 		/// Subject Area: School subject area
 		///</summary>
 		[ImplementPropertyType("subjectArea")]
-		public object SubjectArea
+		public string SubjectArea
 		{
-			get { return this.GetPropertyValue("subjectArea"); }
+			get { return this.GetPropertyValue<string>("subjectArea"); }
 		}
 
 		///<summary>
@@ -488,9 +488,9 @@ namespace Umbraco.Web.PublishedContentModels
 		/// Year: Year level of school booking
 		///</summary>
 		[ImplementPropertyType("year")]
-		public object Year
+		public string Year
 		{
-			get { return this.GetPropertyValue("year"); }
+			get { return this.GetPropertyValue<string>("year"); }
 		}
 	}
 

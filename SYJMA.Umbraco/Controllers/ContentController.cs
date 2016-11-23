@@ -32,21 +32,21 @@ namespace SYJMA.Umbraco.Controllers
             }
             else
             {
-                int recordId = Convert.ToInt32(data.GetValue("year"));
-                int subjectId = Convert.ToInt32(data.GetValue("subjectArea"));
+                //int recordId = Convert.ToInt32(data.GetValue("year"));
+                //int subjectId = Convert.ToInt32(data.GetValue("subjectArea"));
 
-                string yearValue = dataType.GetDropdownListValue(recordId, CONSTVALUE.SCHOOL_YEAR_DROPDOWNLIST_NAME);
-                string subjectArea = dataType.GetDropdownListValue(subjectId, CONSTVALUE.SCHOOL_SUBJECT_DROPDOWNLIST_NAME);
+                //string yearValue = dataType.GetDropdownListValue(recordId, CONSTVALUE.SCHOOL_YEAR_DROPDOWNLIST_NAME);
+                //string subjectArea = dataType.GetDropdownListValue(subjectId, CONSTVALUE.SCHOOL_SUBJECT_DROPDOWNLIST_NAME);
 
                 EventCalendar eventCalendar = GetEventCalendar(data);
 
                 SchoolModel model = new SchoolModel()
                 {
                     Id = Convert.ToInt32(data.GetValue("recordId")),
-                    Year = yearValue,
+                    Year = Convert.ToString(data.GetValue("year")),
                     SchoolName = Convert.ToString(data.GetValue("nameOfSchool")),
                     PreferredDate = Convert.ToString(data.GetValue("preferredDateSchool")),
-                    SubjectArea = subjectArea,
+                    SubjectArea = Convert.ToString(data.GetValue("subjectArea")),
                     StudentsNumber = Convert.ToInt32(data.GetValue("numberOfStudents")),
                     StaffNumber = Convert.ToInt32(data.GetValue("numberOfStaff")),
                     Comments = Convert.ToString(data.GetValue("comments")),

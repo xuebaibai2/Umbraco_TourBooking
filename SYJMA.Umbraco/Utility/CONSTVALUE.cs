@@ -22,6 +22,8 @@ namespace SYJMA.Umbraco.Utility
         public const string GET_EVENTFROMNAME = "http://localhost:58015/Tour?tourname=";
         public const string GET_ALLEVENTNAME = "http://localhost:58015/Tour/AllNames";
         public const string GET_ATTENDEETYPE = "/TourAttendeeType";
+        public const string GET_YEARGROUP = "http://localhost:58015/LookupValue?lookupname=yeargroup&bomtype=event";
+        public const string GET_SUBJECTAREA = "http://localhost:58015/LookupValue?lookupname=subjectarea&bomtype=event";
 
         public const string API_USERNAME = "SYJMA";
         public const string API_PASSWORD = "slowghost30";
@@ -35,5 +37,6 @@ namespace SYJMA.Umbraco.Utility
         /// Content Names
         /// </summary>
         public const string SCHOOL_VISITS_CONTENT = "School Visits";
+
     }
 }
