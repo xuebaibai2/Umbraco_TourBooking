@@ -88,7 +88,8 @@ namespace SYJMA.Umbraco.Controllers
                 Title = Convert.ToString(data.GetValue("invoiceTitle") ?? ""),
                 FirstName = Convert.ToString(data.GetValue("invoiceFirstName") ?? ""),
                 SureName = Convert.ToString(data.GetValue("invoiceSurename") ?? ""),
-                Email = Convert.ToString(data.GetValue("invoiceEmail") ?? "")
+                Email = Convert.ToString(data.GetValue("invoiceEmail") ?? ""),
+                SerialNumber = Convert.ToString(data.GetValue("invoiceeSerialNumber") ?? "")
             };
         }
 
@@ -107,7 +108,7 @@ namespace SYJMA.Umbraco.Controllers
                 Email = Convert.ToString(data.GetValue("email") ?? ""),
                 Mobile = Convert.ToString(data.GetValue("mobile") ?? ""),
                 DaytimeNumber = Convert.ToString(data.GetValue("daytimeNumber") ?? ""),
-                Invoice = GetInvoice(data)
+                SerialNumber = Convert.ToString(data.GetValue("groupCoordinatorSerialNumber") ?? "")
             };
         }
 
@@ -126,6 +127,7 @@ namespace SYJMA.Umbraco.Controllers
                 end = Convert.ToString(data.GetValue("eventEnd") ?? ""),
                 studentPrice = float.Parse(Convert.ToString(data.GetValue("eventPriceStudent") ?? 0)),
                 GroupCoordinator = GetGroupCoordinator(data),
+                Invoice = GetInvoice(data),
                 AdditionalInfo = GetAdditionalinfo(data)
             };
         }

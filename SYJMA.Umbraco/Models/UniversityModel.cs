@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace SYJMA.Umbraco.Models
 {
-    public class UniversityModel : InitialModel
+    public class UniversityModel : BaseModel
     {
         public string UniName { get; set; }
         public string CampusName { get; set; }

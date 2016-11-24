@@ -8,7 +8,7 @@ using  Umbraco.Web;
 using  Umbraco.ModelsBuilder;
 using  Umbraco.ModelsBuilder.Umbraco;
 [assembly: PureLiveAssembly]
-[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "231b1e88418427e")]
+[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "58cd80179a8deaf0")]
 [assembly:System.Reflection.AssemblyVersion("0.0.0.1")]
 
 
@@ -296,7 +296,7 @@ namespace Umbraco.Web.PublishedContentModels
 		}
 
 		///<summary>
-		/// Event Id: Booking event id
+		/// Event Id: Tour ID
 		///</summary>
 		[ImplementPropertyType("eventId")]
 		public string EventId

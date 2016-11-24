@@ -416,6 +416,7 @@
     <Compile Include="Models\AdultModel.cs" />
     <Compile Include="Models\API\API_CONTACT.cs" />
     <Compile Include="Models\API\API_TOURATTENDEETYPE.cs" />
+    <Compile Include="Models\API\API_TOURBOOKING.cs" />
     <Compile Include="Models\EventCalendar.cs" />
     <Compile Include="Models\GroupCoordinator.cs" />
     <Compile Include="Models\InitialModel.cs" />
@@ -426,6 +427,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility\ATTENDEETYPE.cs" />
     <Compile Include="Utility\CONSTVALUE.cs" />
+    <Compile Include="Utility\CONTACTTYPE.cs" />
+    <Compile Include="Utility\TOURBOOKINGSTATUS.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

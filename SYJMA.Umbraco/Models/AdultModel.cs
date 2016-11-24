@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace SYJMA.Umbraco.Models
 {
-    public class AdultModel : InitialModel
+    public class AdultModel : BaseModel
     {
         public string GroupName { get; set; }
         

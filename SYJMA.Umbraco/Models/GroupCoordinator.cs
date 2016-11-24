@@ -14,6 +14,5 @@ namespace SYJMA.Umbraco.Models
         public string Email { get; set; }
         public string Mobile { get; set; }
         public string DaytimeNumber { get; set; }
-        public Invoice Invoice { get; set; }
     }
 }

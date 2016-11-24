@@ -14,6 +14,7 @@ namespace SYJMA.Umbraco.Models
         public float studentPrice { get; set; }
         public float staffPrice { get; set; }
         public GroupCoordinator GroupCoordinator { get; set; }
+        public Invoice Invoice { get; set; }
         public AdditionalInfoModel AdditionalInfo{ get; set; }
 
         public string GetDateDescription()

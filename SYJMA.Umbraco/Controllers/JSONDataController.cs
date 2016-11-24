@@ -49,7 +49,7 @@ namespace SYJMA.Umbraco.Controllers
         /// <returns></returns>
         public float GetJsonData_AttendeeCost(string eventID, string attendeeType)
         {
-            var attendeeTypeResult = GetJsonResultAsString(CONSTVALUE.API_HOST + eventID + CONSTVALUE.GET_ATTENDEETYPE);
+            var attendeeTypeResult = GetJsonResultAsString(CONSTVALUE.TOUR_API + eventID + CONSTVALUE.GET_ATTENDEETYPE);
             if (attendeeTypeResult == null)
             {
                 return 0;
@@ -67,6 +67,7 @@ namespace SYJMA.Umbraco.Controllers
             {
                 schooResultlList.Add(school.KEYNAME);
             }
+            schooResultlList.Sort();
             return Json(schooResultlList);
         }
 
@@ -135,18 +136,36 @@ namespace SYJMA.Umbraco.Controllers
         #endregion
 
         #region 'POST'
-        public string PostNewContact<T>(Object obj)
+        public string PostNewContact<T>(Object obj, string contactType, string indivisualType = INDIVISUALTYPE.GROUPCOORDINATOR)
         {
             API_CONTACT contact = new API_CONTACT();
             if (typeof(T).Equals(new SchoolModel().GetType()))
             {
                 SchoolModel model = (SchoolModel)obj;
-                contact.CONTACTTYPE = "Organisation";
-                contact.PRIMARYCATEGORY = "Schools"; // For university is University
-                contact.KEYNAME = model.SchoolName;
+                contact.CONTACTTYPE = contactType;
+                if (contactType.Equals(CONTACTTYPE.ORGANISATION))
+                {
+                    MapSchoolContact(contact, model);
+                }
+                else if (contactType.Equals(CONTACTTYPE.INDIVIDUAL))
+                {
+                    if (indivisualType.Equals(INDIVISUALTYPE.GROUPCOORDINATOR))
+                    {
+                        MapSchoolCoordinatorContact(contact,model);
+                    }else if (indivisualType.Equals(INDIVISUALTYPE.INVOICEE))
+                    {
+                        MapSchoolInvoiceeContact(contact, model);
+                    }
+                }
             }
             string data = new JavaScriptSerializer().Serialize(contact);
             return PostAPI(CONSTVALUE.POST_CONTACT, data);
+        }
+
+        public string PostNewTourBooking(string tourID, API_TOURBOOKING tourBooking)
+        {
+            string data = new JavaScriptSerializer().Serialize(tourBooking);
+            return PostAPI(CONSTVALUE.TOUR_API + tourID + CONSTVALUE.POST_TOURBOOKING_SUFFIX, data);
         }
         #endregion
 
@@ -224,6 +243,32 @@ namespace SYJMA.Umbraco.Controllers
             string credentials = Convert.ToBase64String(
                         Encoding.ASCII.GetBytes(CONSTVALUE.API_USERNAME + ":" + CONSTVALUE.API_PASSWORD));
             return string.Format("Basic {0}", credentials);
+        }
+
+        private void MapSchoolContact(API_CONTACT contact, SchoolModel model)
+        {
+            contact.PRIMARYCATEGORY = "Schools"; // For university is University
+            contact.KEYNAME = model.SchoolName;
+        }
+
+        private void MapSchoolCoordinatorContact(API_CONTACT contact, SchoolModel model)
+        {
+            contact.PRIMARYCATEGORY = "Individual";
+            contact.FIRSTNAME = model.Event.GroupCoordinator.FirstName;
+            contact.KEYNAME = model.Event.GroupCoordinator.SureName;
+            contact.TITLE = model.Event.GroupCoordinator.Title;
+            contact.EMAILADDRESS = model.Event.GroupCoordinator.Email;
+            contact.MOBILENUMBER = model.Event.GroupCoordinator.Mobile;
+            contact.DAYTELEPHONE = model.Event.GroupCoordinator.DaytimeNumber;
+        }
+
+        private void MapSchoolInvoiceeContact(API_CONTACT contact, SchoolModel model)
+        {
+            contact.PRIMARYCATEGORY = "Individual";
+            contact.FIRSTNAME = model.Event.Invoice.FirstName;
+            contact.KEYNAME = model.Event.Invoice.SureName;
+            contact.TITLE = model.Event.Invoice.Title;
+            contact.EMAILADDRESS = model.Event.Invoice.Email;
         }
 
         #endregion

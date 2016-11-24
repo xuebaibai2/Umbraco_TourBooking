@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace SYJMA.Umbraco.Models
 {
-    public class InitialModel
+    public class BaseModel
     {
         public int Id { get; set; }
         public string PreferredDate { get; set; }

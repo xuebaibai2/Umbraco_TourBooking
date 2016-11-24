@@ -5,6 +5,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using SYJMA.Umbraco.Models;
+using SYJMA.Umbraco.Models.API;
+using SYJMA.Umbraco.Utility;
 using Umbraco.Web.Mvc;
 
 namespace SYJMA.Umbraco.Controllers
@@ -13,6 +15,7 @@ namespace SYJMA.Umbraco.Controllers
     {
         private DataTypeController dataTypeController = new DataTypeController();
         private ContentController contentController = new ContentController();
+        private JSONDataController jsonDataController = new JSONDataController();
 
         /// <summary>
         /// Render Partial View based on the bookType and book model id
@@ -60,8 +63,12 @@ namespace SYJMA.Umbraco.Controllers
         /// <returns>Redirect to next page</returns>
         public ActionResult PostAdditionalBooking_School(SchoolModel school)
         {
+            SchoolModel tempSchool = contentController.GetSchoolModelById(school.Id);
+            string tourBookingID = CreateNewTourBooking(school.Event.id, tempSchool);
+
             var schoolRecord = Services.ContentService.GetById(school.Id);
 
+            schoolRecord.SetValue("tourBookingID", tourBookingID);
             schoolRecord.SetValue("contentKnowledge", school.Event.AdditionalInfo.ContentKnowledge);
             schoolRecord.SetValue("totalCost", school.Event.AdditionalInfo.TotalCost);
             schoolRecord.SetValue("perCost", school.Event.AdditionalInfo.PerCost);
@@ -90,6 +97,26 @@ namespace SYJMA.Umbraco.Controllers
         private float GetTotalPrice(int studentNumber, float pricePerStudent)
         {
             return studentNumber * pricePerStudent;
+        }
+
+        private string CreateNewTourBooking(string tourID, SchoolModel school)
+        {
+            API_TOURBOOKING tourBooking = new API_TOURBOOKING();
+            tourBooking.REFERENCE = "";
+            tourBooking.TOURID = school.Event.id;
+            tourBooking.STARTDATE = Convert.ToDateTime(school.Event.start).ToShortDateString();
+            tourBooking.STARTTIME = Convert.ToDateTime(school.Event.start).ToString("HH:mm:ffff");
+            tourBooking.ENDDATE = Convert.ToDateTime(school.Event.end).ToShortDateString();
+            tourBooking.ENDTIME = Convert.ToDateTime(school.Event.end).ToString("HH:mm:ffff");
+            tourBooking.STATUS = TOURBOOKINGSTATUS.BOOKED;
+            tourBooking.BOOKERSERIALNUMBER = school.Event.GroupCoordinator.SerialNumber;
+            tourBooking.FORSERIALNUMBER = school.SerialNumber;
+            tourBooking.INVOICEESERIALNUMBER = school.Event.Invoice.SerialNumber;
+            tourBooking.YEARGROUP = school.Year;
+            tourBooking.SUBJECT = school.Event.title;
+            tourBooking.BOOKINGCOMMENT = school.Comments;
+
+            return jsonDataController.PostNewTourBooking(tourID, tourBooking);
         }
         #endregion
     }

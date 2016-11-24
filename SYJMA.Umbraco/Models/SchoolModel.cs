@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace SYJMA.Umbraco.Models
 {
-    public class SchoolModel : InitialModel
+    public class SchoolModel : BaseModel
     {
         public string SerialNumber { get; set; }
         public string SchoolName { get; set; }

@@ -35,9 +35,10 @@
             @Html.Label("officer", "SJM Officer Email / Phone")
             @Html.TextBoxFor(x => x.Event.AdditionalInfo.OfficerEmailPhone, new { @id = "officer", @class = "form-control", @disabled = "disabled" })
         </div>
-
+        
         @Html.HiddenFor(x => x.Event.AdditionalInfo.PerCost)
         @Html.HiddenFor(x => x.Event.AdditionalInfo.TotalCost)
+        @Html.HiddenFor(x => x.Event.id)
 
         <div class="col-md-12">
             <a href="@ViewBag.parentUrl" class="btn btn-md btn-primary pull-left">Back</a>

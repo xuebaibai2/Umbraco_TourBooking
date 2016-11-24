@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using SYJMA.Umbraco.Models;
+using SYJMA.Umbraco.Utility;
 using Umbraco.Web.Mvc;
 
 namespace SYJMA.Umbraco.Controllers
@@ -13,6 +14,7 @@ namespace SYJMA.Umbraco.Controllers
     {
         private DataTypeController dataTypeController = new DataTypeController();
         private ContentController contentController = new ContentController();
+        private JSONDataController jsonDataController = new JSONDataController();
 
         /// <summary>
         /// Render Partial View based on the bookType and book model id
@@ -56,7 +58,10 @@ namespace SYJMA.Umbraco.Controllers
         /// <returns>Redirect to next page</returns>
         public ActionResult PostBooking_School(SchoolModel school)
         {
+            school.Event.GroupCoordinator.SerialNumber = jsonDataController.PostNewContact<SchoolModel>(school,CONTACTTYPE.INDIVIDUAL,INDIVISUALTYPE.GROUPCOORDINATOR ).Trim('"');
+            school.Event.Invoice.SerialNumber = jsonDataController.PostNewContact<SchoolModel>(school, CONTACTTYPE.INDIVIDUAL, INDIVISUALTYPE.INVOICEE).Trim('"');
             var schoolRecord = Services.ContentService.GetById(school.Id);
+            schoolRecord.SetValue("groupCoordinatorSerialNumber", school.Event.GroupCoordinator.SerialNumber);
             schoolRecord.SetValue("title", school.Event.GroupCoordinator.Title);
             schoolRecord.SetValue("firstName", school.Event.GroupCoordinator.FirstName);
             schoolRecord.SetValue("surename", school.Event.GroupCoordinator.SureName);
@@ -64,10 +69,11 @@ namespace SYJMA.Umbraco.Controllers
             schoolRecord.SetValue("mobile", school.Event.GroupCoordinator.Mobile);
             schoolRecord.SetValue("daytimeNumber", school.Event.GroupCoordinator.DaytimeNumber);
 
-            schoolRecord.SetValue("invoiceTitle", school.Event.GroupCoordinator.Invoice.Title);
-            schoolRecord.SetValue("invoiceFirstName", school.Event.GroupCoordinator.Invoice.FirstName);
-            schoolRecord.SetValue("invoiceSurename", school.Event.GroupCoordinator.Invoice.SureName);
-            schoolRecord.SetValue("invoiceEmail", school.Event.GroupCoordinator.Invoice.Email);
+            schoolRecord.SetValue("invoiceeSerialNumber", school.Event.Invoice.SerialNumber);
+            schoolRecord.SetValue("invoiceTitle", school.Event.Invoice.Title);
+            schoolRecord.SetValue("invoiceFirstName", school.Event.Invoice.FirstName);
+            schoolRecord.SetValue("invoiceSurename", school.Event.Invoice.SureName);
+            schoolRecord.SetValue("invoiceEmail", school.Event.Invoice.Email);
             Services.ContentService.Save(schoolRecord);
 
             NameValueCollection routeValues = new NameValueCollection();

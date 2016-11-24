@@ -4,10 +4,10 @@
         type: 'POST',
         url: '/umbraco/Surface/JSONData/GetSchoolNameList',
         success: function (result) {
-            //nameList = result;
             $("#Name").autocomplete({
                 source: result,
-                autoFocus: true
+                autoFocus: true,
+                delay: 500
             });
         }
     });

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using SYJMA.Umbraco.Models;
+using SYJMA.Umbraco.Utility;
 using umbraco.NodeFactory;
 using Umbraco.Core.Models;
 using Umbraco.Core.Models.PublishedContent;
@@ -58,7 +59,7 @@ namespace SYJMA.Umbraco.Controllers
         /// <returns>Redirect to page</returns>
         public ActionResult PostInitialPage_School(SchoolModel school)
         {
-            school.SerialNumber = jsonDataController.PostNewContact<SchoolModel>(school).Trim('"');
+            school.SerialNumber = jsonDataController.PostNewContact<SchoolModel>(school,CONTACTTYPE.ORGANISATION).Trim('"');
             var schoolRecord = Services.ContentService.CreateContent(school.SchoolName + " - " + school.SubjectArea, CurrentPage.Id, "School");
 
             schoolRecord.SetValue("schoolSerialNumber", school.SerialNumber);
@@ -127,7 +128,7 @@ namespace SYJMA.Umbraco.Controllers
         /// </summary>
         /// <param name="viewModel"></param>
         /// <returns>Preferred booking date with datetime format</returns>
-        private DateTime GetDateTime(InitialModel viewModel)
+        private DateTime GetDateTime(BaseModel viewModel)
         {
             return Convert.ToDateTime(viewModel.PreferredDate, new System.Globalization.CultureInfo("en-AU", true));
         }
