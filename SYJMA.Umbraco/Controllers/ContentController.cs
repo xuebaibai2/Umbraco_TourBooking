@@ -33,7 +33,7 @@ namespace SYJMA.Umbraco.Controllers
             else
             {
                 EventCalendar eventCalendar = GetEventCalendar(data);
-
+                List<Attendee> attendeeList = GetAttendeeList(data);
                 SchoolModel model = new SchoolModel()
                 {
                     Id = Convert.ToInt32(data.GetValue("recordId")),
@@ -44,7 +44,9 @@ namespace SYJMA.Umbraco.Controllers
                     StudentsNumber = Convert.ToInt32(data.GetValue("numberOfStudents")),
                     StaffNumber = Convert.ToInt32(data.GetValue("numberOfStaff")),
                     Comments = Convert.ToString(data.GetValue("comments")),
-                    Event = eventCalendar
+                    TourBookingID = Convert.ToString(data.GetValue("tourBookingID")),
+                    Event = eventCalendar,
+                    AttendeeList = attendeeList 
                 };
                 return model;
             }
@@ -76,6 +78,23 @@ namespace SYJMA.Umbraco.Controllers
 
         #region 'Private Region'
 
+        private List<Attendee> GetAttendeeList(IContent data)
+        {
+            List<Attendee> temp = new List<Attendee>();
+            temp.Add(new Attendee()
+            {
+                ID = Convert.ToString(data.GetValue("studentAttendeeTypeID") ?? ""),
+                Cost = float.Parse(Convert.ToString(data.GetValue("eventPriceStudent") ?? 0)),
+                Type = ATTENDEETYPE.ATTENDEETYPE_STUDENT
+            });
+            temp.Add(new Attendee()
+            {
+                ID = Convert.ToString(data.GetValue("staffAttendeeTypeID") ?? ""),
+                Cost = float.Parse(Convert.ToString(data.GetValue("eventPriceStaff") ?? 0)),
+                Type = ATTENDEETYPE.ATTENDEETYPE_STAFF
+            });
+            return temp;
+        }
         /// <summary>
         /// Get Invoice object from Umbraco record 
         /// </summary>
@@ -125,7 +144,7 @@ namespace SYJMA.Umbraco.Controllers
                 id = Convert.ToString(data.GetValue("eventId") ?? ""),
                 start = Convert.ToString(data.GetValue("eventStart") ?? ""),
                 end = Convert.ToString(data.GetValue("eventEnd") ?? ""),
-                studentPrice = float.Parse(Convert.ToString(data.GetValue("eventPriceStudent") ?? 0)),
+                //studentPrice = float.Parse(Convert.ToString(data.GetValue("eventPriceStudent") ?? 0)),
                 GroupCoordinator = GetGroupCoordinator(data),
                 Invoice = GetInvoice(data),
                 AdditionalInfo = GetAdditionalinfo(data)

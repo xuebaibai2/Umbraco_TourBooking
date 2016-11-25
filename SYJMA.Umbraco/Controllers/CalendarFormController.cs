@@ -27,7 +27,7 @@ namespace SYJMA.Umbraco.Controllers
         public PartialViewResult CalendarForm(string bookType, string id)
         {
             int result;
-            if (!Int32.TryParse(id,out result))
+            if (!Int32.TryParse(id, out result))
             {
                 return PartialView("_Error");
             }
@@ -46,7 +46,7 @@ namespace SYJMA.Umbraco.Controllers
             }
             else if (bookType.Equals("Adult"))
             {
-                
+
             }
             else if (bookType.Equals("University"))
             {
@@ -62,16 +62,26 @@ namespace SYJMA.Umbraco.Controllers
         /// <returns>Redirect to next page</returns>
         public ActionResult PostCalendarForm_School(SchoolModel school)
         {
-            school.Event.studentPrice = jsonDataController.GetJsonData_AttendeeCost(school.Event.id, ATTENDEETYPE.ATTENDEETYPE_STUDENT);
-            school.Event.staffPrice = jsonDataController.GetJsonData_AttendeeCost(school.Event.id, ATTENDEETYPE.ATTENDEETYPE_STAFF);
+
+            RetrieveExtraSchoolDetail(school);
 
             var schoolRecord = Services.ContentService.GetById(school.Id);
-            schoolRecord.SetValue("eventTitle",school.Event.title);
-            schoolRecord.SetValue("eventId",school.Event.id);
-            schoolRecord.SetValue("eventStart",school.Event.start);
-            schoolRecord.SetValue("eventEnd",school.Event.end);
-            schoolRecord.SetValue("eventPriceStudent", Convert.ToDecimal(school.Event.studentPrice));
-            schoolRecord.SetValue("eventPriceStaff", Convert.ToDecimal(school.Event.staffPrice));
+            schoolRecord.SetValue("studentAttendeeTypeID", school.AttendeeList
+                .Where(x => x.Type.Equals(ATTENDEETYPE.ATTENDEETYPE_STUDENT))
+                .Select(x => x.ID).SingleOrDefault());
+            schoolRecord.SetValue("staffAttendeeTypeID", school.AttendeeList
+                .Where(x => x.Type.Equals(ATTENDEETYPE.ATTENDEETYPE_STAFF))
+                .Select(x => x.ID).SingleOrDefault());
+            schoolRecord.SetValue("eventTitle", school.Event.title);
+            schoolRecord.SetValue("eventId", school.Event.id);
+            schoolRecord.SetValue("eventStart", school.Event.start);
+            schoolRecord.SetValue("eventEnd", school.Event.end);
+            schoolRecord.SetValue("eventPriceStudent", school.AttendeeList
+                .Where(x => x.Type.Equals(ATTENDEETYPE.ATTENDEETYPE_STUDENT))
+                .Select(x => x.Cost).SingleOrDefault().ToString());
+            schoolRecord.SetValue("eventPriceStaff", school.AttendeeList
+                .Where(x => x.Type.Equals(ATTENDEETYPE.ATTENDEETYPE_STAFF))
+                .Select(x => x.Cost).SingleOrDefault().ToString());
             Services.ContentService.Save(schoolRecord);
 
             NameValueCollection routeValues = new NameValueCollection();
@@ -80,7 +90,57 @@ namespace SYJMA.Umbraco.Controllers
             return RedirectToUmbracoPage(contentController.GetContentIDFromSelf("SchoolConfirm", CurrentPage), routeValues);
         }
 
+        private void RetrieveExtraSchoolDetail(SchoolModel school)
+        {
+            //school.Event.studentPrice = jsonDataController.GetJsonData_AttendeeCost(school.Event.id, ATTENDEETYPE.ATTENDEETYPE_STUDENT);
+            //school.Event.staffPrice = jsonDataController.GetJsonData_AttendeeCost(school.Event.id, ATTENDEETYPE.ATTENDEETYPE_STAFF);
+            var attendeeList = jsonDataController.GetJsonData_AttendeeType(school.Event.id);
+            if (attendeeList != null)
+            {
+                string studentAttendeeTypeID = attendeeList.Where(x => x.TYPE.Equals(ATTENDEETYPE.ATTENDEETYPE_STUDENT)).Select(x => x.ID).FirstOrDefault();
+                string staffAttendeeTypeID = attendeeList.Where(x => x.TYPE.Equals(ATTENDEETYPE.ATTENDEETYPE_STAFF)).Select(x => x.ID).FirstOrDefault();
+                float studentPrice = attendeeList.Where(x => x.TYPE.Equals(ATTENDEETYPE.ATTENDEETYPE_STUDENT)).Select(x => x.COST).FirstOrDefault();
+                float staffPrice = attendeeList.Where(x => x.TYPE.Equals(ATTENDEETYPE.ATTENDEETYPE_STAFF)).Select(x => x.COST).FirstOrDefault();
 
-        
-	}
+                //school.AttendeeList.Add(ATTENDEETYPE.ATTENDEETYPE_STUDENT, studentAttendeeTypeID);
+                //school.AttendeeList.Add(ATTENDEETYPE.ATTENDEETYPE_STAFF, staffAttendeeTypeID);
+                school.AttendeeList.Add(new Attendee
+                {
+                    ID = studentAttendeeTypeID,
+                    Type = ATTENDEETYPE.ATTENDEETYPE_STUDENT,
+                    Cost = studentPrice
+                });
+                school.AttendeeList.Add(new Attendee
+                {
+                    ID = staffAttendeeTypeID,
+                    Type = ATTENDEETYPE.ATTENDEETYPE_STAFF,
+                    Cost = staffPrice
+                });
+                //school.Event.studentPrice = school.AttendeeList.Where(x => x.Type.Equals(ATTENDEETYPE.ATTENDEETYPE_STUDENT)).Select(x => x.Cost).FirstOrDefault();
+                //school.Event.staffPrice = school.AttendeeList.Where(x => x.Type.Equals(ATTENDEETYPE.ATTENDEETYPE_STAFF)).Select(x => x.Cost).FirstOrDefault();
+                //school.Event.studentPrice = attendeeList.Where(x => x.TYPE.Equals(ATTENDEETYPE.ATTENDEETYPE_STUDENT)).Select(x => x.COST).FirstOrDefault();
+                //school.Event.staffPrice = attendeeList.Where(x => x.TYPE.Equals(ATTENDEETYPE.ATTENDEETYPE_STAFF)).Select(x => x.COST).FirstOrDefault();
+            }
+            else
+            {
+                school.AttendeeList.Add(new Attendee
+                {
+                    ID = "",
+                    Type = ATTENDEETYPE.ATTENDEETYPE_STUDENT,
+                    Cost = 0
+                });
+                school.AttendeeList.Add(new Attendee
+                {
+                    ID = "",
+                    Type = ATTENDEETYPE.ATTENDEETYPE_STAFF,
+                    Cost = 0
+                });
+                //school.AttendeeList.Add(ATTENDEETYPE.ATTENDEETYPE_STUDENT, "");
+                //school.AttendeeList.Add(ATTENDEETYPE.ATTENDEETYPE_STAFF, "");
+                //school.Event.studentPrice = 0;
+                //school.Event.staffPrice = 0;
+            }
+        }
+
+    }
 }

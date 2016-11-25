@@ -30,6 +30,8 @@ namespace SYJMA.Umbraco.Utility
 
         public const string POST_CONTACT = DOMAIN + "Contacts/";
         public const string POST_TOURBOOKING_SUFFIX = "/TourBooking";
+        public const string POST_TOURBOOKINGATTENDEESUMMARY_SUFFIX = "/TourBookingAttendeeSummary";
+        public const string POST_TOURBOOKINGATTENDEESUMMARY_MIDDLE = "/TourBooking/";
 
 
         public const string API_USERNAME = "SYJMA";

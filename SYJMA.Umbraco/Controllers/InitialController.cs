@@ -61,7 +61,7 @@ namespace SYJMA.Umbraco.Controllers
         {
             school.SerialNumber = jsonDataController.PostNewContact<SchoolModel>(school,CONTACTTYPE.ORGANISATION).Trim('"');
             var schoolRecord = Services.ContentService.CreateContent(school.SchoolName + " - " + school.SubjectArea, CurrentPage.Id, "School");
-
+            
             schoolRecord.SetValue("schoolSerialNumber", school.SerialNumber);
             schoolRecord.SetValue("nameOfSchool", school.SchoolName);
             schoolRecord.SetValue("year", school.Year);
@@ -132,6 +132,7 @@ namespace SYJMA.Umbraco.Controllers
         {
             return Convert.ToDateTime(viewModel.PreferredDate, new System.Globalization.CultureInfo("en-AU", true));
         }
+
         #endregion
     }
 }

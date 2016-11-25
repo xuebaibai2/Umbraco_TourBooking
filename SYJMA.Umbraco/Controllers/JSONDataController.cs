@@ -18,7 +18,7 @@ namespace SYJMA.Umbraco.Controllers
     {
         #region 'Get'
         /// <summary>
-        /// Retrieve data throught web services and return JSON data
+        /// Retrieve available Event/Tour information throught web services and return JSON data
         /// </summary>
         /// <param name="eventName"></param>
         /// <returns></returns>
@@ -35,7 +35,6 @@ namespace SYJMA.Umbraco.Controllers
                     title = tour.NAME,
                     start = tour.AVAILABLEFROM,
                     end = tour.AVAILABLETO
-                    //studentPrice = tour.ATTENDEECOST // retrive data from API_TOURATTENDEETYPE model
                 });
             }
             return Json(eventList);
@@ -56,6 +55,16 @@ namespace SYJMA.Umbraco.Controllers
             }
             IEnumerable<API_TOURATTENDEETYPE> attendeeTypeList = GetDeserializedJsonDataList<API_TOURATTENDEETYPE>(attendeeTypeResult);
             return attendeeTypeList.Where(x => x.TYPE.Equals(attendeeType)).Select(x => x.COST).FirstOrDefault();
+        }
+
+        public List<API_TOURATTENDEETYPE> GetJsonData_AttendeeType(string eventID)
+        {
+            var attendeeTypeResult = GetJsonResultAsString(CONSTVALUE.TOUR_API + eventID + CONSTVALUE.GET_ATTENDEETYPE);
+            if (attendeeTypeResult == null)
+            {
+                return null;
+            }
+            return GetDeserializedJsonDataList<API_TOURATTENDEETYPE>(attendeeTypeResult).ToList();
         }
 
         public JsonResult GetSchoolNameList()
@@ -166,6 +175,12 @@ namespace SYJMA.Umbraco.Controllers
         {
             string data = new JavaScriptSerializer().Serialize(tourBooking);
             return PostAPI(CONSTVALUE.TOUR_API + tourID + CONSTVALUE.POST_TOURBOOKING_SUFFIX, data);
+        }
+
+        public string PostNewTourBookingAttendeeSummary(API_TOURBOOKINGATTENDEESUMMARY attemdeeSummary)
+        {
+            string data = new JavaScriptSerializer().Serialize(attemdeeSummary);
+            return PostAPI(CONSTVALUE.TOUR_API + attemdeeSummary.TOURID + CONSTVALUE.POST_TOURBOOKINGATTENDEESUMMARY_MIDDLE+ attemdeeSummary.TOURBOOKINGID + CONSTVALUE.POST_TOURBOOKINGATTENDEESUMMARY_SUFFIX, data);
         }
         #endregion
 

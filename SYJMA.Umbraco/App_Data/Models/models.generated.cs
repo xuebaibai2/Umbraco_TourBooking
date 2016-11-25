@@ -19,7 +19,7 @@ using Umbraco.ModelsBuilder;
 using Umbraco.ModelsBuilder.Umbraco;
 
 [assembly: PureLiveAssembly]
-[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "58cd80179a8deaf0")]
+[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "f70149789ec6299f")]
 [assembly:System.Reflection.AssemblyVersion("0.0.0.2")]
 
 namespace Umbraco.Web.PublishedContentModels
@@ -457,6 +457,24 @@ namespace Umbraco.Web.PublishedContentModels
 		public string SchoolSerialNumber
 		{
 			get { return this.GetPropertyValue<string>("schoolSerialNumber"); }
+		}
+
+		///<summary>
+		/// Staff Attendee Type ID
+		///</summary>
+		[ImplementPropertyType("staffAttendeeTypeID")]
+		public string StaffAttendeeTypeID
+		{
+			get { return this.GetPropertyValue<string>("staffAttendeeTypeID"); }
+		}
+
+		///<summary>
+		/// Student Attendee Type ID
+		///</summary>
+		[ImplementPropertyType("studentAttendeeTypeID")]
+		public string StudentAttendeeTypeID
+		{
+			get { return this.GetPropertyValue<string>("studentAttendeeTypeID"); }
 		}
 
 		///<summary>
