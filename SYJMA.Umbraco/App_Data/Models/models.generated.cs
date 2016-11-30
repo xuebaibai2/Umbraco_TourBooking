@@ -19,8 +19,8 @@ using Umbraco.ModelsBuilder;
 using Umbraco.ModelsBuilder.Umbraco;
 
 [assembly: PureLiveAssembly]
-[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "f70149789ec6299f")]
-[assembly:System.Reflection.AssemblyVersion("0.0.0.2")]
+[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "8bf7cc9df099cea2")]
+[assembly:System.Reflection.AssemblyVersion("0.0.0.1")]
 
 namespace Umbraco.Web.PublishedContentModels
 {
@@ -188,6 +188,15 @@ namespace Umbraco.Web.PublishedContentModels
 		public IHtmlString CalendarHeader
 		{
 			get { return this.GetPropertyValue<IHtmlString>("calendarHeader"); }
+		}
+
+		///<summary>
+		/// Program Description Link
+		///</summary>
+		[ImplementPropertyType("programDescriptionLink")]
+		public IHtmlString ProgramDescriptionLink
+		{
+			get { return this.GetPropertyValue<IHtmlString>("programDescriptionLink"); }
 		}
 	}
 
@@ -824,12 +833,136 @@ namespace Umbraco.Web.PublishedContentModels
 		}
 
 		///<summary>
+		/// Cafe Menu Link
+		///</summary>
+		[ImplementPropertyType("cafeMenuLink")]
+		public string CafeMenuLink
+		{
+			get { return this.GetPropertyValue<string>("cafeMenuLink"); }
+		}
+
+		///<summary>
 		/// Page Header
 		///</summary>
 		[ImplementPropertyType("pageHeader")]
 		public string PageHeader
 		{
 			get { return this.GetPropertyValue<string>("pageHeader"); }
+		}
+
+		///<summary>
+		/// Risk Assessment Form Link
+		///</summary>
+		[ImplementPropertyType("riskAssessmentFormLink")]
+		public string RiskAssessmentFormLink
+		{
+			get { return this.GetPropertyValue<string>("riskAssessmentFormLink"); }
+		}
+
+		///<summary>
+		/// SJM Officer Contact
+		///</summary>
+		[ImplementPropertyType("sJMOfficerContact")]
+		public string SJmofficerContact
+		{
+			get { return this.GetPropertyValue<string>("sJMOfficerContact"); }
+		}
+	}
+
+	/// <summary>Complete Booking</summary>
+	[PublishedContentModel("completeBooking")]
+	public partial class CompleteBooking : Master
+	{
+#pragma warning disable 0109 // new is redundant
+		public new const string ModelTypeAlias = "completeBooking";
+		public new const PublishedItemType ModelItemType = PublishedItemType.Content;
+#pragma warning restore 0109
+
+		public CompleteBooking(IPublishedContent content)
+			: base(content)
+		{ }
+
+#pragma warning disable 0109 // new is redundant
+		public new static PublishedContentType GetModelContentType()
+		{
+			return PublishedContentType.Get(ModelItemType, ModelTypeAlias);
+		}
+#pragma warning restore 0109
+
+		public static PublishedPropertyType GetModelPropertyType<TValue>(Expression<Func<CompleteBooking, TValue>> selector)
+		{
+			return PublishedContentModelUtility.GetModelPropertyType(GetModelContentType(), selector);
+		}
+
+		///<summary>
+		/// Additional Info1: Display message intended for marketing or additional information
+		///</summary>
+		[ImplementPropertyType("additionalInfo1")]
+		public IHtmlString AdditionalInfo1
+		{
+			get { return this.GetPropertyValue<IHtmlString>("additionalInfo1"); }
+		}
+
+		///<summary>
+		/// Additional Info 2: Additional message area
+		///</summary>
+		[ImplementPropertyType("additionalInfo2")]
+		public IHtmlString AdditionalInfo2
+		{
+			get { return this.GetPropertyValue<IHtmlString>("additionalInfo2"); }
+		}
+
+		///<summary>
+		/// Page Header
+		///</summary>
+		[ImplementPropertyType("pageHeader")]
+		public IHtmlString PageHeader
+		{
+			get { return this.GetPropertyValue<IHtmlString>("pageHeader"); }
+		}
+	}
+
+	/// <summary>Initial Identification Subtour</summary>
+	[PublishedContentModel("initialIdentificationSubtour")]
+	public partial class InitialIdentificationSubtour : Master
+	{
+#pragma warning disable 0109 // new is redundant
+		public new const string ModelTypeAlias = "initialIdentificationSubtour";
+		public new const PublishedItemType ModelItemType = PublishedItemType.Content;
+#pragma warning restore 0109
+
+		public InitialIdentificationSubtour(IPublishedContent content)
+			: base(content)
+		{ }
+
+#pragma warning disable 0109 // new is redundant
+		public new static PublishedContentType GetModelContentType()
+		{
+			return PublishedContentType.Get(ModelItemType, ModelTypeAlias);
+		}
+#pragma warning restore 0109
+
+		public static PublishedPropertyType GetModelPropertyType<TValue>(Expression<Func<InitialIdentificationSubtour, TValue>> selector)
+		{
+			return PublishedContentModelUtility.GetModelPropertyType(GetModelContentType(), selector);
+		}
+
+		///<summary>
+		/// Book Type
+		///</summary>
+		[ImplementPropertyType("bookType")]
+		public object BookType
+		{
+			get { return this.GetPropertyValue("bookType"); }
+		}
+
+		///<summary>
+		/// Book Type Description
+		///</summary>
+		[ImplementPropertyType("bookTypeDescription")]
+		public string BookTypeDescription
+		{
+			get { return this.GetPropertyValue<string>("bookTypeDescription"); }
 		}
 	}
 

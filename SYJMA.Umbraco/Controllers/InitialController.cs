@@ -26,12 +26,14 @@ namespace SYJMA.Umbraco.Controllers
         /// <returns>Partial view with Model</returns>
         public PartialViewResult InitialIdentification(string bookType)
         {
+            
             if (bookType.Equals("School"))
             {
                 SchoolModel school = new SchoolModel();
-                school.type = "School";
                 school.SubjectList = jsonDataController.GetSubjectAreaList();
                 school.YearList = jsonDataController.GetYearGroupList();
+                school.type = "School";
+                
                 return PartialView("~/Views/Partials/School/_SchoolVisit.cshtml", school);
             }
             else if (bookType.Equals("Adult"))
@@ -52,6 +54,23 @@ namespace SYJMA.Umbraco.Controllers
             return null;
         }
 
+        public PartialViewResult SubtourInitialIdentification(string bookType, string id)
+        {
+            SchoolModel school = new SchoolModel();
+            int result;
+            if (!Int32.TryParse(id, out result))
+            {
+                return PartialView("_Error");
+            }
+            school = contentController.GetSchoolModelById(Convert.ToInt32(id));
+            school.SubjectList = jsonDataController.GetSubjectAreaList();
+            school.YearList = jsonDataController.GetYearGroupList();
+            if (bookType.Equals("School"))
+            {
+                return PartialView("~/Views/Partials/School/_SchoolSubtourBooking.cshtml", school);
+            }
+            return null;
+        }
         /// <summary>
         /// Receive post data form from School partialview and save into School Visits content as a record
         /// </summary>

@@ -37,6 +37,7 @@ namespace SYJMA.Umbraco.Controllers
                 SchoolModel model = new SchoolModel()
                 {
                     Id = Convert.ToInt32(data.GetValue("recordId")),
+                    SerialNumber = Convert.ToString(data.GetValue("schoolSerialnumber")),
                     Year = Convert.ToString(data.GetValue("year")),
                     SchoolName = Convert.ToString(data.GetValue("nameOfSchool")),
                     PreferredDate = Convert.ToString(data.GetValue("preferredDateSchool")),
@@ -50,6 +51,34 @@ namespace SYJMA.Umbraco.Controllers
                 };
                 return model;
             }
+        }
+
+        public void CreateNewSchoolModel(SchoolModel school)
+        {
+            var schoolRecord = Services.ContentService.CreateContent(school.SchoolName + " - " + school.SubjectArea, CurrentPage.Id, "School");
+
+            schoolRecord.SetValue("schoolSerialNumber", school.SerialNumber);
+            schoolRecord.SetValue("nameOfSchool", school.SchoolName);
+            schoolRecord.SetValue("year", school.Year);
+            schoolRecord.SetValue("preferredDateSchool", GetDateTime(school));
+            schoolRecord.SetValue("subjectArea", school.SubjectArea);
+            schoolRecord.SetValue("numberOfStudents", school.StudentsNumber);
+            schoolRecord.SetValue("numberOfStaff", school.StaffNumber);
+            schoolRecord.SetValue("comments", school.Comments);
+            Services.ContentService.SaveAndPublishWithStatus(schoolRecord);
+            school.Id = schoolRecord.Id;
+            schoolRecord.SetValue("recordId", school.Id);
+            Services.ContentService.Save(schoolRecord);
+        }
+
+        /// <summary>
+        /// Convert string format of datetime to DateTime datatype
+        /// </summary>
+        /// <param name="viewModel"></param>
+        /// <returns>Preferred booking date with datetime format</returns>
+        private DateTime GetDateTime(BaseModel viewModel)
+        {
+            return Convert.ToDateTime(viewModel.PreferredDate, new System.Globalization.CultureInfo("en-AU", true));
         }
 
         /// <summary>

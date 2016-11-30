@@ -1,0 +1,108 @@
+﻿@using SYJMA.Umbraco.Controllers;
+@inherits Umbraco.Web.Mvc.UmbracoViewPage<SYJMA.Umbraco.Models.SchoolModel>
+
+<h2 class="text-center">Your Booking Number is: <b>@Model.TourBookingID</b></h2>
+<div class="row">
+    <div class="col-md-12">
+        <table class="table">
+            <tr>
+                <td colspan="2">
+                    <h3>Tour Info</h3>
+                </td>
+            </tr>
+            <tr>
+                <td><b>Name of Institution</b></td>
+                <td>@Html.DisplayFor(x => x.SchoolName)</td>
+            </tr>
+
+            <tr>
+                <td><b>Date and Time of Tour</b></td>
+                <td>@Model.Event.GetDateDescription()</td>
+            </tr>
+
+            <tr>
+                <td><b>Program / Tour</b></td>
+                <td>@Html.DisplayFor(x => x.Event.title)</td>
+            </tr>
+
+            <tr>
+                <td><b>Year Group</b></td>
+                <td>@Html.DisplayFor(x => x.Year)</td>
+            </tr>
+
+            <tr>
+                <td><b>Subject Area</b></td>
+                <td>@Html.DisplayFor(x => x.SubjectArea)</td>
+            </tr>
+
+            <tr>
+                <td><b>Number of Students</b></td>
+                <td>@Html.DisplayFor(x => x.StudentsNumber)</td>
+            </tr>
+
+            <tr>
+                <td><b>Students total price</b></td>
+                <td>@Model.GetStudentAttendeeCost().ToString("c2")</td>
+            </tr>
+            <tr>
+                <td><b>Number of Staff</b></td>
+                <td>@Html.DisplayFor(x => x.StaffNumber)</td>
+            </tr>
+
+            <tr>
+                <td colspan="2">
+                    <h3>Group Coordinator</h3>
+                </td>
+            </tr>
+            <tr>
+                <td><b>Title</b></td>
+                <td>@Html.DisplayFor(x => x.Event.GroupCoordinator.Title)</td>
+            </tr>
+            <tr>
+                <td><b>First Name</b></td>
+                <td>@Html.DisplayFor(x => x.Event.GroupCoordinator.FirstName)</td>
+            </tr>
+            <tr>
+                <td><b>Surename</b></td>
+                <td>@Html.DisplayFor(x => x.Event.GroupCoordinator.SureName)</td>
+            </tr>
+            <tr>
+                <td><b>Email</b></td>
+                <td>@Html.DisplayFor(x => x.Event.GroupCoordinator.Email)</td>
+            </tr>
+            <tr>
+                <td><b>Mobile Number</b></td>
+                <td>@Html.DisplayFor(x => x.Event.GroupCoordinator.Mobile)</td>
+            </tr>
+            <tr>
+                <td><b>Daytime Number</b></td>
+                <td>@Html.DisplayFor(x => x.Event.GroupCoordinator.DaytimeNumber)</td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <h3>Invoice to</h3>
+                </td>
+            </tr>
+            <tr>
+                <td><b>Title</b></td>
+                <td>@Html.DisplayFor(x => x.Event.Invoice.Title)</td>
+            </tr>
+            <tr>
+                <td><b>First name</b></td>
+                <td>@Html.DisplayFor(x => x.Event.Invoice.FirstName)</td>
+            </tr>
+            <tr>
+                <td><b>Surename</b></td>
+                <td>@Html.DisplayFor(x => x.Event.Invoice.SureName)</td>
+            </tr>
+            <tr>
+                <td><b>Email</b></td>
+                <td>@Html.DisplayFor(x => x.Event.Invoice.Email)</td>
+            </tr>
+        </table>
+        <div class="text-center">
+            <a href="/" class="btn btn-md btn-primary">Back to home</a>
+        </div>
+    </div>
+</div>
+@Html.HiddenFor(x => x.Id)

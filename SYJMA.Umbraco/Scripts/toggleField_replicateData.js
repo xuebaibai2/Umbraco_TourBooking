@@ -7,6 +7,7 @@
         replicateField(c, '#firstname', '#firstname_i');
         replicateField(c, '#surename', '#surename_i');
         replicateField(c, '#email', '#email_i');
+        setHiddenInput(c);
     });
 });
 function replicateField(flag, emi_id, rec_id) {
@@ -20,5 +21,13 @@ function replicateField(flag, emi_id, rec_id) {
     if (flag === false) {
         $(rec_id).val('');
         $(emi_id).off('input')
+    }
+}
+function setHiddenInput(flag) {
+    if (flag === true) {
+        $('input[name="isSameInvoice"]').val('true');
+    }
+    if (flag === false) {
+        $('input[name="isSameInvoice"]').val('false');
     }
 }

@@ -1,0 +1,13 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage<ContentModels.CompleteBooking>
+@using ContentModels = Umbraco.Web.PublishedContentModels;
+@{
+	Layout = "Master.cshtml";
+}
+@CurrentPage.pageHeader
+<br />
+@Html.Action("BookCompletion", "BookCompletion", new {id = Request.QueryString.Get("id"), type = Request.QueryString.Get("type")})
+
+<div class="row">
+    <div class="col-md-6">@CurrentPage.additionalInfo1</div>
+    <div class="col-md-6">@CurrentPage.additionalInfo2</div>
+</div>

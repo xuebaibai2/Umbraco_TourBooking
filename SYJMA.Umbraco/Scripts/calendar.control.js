@@ -9,24 +9,24 @@
         editable: true,
         eventLimit: true, // allow "more" link when too many events
         allDaySlot: false,
+        slotDuration: '01:00:00',
         minTime: '9:00',
         maxTime: '17:00',
         firstDay: 1,
         weekends: false,
-        height: 428,
+        height: 250,
         timezone: 'local',
         titleFormat: 'D MMM YYYY',
         eventStartEditable: false,
         eventDurationEditable: false,
         eventClick: function (calEvent, jsEvent, view) {
-            
+            $('#externalLink').hide();
+            $('#selectionConfirm').show();
             $('#selectionConfirm').html(
                 'You have chosen <b>' + calEvent.title + '</b> from ' + calEvent.start.format('hha') + ' until ' + calEvent.end.format('hha') + ' on ' + calEvent.start.format('DD MMMM YYYY') + '.  Click Next to confirm.'
         );
             $('#selectedEventId').val(calEvent.id);
             $('#selectedEventTitle').val(calEvent.title);
-            //$('#selectedEventStart').val(calEvent.start.format('DD-MM-YYYY kk:mm'));
-            //$('#selectedEventEnd').val(calEvent.end.format('DD-MM-YYYY kk:mm'));
             $('#selectedEventStart').val(calEvent.start.format());
             $('#selectedEventEnd').val(calEvent.end.format());
         }
@@ -35,7 +35,9 @@
     $('#calendarForm input').on('change', function () {
         removeEvents();
         addEvents($('input[name=Program]:checked', '#calendarForm').val());
-        $('#selectionConfirm').html('');
+        //$('#selectionConfirm').html('');
+        $('#selectionConfirm').hide();
+        $('#externalLink').show();
     });
 });
 

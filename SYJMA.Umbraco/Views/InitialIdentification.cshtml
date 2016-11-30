@@ -3,7 +3,13 @@
 @{
 	Layout = "Master.cshtml";
     string bookType = CurrentPage.bookType;
+    string id = Request.QueryString.Get("id");
 }
 
 <h3 class="well">@CurrentPage.bookTypeDescription</h3>
-@Html.Action("InitialIdentification", "Initial", new { bookType = bookType})
+@if (id == null || id.Equals(""))
+{
+    @Html.Action("InitialIdentification", "Initial", new { bookType = bookType })
+}else{
+    @Html.Action("SubtourInitialIdentification","Initial",new {bookType = bookType, id = id})
+}

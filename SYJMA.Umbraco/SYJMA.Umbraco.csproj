@@ -375,6 +375,7 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.min.css.map" />
     <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Images\logo%402x.png" />
     <Content Include="Images\Sydney-Jewish-Museum.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -384,6 +385,7 @@
     <Content Include="fonts\fontawesome-webfont.woff" />
     <Content Include="fonts\fontawesome-webfont.woff2" />
     <Content Include="fonts\FontAwesome.otf" />
+    <None Include="Properties\PublishProfiles\release.pubxml" />
     <None Include="Scripts\jquery-1.12.4.intellisense.js" />
     <Content Include="Scripts\calendar.control.js" />
     <Content Include="Scripts\DatePicker.js" />
@@ -414,6 +416,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\AdditionalBookingDetailController.cs" />
+    <Compile Include="Controllers\AdditionalTourInitialController.cs" />
+    <Compile Include="Controllers\BookCompletionController.cs" />
     <Compile Include="Controllers\BookingDetailController.cs" />
     <Compile Include="Controllers\CalendarFormController.cs" />
     <Compile Include="Controllers\ConfirmationPanelController.cs" />
@@ -482,6 +486,8 @@
     <Content Include="Views\Partials\School\_SchoolBookingDetail.cshtml" />
     <Content Include="Views\AdditionBookingDetail.cshtml" />
     <Content Include="Views\Partials\School\_SchoolAdditionalBookingDetail.cshtml" />
+    <Content Include="Views\CompleteBooking.cshtml" />
+    <Content Include="Views\Partials\School\_SchoolBookCompletion.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -491,6 +497,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\AdditionalBookingDetail\" />
+    <Folder Include="Views\AdditionalTourInitial\" />
+    <Folder Include="Views\BookCompletion\" />
     <Folder Include="Views\BookingDetail\" />
     <Folder Include="Views\CalendarForm\" />
     <Folder Include="Views\ConfirmationPanel\" />

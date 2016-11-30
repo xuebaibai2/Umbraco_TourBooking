@@ -26,23 +26,26 @@
         <div class="form-group col-md-4">
             @Html.Label("cafe", "Café Catering Required? ")
             @Html.CheckBoxFor(x => x.Event.AdditionalInfo.CafeRequire, new { @id = "cafe" })
-            <a href="#">Link to Menu</a>
+            <a href="@Umbraco.Field("cafeMenuLink")">Link to Menu</a>
         </div>
         <div class="form-group col-md-8">
-            Risk Assessment Form <a href="#">Link</a>
+            Risk Assessment Form <a href="@Umbraco.Field("riskAssessmentFormLink")">Link</a>
         </div>
         <div class="form-group col-md-12">
             @Html.Label("officer", "SJM Officer Email / Phone")
-            @Html.TextBoxFor(x => x.Event.AdditionalInfo.OfficerEmailPhone, new { @id = "officer", @class = "form-control", @disabled = "disabled" })
+            <input type="text" name="officer" value="@Umbraco.Field("sJMOfficerContact")" id="officer" class="form-control" disabled="disabled" />
+            @*@Html.TextBoxFor(x => x.Event.AdditionalInfo.OfficerEmailPhone, new { @id = "officer", @class = "form-control", @disabled = "disabled" })*@
         </div>
-        
+
         @Html.HiddenFor(x => x.Event.AdditionalInfo.PerCost)
         @Html.HiddenFor(x => x.Event.AdditionalInfo.TotalCost)
         @Html.HiddenFor(x => x.Event.id)
 
-        <div class="col-md-12">
+        <div class="col-md-12 text-center">
             <a href="@ViewBag.parentUrl" class="btn btn-md btn-primary pull-left">Back</a>
+            <a href="/school-visits/?id=@Model.Id" class="btn btn-md btn-primary">Add Another Booking</a>
             <input type="submit" name="submit" value="Next" class="btn btn-md btn-primary pull-right" />
+
         </div>
     </div>
 }
