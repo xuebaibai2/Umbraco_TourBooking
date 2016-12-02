@@ -67,7 +67,7 @@ namespace SYJMA.Umbraco.Controllers
 
             var schoolRecord = Services.ContentService.GetById(school.Id);
             schoolRecord.SetValue("studentAttendeeTypeID", school.GetStudentAttendeeID());
-            schoolRecord.SetValue("staffAttendeeTypeID", school.GetStaffAttendeeID());
+            schoolRecord.SetValue("staffAttendeeTypeID", school.GetStaffAttendeeID() ?? "N/A");
             schoolRecord.SetValue("eventTitle", school.Event.title);
             schoolRecord.SetValue("eventId", school.Event.id);
             schoolRecord.SetValue("eventStart", school.Event.start);

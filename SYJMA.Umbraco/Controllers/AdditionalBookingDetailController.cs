@@ -40,17 +40,16 @@ namespace SYJMA.Umbraco.Controllers
                 }
 
                 school.SubTourIDList = Session["idList"] as List<int>;
-                school.SubTourIDList.Add(int.Parse(id));
-                Session["idList"] = school.SubTourIDList;
+                if (school.SubTourIDList != null)
+                {
+                    school.SubTourIDList.Add(int.Parse(id));
+                    Session["idList"] = school.SubTourIDList;
+                }
 
-                school.Event.AdditionalInfo.OfficerEmailPhone = "1800 207 360";
-
-                float studentPrice = school.AttendeeList
-                .Where(x => x.Type.Equals(ATTENDEETYPE.ATTENDEETYPE_STUDENT))
-                .Select(x => x.Cost).SingleOrDefault();
-
+                float studentPrice = school.GetStudentAttendeeCost();
                 school.Event.AdditionalInfo.PerCost = studentPrice.ToString("c2");
                 school.Event.AdditionalInfo.TotalCost = GetTotalPrice(school.StudentsNumber, studentPrice).ToString("c2");
+
                 ViewBag.parentUrl = CurrentPage.Parent.Url + "?id=" + id;
                 return PartialView("~/Views/Partials/School/_SchoolAdditionalBookingDetail.cshtml", school);
             }
@@ -72,9 +71,12 @@ namespace SYJMA.Umbraco.Controllers
         /// <returns>Redirect to next page</returns>
         public ActionResult PostAdditionalBooking_School(SchoolModel school)
         {
-            
+            SetSchoolViewRecordInUmbraco(school);
             school = contentController.GetSchoolModelById(school.Id);
+
             school.SubTourIDList = Session["idList"] as List<int>;
+
+            
             string schoolSerialNumber = CreateNewSchoolContact(school);
             foreach (int id in school.SubTourIDList)
             {
@@ -84,7 +86,7 @@ namespace SYJMA.Umbraco.Controllers
                 CreateNewContact(temp);
                 temp.TourBookingID = CreateNewTourBooking(temp);
                 CreateNewTourBookingAttendeeSummary(temp);
-                SetSchoolRecord(temp);
+                SetSchoolTourBookingIDInUmbraco(temp);
             }
             
             NameValueCollection routeValues = new NameValueCollection();
@@ -115,11 +117,9 @@ namespace SYJMA.Umbraco.Controllers
             return o_price - discount;
         }
 
-        private void SetSchoolRecord(SchoolModel school)
+        private void SetSchoolViewRecordInUmbraco(SchoolModel school)
         {
             var schoolRecord = Services.ContentService.GetById(school.Id);
-
-            schoolRecord.SetValue("tourBookingID", school.TourBookingID);
             schoolRecord.SetValue("contentKnowledge", school.Event.AdditionalInfo.ContentKnowledge);
             schoolRecord.SetValue("totalCost", school.Event.AdditionalInfo.TotalCost);
             schoolRecord.SetValue("perCost", school.Event.AdditionalInfo.PerCost);
@@ -205,6 +205,13 @@ namespace SYJMA.Umbraco.Controllers
         {
             var schoolRecord = Services.ContentService.GetById(school.Id);
             schoolRecord.SetValue("schoolSerialNumber", school.SerialNumber);
+            Services.ContentService.Save(schoolRecord);
+        }
+
+        private void SetSchoolTourBookingIDInUmbraco(SchoolModel school)
+        {
+            var schoolRecord = Services.ContentService.GetById(school.Id);
+            schoolRecord.SetValue("tourBookingID", school.TourBookingID);
             Services.ContentService.Save(schoolRecord);
         }
 
