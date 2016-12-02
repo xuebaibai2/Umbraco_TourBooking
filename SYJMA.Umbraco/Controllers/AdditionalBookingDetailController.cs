@@ -31,6 +31,7 @@ namespace SYJMA.Umbraco.Controllers
                 return PartialView("_Error");
             }
 
+
             if (bookType.Equals("School"))
             {
                 SchoolModel school = contentController.GetSchoolModelById(Convert.ToInt32(id));
