@@ -7,12 +7,16 @@ namespace SYJMA.Umbraco.Models
 {
     public class EventCalendar
     {
+        public EventCalendar()
+        {
+            this.IsSameContact = false;
+        }
+        
         public string id { get; set; }
         public string title { get; set; }
         public string start { get; set; }
         public string end { get; set; }
-        //public float studentPrice { get; set; }
-        //public float staffPrice { get; set; }
+        public bool IsSameContact { get; set; }
         public GroupCoordinator GroupCoordinator { get; set; }
         public Invoice Invoice { get; set; }
         public AdditionalInfoModel AdditionalInfo{ get; set; }

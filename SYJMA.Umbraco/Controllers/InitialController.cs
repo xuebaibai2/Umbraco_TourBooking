@@ -29,6 +29,7 @@ namespace SYJMA.Umbraco.Controllers
             
             if (bookType.Equals("School"))
             {
+                Session["idList"] = new List<int>();
                 SchoolModel school = new SchoolModel();
                 school.SubjectList = jsonDataController.GetSubjectAreaList();
                 school.YearList = jsonDataController.GetYearGroupList();
@@ -65,11 +66,32 @@ namespace SYJMA.Umbraco.Controllers
             school = contentController.GetSchoolModelById(Convert.ToInt32(id));
             school.SubjectList = jsonDataController.GetSubjectAreaList();
             school.YearList = jsonDataController.GetYearGroupList();
+            school.PreferredDate = GetDateTimeForInitial(school as BaseModel).ToString("dd/MM/yyyy");
+            contentController.CreateNewSchoolModel(school);
             if (bookType.Equals("School"))
             {
                 return PartialView("~/Views/Partials/School/_SchoolSubtourBooking.cshtml", school);
             }
             return null;
+        }
+
+
+        public ActionResult PostSubTourInitialPage_School(SchoolModel school)
+        {
+            var schoolRecord = Services.ContentService.GetById(school.Id);
+            
+            schoolRecord.SetValue("year", school.Year);
+            schoolRecord.SetValue("preferredDateSchool", GetDateTimeForPost(school));
+            schoolRecord.SetValue("subjectArea", school.SubjectArea);
+            schoolRecord.SetValue("numberOfStudents", school.StudentsNumber);
+            schoolRecord.SetValue("numberOfStaff", school.StaffNumber);
+            schoolRecord.SetValue("comments", school.Comments);
+            schoolRecord.Name = string.Format("{0} - Year Group: {1}", school.Id, school.Year);
+            Services.ContentService.Save(schoolRecord);
+
+            NameValueCollection routeValues = new NameValueCollection();
+            routeValues.Add("id", school.Id.ToString());
+            return RedirectToUmbracoPage(contentController.GetContentIDFromParent("School Calendar Form",CurrentPage), routeValues);
         }
         /// <summary>
         /// Receive post data form from School partialview and save into School Visits content as a record
@@ -78,13 +100,13 @@ namespace SYJMA.Umbraco.Controllers
         /// <returns>Redirect to page</returns>
         public ActionResult PostInitialPage_School(SchoolModel school)
         {
-            school.SerialNumber = jsonDataController.PostNewContact<SchoolModel>(school,CONTACTTYPE.ORGANISATION).Trim('"');
+            //school.SerialNumber = jsonDataController.PostNewContact<SchoolModel>(school,CONTACTTYPE.ORGANISATION).Trim('"');
             var schoolRecord = Services.ContentService.CreateContent(school.SchoolName + " - " + school.SubjectArea, CurrentPage.Id, "School");
             
-            schoolRecord.SetValue("schoolSerialNumber", school.SerialNumber);
+            //schoolRecord.SetValue("schoolSerialNumber", school.SerialNumber);
             schoolRecord.SetValue("nameOfSchool", school.SchoolName);
             schoolRecord.SetValue("year", school.Year);
-            schoolRecord.SetValue("preferredDateSchool", GetDateTime(school));
+            schoolRecord.SetValue("preferredDateSchool", GetDateTimeForPost(school));
             schoolRecord.SetValue("subjectArea", school.SubjectArea);
             schoolRecord.SetValue("numberOfStudents", school.StudentsNumber);
             schoolRecord.SetValue("numberOfStaff", school.StaffNumber);
@@ -92,6 +114,9 @@ namespace SYJMA.Umbraco.Controllers
             Services.ContentService.SaveAndPublishWithStatus(schoolRecord);
             school.Id = schoolRecord.Id;
             schoolRecord.SetValue("recordId", school.Id);
+            school.MainBookingID = school.Id;
+            schoolRecord.SetValue("mainBookingID", school.MainBookingID);
+            schoolRecord.Name = string.Format("{0} - {1}", school.MainBookingID, school.SchoolName);
             Services.ContentService.Save(schoolRecord);
 
             NameValueCollection routeValues = new NameValueCollection();
@@ -112,7 +137,7 @@ namespace SYJMA.Umbraco.Controllers
 
             adultRecord.SetValue("nameOfGroup", adult.GroupName);
             adultRecord.SetValue("program", selectedProgramId);
-            adultRecord.SetValue("preferredDateAdult", GetDateTime(adult));
+            adultRecord.SetValue("preferredDateAdult", GetDateTimeForPost(adult));
             adultRecord.SetValue("numberOfAdults", adult.AdultNumber);
             adultRecord.SetValue("comments", adult.Comments);
             Services.ContentService.SaveAndPublishWithStatus(adultRecord);
@@ -133,7 +158,7 @@ namespace SYJMA.Umbraco.Controllers
             uniRecord.SetValue("nameOfUniversity", uni.UniName);
             uniRecord.SetValue("nameOfCampus", uni.CampusName);
             uniRecord.SetValue("program", selectedProgramId);
-            uniRecord.SetValue("preferredDate", GetDateTime(uni));
+            uniRecord.SetValue("preferredDate", GetDateTimeForPost(uni));
             uniRecord.SetValue("numberOfStudents", uni.StudentNumber);
             uniRecord.SetValue("numberOfStaff", uni.StaffNumber);
             uniRecord.SetValue("comments", uni.Comments);
@@ -147,9 +172,14 @@ namespace SYJMA.Umbraco.Controllers
         /// </summary>
         /// <param name="viewModel"></param>
         /// <returns>Preferred booking date with datetime format</returns>
-        private DateTime GetDateTime(BaseModel viewModel)
+        private DateTime GetDateTimeForPost(BaseModel viewModel)
         {
             return Convert.ToDateTime(viewModel.PreferredDate, new System.Globalization.CultureInfo("en-AU", true));
+        }
+
+        private DateTime GetDateTimeForInitial(BaseModel viewModel)
+        {
+            return DateTime.ParseExact(viewModel.PreferredDate, "MM/dd/yyyy hh:mm:ss tt", new System.Globalization.CultureInfo("en-AU"), System.Globalization.DateTimeStyles.None);
         }
 
         #endregion

@@ -1,5 +1,6 @@
 ﻿$(document).ready(function () {
     var c = false;
+    $('#checkbox').checked = false;
     $('#checkbox').change(function () {
         c = this.checked ? true : false;
         $(".invoice").toggle();
@@ -25,9 +26,11 @@ function replicateField(flag, emi_id, rec_id) {
 }
 function setHiddenInput(flag) {
     if (flag === true) {
-        $('input[name="isSameInvoice"]').val('true');
+        //$('input[name="IsSameContact"]').val('true');
+        $('#IsSameContact').val('true');
     }
     if (flag === false) {
-        $('input[name="isSameInvoice"]').val('false');
+        //$('input[name="IsSameContact"]').val('false');
+        $('#IsSameContact').val('false');
     }
 }

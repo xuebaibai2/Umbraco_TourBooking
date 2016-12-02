@@ -56,21 +56,21 @@ namespace SYJMA.Umbraco.Controllers
         /// </summary>
         /// <param name="school"></param>
         /// <returns>Redirect to next page</returns>
-        public ActionResult PostBooking_School(SchoolModel school, bool isSameInvoice)
+        public ActionResult PostBooking_School(SchoolModel school)
         {
-            if (isSameInvoice)
-            {
-                school.Event.GroupCoordinator.SerialNumber = jsonDataController.PostNewContact<SchoolModel>(school, CONTACTTYPE.INDIVIDUAL, INDIVISUALTYPE.GROUPCOORDINATOR).Trim('"');
-                school.Event.Invoice.SerialNumber = school.Event.GroupCoordinator.SerialNumber;
-            }
-            else
-            {
-                school.Event.GroupCoordinator.SerialNumber = jsonDataController.PostNewContact<SchoolModel>(school, CONTACTTYPE.INDIVIDUAL, INDIVISUALTYPE.GROUPCOORDINATOR).Trim('"');
-                school.Event.Invoice.SerialNumber = jsonDataController.PostNewContact<SchoolModel>(school, CONTACTTYPE.INDIVIDUAL, INDIVISUALTYPE.INVOICEE).Trim('"');
-            }
+            //if (school.Event.IsSameContact)
+            //{
+            //    school.Event.GroupCoordinator.SerialNumber = jsonDataController.PostNewContact<SchoolModel>(school, CONTACTTYPE.INDIVIDUAL, INDIVISUALTYPE.GROUPCOORDINATOR).Trim('"');
+            //    school.Event.Invoice.SerialNumber = school.Event.GroupCoordinator.SerialNumber;
+            //}
+            //else
+            //{
+            //    school.Event.GroupCoordinator.SerialNumber = jsonDataController.PostNewContact<SchoolModel>(school, CONTACTTYPE.INDIVIDUAL, INDIVISUALTYPE.GROUPCOORDINATOR).Trim('"');
+            //    school.Event.Invoice.SerialNumber = jsonDataController.PostNewContact<SchoolModel>(school, CONTACTTYPE.INDIVIDUAL, INDIVISUALTYPE.INVOICEE).Trim('"');
+            //}
             
             var schoolRecord = Services.ContentService.GetById(school.Id);
-            schoolRecord.SetValue("groupCoordinatorSerialNumber", school.Event.GroupCoordinator.SerialNumber);
+            //schoolRecord.SetValue("groupCoordinatorSerialNumber", school.Event.GroupCoordinator.SerialNumber);
             schoolRecord.SetValue("title", school.Event.GroupCoordinator.Title);
             schoolRecord.SetValue("firstName", school.Event.GroupCoordinator.FirstName);
             schoolRecord.SetValue("surename", school.Event.GroupCoordinator.SureName);
@@ -78,11 +78,13 @@ namespace SYJMA.Umbraco.Controllers
             schoolRecord.SetValue("mobile", school.Event.GroupCoordinator.Mobile);
             schoolRecord.SetValue("daytimeNumber", school.Event.GroupCoordinator.DaytimeNumber);
 
-            schoolRecord.SetValue("invoiceeSerialNumber", school.Event.Invoice.SerialNumber);
+            //schoolRecord.SetValue("invoiceeSerialNumber", school.Event.Invoice.SerialNumber);
             schoolRecord.SetValue("invoiceTitle", school.Event.Invoice.Title);
             schoolRecord.SetValue("invoiceFirstName", school.Event.Invoice.FirstName);
             schoolRecord.SetValue("invoiceSurename", school.Event.Invoice.SureName);
             schoolRecord.SetValue("invoiceEmail", school.Event.Invoice.Email);
+
+            schoolRecord.SetValue("isSameContact", school.Event.IsSameContact);
             Services.ContentService.Save(schoolRecord);
 
             NameValueCollection routeValues = new NameValueCollection();

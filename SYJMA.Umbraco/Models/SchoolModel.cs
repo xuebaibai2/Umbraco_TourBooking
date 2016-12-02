@@ -13,9 +13,11 @@ namespace SYJMA.Umbraco.Models
         public string SchoolName { get; set; }
         public string Year { get; set; }
         public string SubjectArea { get; set; }
+        public int MainBookingID { get; set; }
 
         public IEnumerable<SelectListItem> YearList { get; set; }
         public IEnumerable<SelectListItem> SubjectList { get; set; }
+        public List<int> SubTourIDList = new List<int>();
 
         /// <summary>
         /// Temporary stored staff & student number, will retrive later from Attendee Model
@@ -46,7 +48,7 @@ namespace SYJMA.Umbraco.Models
 
         public float GetStaffAttendeeCost()
         {
-            return this.AttendeeList.Where(x => x.Type.Equals(ATTENDEETYPE.ATTENDEETYPE_STUDENT))
+            return this.AttendeeList.Where(x => x.Type.Equals(ATTENDEETYPE.ATTENDEETYPE_STAFF))
                 .Select(x => x.Cost)
                 .SingleOrDefault();
         }

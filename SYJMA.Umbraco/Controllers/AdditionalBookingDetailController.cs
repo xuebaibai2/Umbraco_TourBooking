@@ -39,6 +39,10 @@ namespace SYJMA.Umbraco.Controllers
                     return PartialView("_Error");
                 }
 
+                school.SubTourIDList = Session["idList"] as List<int>;
+                school.SubTourIDList.Add(int.Parse(id));
+                Session["idList"] = school.SubTourIDList;
+
                 school.Event.AdditionalInfo.OfficerEmailPhone = "1800 207 360";
 
                 float studentPrice = school.AttendeeList
@@ -68,20 +72,21 @@ namespace SYJMA.Umbraco.Controllers
         /// <returns>Redirect to next page</returns>
         public ActionResult PostAdditionalBooking_School(SchoolModel school)
         {
-            SchoolModel tempSchool = contentController.GetSchoolModelById(school.Id);
-            tempSchool.TourBookingID = CreateNewTourBooking(school.Event.id, tempSchool);
-            var s = CreateNewTourBookingAttendeeSummary(tempSchool);
-            var schoolRecord = Services.ContentService.GetById(school.Id);
             
-            schoolRecord.SetValue("tourBookingID", tempSchool.TourBookingID);
-            schoolRecord.SetValue("contentKnowledge", school.Event.AdditionalInfo.ContentKnowledge);
-            schoolRecord.SetValue("totalCost", school.Event.AdditionalInfo.TotalCost);
-            schoolRecord.SetValue("perCost", school.Event.AdditionalInfo.PerCost);
-            schoolRecord.SetValue("additionalDetails", school.Event.AdditionalInfo.AdditionalDetail);
-            schoolRecord.SetValue("cafeRequirement", school.Event.AdditionalInfo.CafeRequire);
-
-            Services.ContentService.Save(schoolRecord);
-
+            school = contentController.GetSchoolModelById(school.Id);
+            school.SubTourIDList = Session["idList"] as List<int>;
+            string schoolSerialNumber = CreateNewSchoolContact(school);
+            foreach (int id in school.SubTourIDList)
+            {
+                SchoolModel temp = contentController.GetSchoolModelById(id);
+                temp.SerialNumber = schoolSerialNumber;
+                SetSchoolSerialNumberInUmbraco(temp);
+                CreateNewContact(temp);
+                temp.TourBookingID = CreateNewTourBooking(temp);
+                CreateNewTourBookingAttendeeSummary(temp);
+                SetSchoolRecord(temp);
+            }
+            
             NameValueCollection routeValues = new NameValueCollection();
             routeValues.Add("id", school.Id.ToString());
             routeValues.Add("type", "School");
@@ -110,7 +115,21 @@ namespace SYJMA.Umbraco.Controllers
             return o_price - discount;
         }
 
-        private string CreateNewTourBooking(string tourID, SchoolModel school)
+        private void SetSchoolRecord(SchoolModel school)
+        {
+            var schoolRecord = Services.ContentService.GetById(school.Id);
+
+            schoolRecord.SetValue("tourBookingID", school.TourBookingID);
+            schoolRecord.SetValue("contentKnowledge", school.Event.AdditionalInfo.ContentKnowledge);
+            schoolRecord.SetValue("totalCost", school.Event.AdditionalInfo.TotalCost);
+            schoolRecord.SetValue("perCost", school.Event.AdditionalInfo.PerCost);
+            schoolRecord.SetValue("additionalDetails", school.Event.AdditionalInfo.AdditionalDetail);
+            schoolRecord.SetValue("cafeRequirement", school.Event.AdditionalInfo.CafeRequire);
+
+            Services.ContentService.Save(schoolRecord);
+        }
+
+        private string CreateNewTourBooking(SchoolModel school)
         {
             float totalCost = GetTotalPrice(school.StudentsNumber, school.GetStudentAttendeeCost())
                 + GetTotalPrice(school.StaffNumber,school.GetStaffAttendeeCost());
@@ -128,10 +147,10 @@ namespace SYJMA.Umbraco.Controllers
             tourBooking.INVOICEESERIALNUMBER = school.Event.Invoice.SerialNumber;
             tourBooking.TOTALCOST = totalCost;
             tourBooking.YEARGROUP = school.Year;
-            tourBooking.SUBJECT = school.Event.title;
+            tourBooking.SUBJECT = school.SubjectArea;
             tourBooking.BOOKINGCOMMENT = school.Comments;
 
-            return jsonDataController.PostNewTourBooking(tourID, tourBooking).Trim('"');
+            return jsonDataController.PostNewTourBooking(school.Event.id, tourBooking).Trim('"');
         }
 
         private List<string> CreateNewTourBookingAttendeeSummary(SchoolModel school)
@@ -174,6 +193,40 @@ namespace SYJMA.Umbraco.Controllers
             }
             return results;
         }
+
+        private string CreateNewSchoolContact(SchoolModel school)
+        {
+            school.SerialNumber = jsonDataController.PostNewContact<SchoolModel>(school, CONTACTTYPE.ORGANISATION).Trim('"');
+            
+            return school.SerialNumber;
+        }
+
+        private void SetSchoolSerialNumberInUmbraco(SchoolModel school)
+        {
+            var schoolRecord = Services.ContentService.GetById(school.Id);
+            schoolRecord.SetValue("schoolSerialNumber", school.SerialNumber);
+            Services.ContentService.Save(schoolRecord);
+        }
+
+        private void CreateNewContact(SchoolModel school)
+        {
+            if (school.Event.IsSameContact)
+            {
+                school.Event.GroupCoordinator.SerialNumber = jsonDataController.PostNewContact<SchoolModel>(school, CONTACTTYPE.INDIVIDUAL, INDIVISUALTYPE.GROUPCOORDINATOR).Trim('"');
+                school.Event.Invoice.SerialNumber = school.Event.GroupCoordinator.SerialNumber;
+            }
+            else
+            {
+                school.Event.GroupCoordinator.SerialNumber = jsonDataController.PostNewContact<SchoolModel>(school, CONTACTTYPE.INDIVIDUAL, INDIVISUALTYPE.GROUPCOORDINATOR).Trim('"');
+                school.Event.Invoice.SerialNumber = jsonDataController.PostNewContact<SchoolModel>(school, CONTACTTYPE.INDIVIDUAL, INDIVISUALTYPE.INVOICEE).Trim('"');
+            }
+            var schoolRecord = Services.ContentService.GetById(school.Id);
+            schoolRecord.SetValue("groupCoordinatorSerialNumber", school.Event.GroupCoordinator.SerialNumber);
+            schoolRecord.SetValue("invoiceeSerialNumber", school.Event.Invoice.SerialNumber);
+            Services.ContentService.Save(schoolRecord);
+        }
+
+        
 
         #endregion
     }

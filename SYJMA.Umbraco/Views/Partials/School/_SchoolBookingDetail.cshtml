@@ -64,7 +64,8 @@
                 @Html.TextBoxFor(x => x.Event.Invoice.Email, new { @id = "email_i", @class = "form-control" })
             </div>
         </div>
-        <input type="hidden" name="isSameInvoice" value="false">
+        @*<input type="hidden" name="isSameInvoice" value="false">*@
+        @Html.HiddenFor(x => x.Event.IsSameContact, new { @id = "IsSameContact"})
         <div class="col-md-12">
             <a href="@ViewBag.parentUrl" class="btn btn-md btn-primary pull-left">Back</a>
             <input type="submit" name="submit" value="Next" class="btn btn-md btn-primary pull-right" />

@@ -8,7 +8,7 @@ using  Umbraco.Web;
 using  Umbraco.ModelsBuilder;
 using  Umbraco.ModelsBuilder.Umbraco;
 [assembly: PureLiveAssembly]
-[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "8bf7cc9df099cea2")]
+[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "ab44b5c80a6fa13d")]
 [assembly:System.Reflection.AssemblyVersion("0.0.0.1")]
 
 
@@ -413,6 +413,24 @@ namespace Umbraco.Web.PublishedContentModels
 		}
 
 		///<summary>
+		/// Is Same Contact
+		///</summary>
+		[ImplementPropertyType("isSameContact")]
+		public string IsSameContact
+		{
+			get { return this.GetPropertyValue<string>("isSameContact"); }
+		}
+
+		///<summary>
+		/// MainBookingID
+		///</summary>
+		[ImplementPropertyType("mainBookingID")]
+		public string MainBookingID
+		{
+			get { return this.GetPropertyValue<string>("mainBookingID"); }
+		}
+
+		///<summary>
 		/// Mobile: Group Coordinator Mobile Number
 		///</summary>
 		[ImplementPropertyType("mobile")]
@@ -461,9 +479,9 @@ namespace Umbraco.Web.PublishedContentModels
 		/// Preferred Date School: Preferred date for school booking
 		///</summary>
 		[ImplementPropertyType("preferredDateSchool")]
-		public DateTime PreferredDateSchool
+		public string PreferredDateSchool
 		{
-			get { return this.GetPropertyValue<DateTime>("preferredDateSchool"); }
+			get { return this.GetPropertyValue<string>("preferredDateSchool"); }
 		}
 
 		///<summary>

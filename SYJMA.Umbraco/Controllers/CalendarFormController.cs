@@ -66,22 +66,14 @@ namespace SYJMA.Umbraco.Controllers
             RetrieveExtraSchoolDetail(school);
 
             var schoolRecord = Services.ContentService.GetById(school.Id);
-            schoolRecord.SetValue("studentAttendeeTypeID", school.AttendeeList
-                .Where(x => x.Type.Equals(ATTENDEETYPE.ATTENDEETYPE_STUDENT))
-                .Select(x => x.ID).SingleOrDefault());
-            schoolRecord.SetValue("staffAttendeeTypeID", school.AttendeeList
-                .Where(x => x.Type.Equals(ATTENDEETYPE.ATTENDEETYPE_STAFF))
-                .Select(x => x.ID).SingleOrDefault());
+            schoolRecord.SetValue("studentAttendeeTypeID", school.GetStudentAttendeeID());
+            schoolRecord.SetValue("staffAttendeeTypeID", school.GetStaffAttendeeID());
             schoolRecord.SetValue("eventTitle", school.Event.title);
             schoolRecord.SetValue("eventId", school.Event.id);
             schoolRecord.SetValue("eventStart", school.Event.start);
             schoolRecord.SetValue("eventEnd", school.Event.end);
-            schoolRecord.SetValue("eventPriceStudent", school.AttendeeList
-                .Where(x => x.Type.Equals(ATTENDEETYPE.ATTENDEETYPE_STUDENT))
-                .Select(x => x.Cost).SingleOrDefault().ToString());
-            schoolRecord.SetValue("eventPriceStaff", school.AttendeeList
-                .Where(x => x.Type.Equals(ATTENDEETYPE.ATTENDEETYPE_STAFF))
-                .Select(x => x.Cost).SingleOrDefault().ToString());
+            schoolRecord.SetValue("eventPriceStudent", school.GetStudentAttendeeCost().ToString("c2"));
+            schoolRecord.SetValue("eventPriceStaff", school.GetStaffAttendeeCost().ToString("c2"));
             Services.ContentService.Save(schoolRecord);
 
             NameValueCollection routeValues = new NameValueCollection();
@@ -92,7 +84,7 @@ namespace SYJMA.Umbraco.Controllers
 
         private void RetrieveExtraSchoolDetail(SchoolModel school)
         {
-            //school.Event.studentPrice = jsonDataController.GetJsonData_AttendeeCost(school.Event.id, ATTENDEETYPE.ATTENDEETYPE_STUDENT);
+            //school.Event._studentPrice = jsonDataController.GetJsonData_AttendeeCost(school.Event.id, ATTENDEETYPE.ATTENDEETYPE_STUDENT);
             //school.Event.staffPrice = jsonDataController.GetJsonData_AttendeeCost(school.Event.id, ATTENDEETYPE.ATTENDEETYPE_STAFF);
             var attendeeList = jsonDataController.GetJsonData_AttendeeType(school.Event.id);
             if (attendeeList != null)
@@ -116,9 +108,9 @@ namespace SYJMA.Umbraco.Controllers
                     Type = ATTENDEETYPE.ATTENDEETYPE_STAFF,
                     Cost = staffPrice
                 });
-                //school.Event.studentPrice = school.AttendeeList.Where(x => x.Type.Equals(ATTENDEETYPE.ATTENDEETYPE_STUDENT)).Select(x => x.Cost).FirstOrDefault();
+                //school.Event._studentPrice = school.AttendeeList.Where(x => x.Type.Equals(ATTENDEETYPE.ATTENDEETYPE_STUDENT)).Select(x => x.Cost).FirstOrDefault();
                 //school.Event.staffPrice = school.AttendeeList.Where(x => x.Type.Equals(ATTENDEETYPE.ATTENDEETYPE_STAFF)).Select(x => x.Cost).FirstOrDefault();
-                //school.Event.studentPrice = attendeeList.Where(x => x.TYPE.Equals(ATTENDEETYPE.ATTENDEETYPE_STUDENT)).Select(x => x.COST).FirstOrDefault();
+                //school.Event._studentPrice = attendeeList.Where(x => x.TYPE.Equals(ATTENDEETYPE.ATTENDEETYPE_STUDENT)).Select(x => x.COST).FirstOrDefault();
                 //school.Event.staffPrice = attendeeList.Where(x => x.TYPE.Equals(ATTENDEETYPE.ATTENDEETYPE_STAFF)).Select(x => x.COST).FirstOrDefault();
             }
             else
@@ -137,7 +129,7 @@ namespace SYJMA.Umbraco.Controllers
                 });
                 //school.AttendeeList.Add(ATTENDEETYPE.ATTENDEETYPE_STUDENT, "");
                 //school.AttendeeList.Add(ATTENDEETYPE.ATTENDEETYPE_STAFF, "");
-                //school.Event.studentPrice = 0;
+                //school.Event._studentPrice = 0;
                 //school.Event.staffPrice = 0;
             }
         }
