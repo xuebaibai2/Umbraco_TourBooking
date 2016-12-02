@@ -224,10 +224,10 @@ namespace SYJMA.Umbraco.Controllers
                 start = Convert.ToString(data.GetValue("eventStart") ?? ""),
                 end = Convert.ToString(data.GetValue("eventEnd") ?? ""),
                 //_studentPrice = float.Parse(Convert.ToString(data.GetValue("eventPriceStudent") ?? 0)),
+                IsSameContact = Convert.ToBoolean(Convert.ToInt32(data.GetValue("isSameContact"))),
                 GroupCoordinator = GetGroupCoordinator(data),
                 Invoice = GetInvoice(data),
-                AdditionalInfo = GetAdditionalinfo(data),
-                IsSameContact = Convert.ToBoolean(Convert.ToInt32(data.GetValue("isSameContact")))
+                AdditionalInfo = GetAdditionalinfo(data)
             };
         }
 

@@ -19,6 +19,7 @@ namespace SYJMA.Umbraco.Utility
         /// </summary>
         //public const string TOUR_API = "http://demo2054938.mockable.io/";
         private const string DOMAIN = "http://localhost:58015/";
+        //private const string DOMAIN = "https://www.thankq.net.au/apiREST/v105/";
         public const string TOUR_API = DOMAIN + "Tour/";
 
         public const string GET_EVENTFROMNAME = DOMAIN + "Tour?tourname=";
