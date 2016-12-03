@@ -2,7 +2,7 @@
     var nameList = [];
     $.ajax({
         type: 'POST',
-        url: '/umbraco/Surface/JSONData/GetSchoolNameList',
+        url: baseUrl + 'umbraco/Surface/JSONData/GetSchoolNameList',
         success: function (result) {
             $("#Name").autocomplete({
                 source: result,

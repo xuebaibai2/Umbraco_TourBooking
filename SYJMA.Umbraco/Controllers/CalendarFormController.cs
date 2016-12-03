@@ -39,8 +39,8 @@ namespace SYJMA.Umbraco.Controllers
                 {
                     return PartialView("_Error");
                 }
-
-                ViewBag.parentUrl = "/school-visits/";
+                ViewBag.rootUrl = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"));
+                ViewBag.parentUrl = Url.Content("~") + "/school-visits/";
                 school.ProgramList = jsonDataController.GetEventNameList();
                 return PartialView("~/Views/Partials/School/_SchoolCalendar.cshtml", school);
             }

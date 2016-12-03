@@ -44,7 +44,7 @@
 function addEvents(url) {
     $.ajax({
         type: 'POST',
-        url: '/umbraco/Surface/JSONData/GetJsonData_Event?eventName=' + url,
+        url: baseUrl + 'umbraco/Surface/JSONData/GetJsonData_Event?eventName=' + url,
         success: function (result) {
             removeEvents();
             addEvent(result);
