@@ -40,7 +40,7 @@ namespace SYJMA.Umbraco.Controllers
                     return PartialView("_Error");
                 }
                 ViewBag.rootUrl = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"));
-                ViewBag.parentUrl = Url.Content("~") + "/school-visits/";
+                ViewBag.parentUrl = ViewBag.rootUrl + "school-visits/";
                 school.ProgramList = jsonDataController.GetEventNameList();
                 return PartialView("~/Views/Partials/School/_SchoolCalendar.cshtml", school);
             }
@@ -63,29 +63,16 @@ namespace SYJMA.Umbraco.Controllers
         public ActionResult PostCalendarForm_School(SchoolModel school)
         {
 
-            RetrieveExtraSchoolDetail(school);
-
-            var schoolRecord = Services.ContentService.GetById(school.Id);
-            schoolRecord.SetValue("studentAttendeeTypeID", school.GetStudentAttendeeID());
-            schoolRecord.SetValue("staffAttendeeTypeID", school.GetStaffAttendeeID() ?? "N/A");
-            schoolRecord.SetValue("eventTitle", school.Event.title);
-            schoolRecord.SetValue("eventId", school.Event.id);
-            schoolRecord.SetValue("eventStart", school.Event.start);
-            schoolRecord.SetValue("eventEnd", school.Event.end);
-            schoolRecord.SetValue("eventPriceStudent", school.GetStudentAttendeeCost().ToString("c2"));
-            schoolRecord.SetValue("eventPriceStaff", school.GetStaffAttendeeCost().ToString("c2"));
-            Services.ContentService.Save(schoolRecord);
-
+            SetSchoolAttendeeDetail(school);
+            contentController.SetPostCalendarForm_School(school);
             NameValueCollection routeValues = new NameValueCollection();
             routeValues.Add("id", school.Id.ToString());
 
             return RedirectToUmbracoPage(contentController.GetContentIDFromSelf("SchoolConfirm", CurrentPage), routeValues);
         }
 
-        private void RetrieveExtraSchoolDetail(SchoolModel school)
+        private void SetSchoolAttendeeDetail(SchoolModel school)
         {
-            //school.Event._studentPrice = jsonDataController.GetJsonData_AttendeeCost(school.Event.id, ATTENDEETYPE.ATTENDEETYPE_STUDENT);
-            //school.Event.staffPrice = jsonDataController.GetJsonData_AttendeeCost(school.Event.id, ATTENDEETYPE.ATTENDEETYPE_STAFF);
             var attendeeList = jsonDataController.GetJsonData_AttendeeType(school.Event.id);
             if (attendeeList != null)
             {
@@ -94,8 +81,6 @@ namespace SYJMA.Umbraco.Controllers
                 float studentPrice = attendeeList.Where(x => x.TYPE.Equals(ATTENDEETYPE.ATTENDEETYPE_STUDENT)).Select(x => x.COST).FirstOrDefault();
                 float staffPrice = attendeeList.Where(x => x.TYPE.Equals(ATTENDEETYPE.ATTENDEETYPE_STAFF)).Select(x => x.COST).FirstOrDefault();
 
-                //school.AttendeeList.Add(ATTENDEETYPE.ATTENDEETYPE_STUDENT, studentAttendeeTypeID);
-                //school.AttendeeList.Add(ATTENDEETYPE.ATTENDEETYPE_STAFF, staffAttendeeTypeID);
                 school.AttendeeList.Add(new Attendee
                 {
                     ID = studentAttendeeTypeID,
@@ -108,10 +93,6 @@ namespace SYJMA.Umbraco.Controllers
                     Type = ATTENDEETYPE.ATTENDEETYPE_STAFF,
                     Cost = staffPrice
                 });
-                //school.Event._studentPrice = school.AttendeeList.Where(x => x.Type.Equals(ATTENDEETYPE.ATTENDEETYPE_STUDENT)).Select(x => x.Cost).FirstOrDefault();
-                //school.Event.staffPrice = school.AttendeeList.Where(x => x.Type.Equals(ATTENDEETYPE.ATTENDEETYPE_STAFF)).Select(x => x.Cost).FirstOrDefault();
-                //school.Event._studentPrice = attendeeList.Where(x => x.TYPE.Equals(ATTENDEETYPE.ATTENDEETYPE_STUDENT)).Select(x => x.COST).FirstOrDefault();
-                //school.Event.staffPrice = attendeeList.Where(x => x.TYPE.Equals(ATTENDEETYPE.ATTENDEETYPE_STAFF)).Select(x => x.COST).FirstOrDefault();
             }
             else
             {
@@ -127,10 +108,6 @@ namespace SYJMA.Umbraco.Controllers
                     Type = ATTENDEETYPE.ATTENDEETYPE_STAFF,
                     Cost = 0
                 });
-                //school.AttendeeList.Add(ATTENDEETYPE.ATTENDEETYPE_STUDENT, "");
-                //school.AttendeeList.Add(ATTENDEETYPE.ATTENDEETYPE_STAFF, "");
-                //school.Event._studentPrice = 0;
-                //school.Event.staffPrice = 0;
             }
         }
 

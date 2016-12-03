@@ -76,12 +76,10 @@ namespace SYJMA.Umbraco.Controllers
             schoolRecord.SetValue("schoolSerialNumber", school.SerialNumber);
             schoolRecord.SetValue("nameOfSchool", school.SchoolName);
             schoolRecord.SetValue("year", school.Year);
-            //schoolRecord.SetValue("preferredDateSchool", GetDateTime(school).Date);
             schoolRecord.SetValue("preferredDateSchool", school.PreferredDate);
             schoolRecord.SetValue("subjectArea", school.SubjectArea);
             schoolRecord.SetValue("numberOfStudents", school.StudentsNumber);
             schoolRecord.SetValue("numberOfStaff", school.StaffNumber);
-            //schoolRecord.SetValue("comments", school.Comments);
 
             //schoolRecord.SetValue("tourBookingID", school.TourBookingID);
             //schoolRecord.SetValue("contentKnowledge", school.Event.AdditionalInfo.ContentKnowledge);
@@ -103,7 +101,6 @@ namespace SYJMA.Umbraco.Controllers
             schoolRecord.SetValue("invoiceFirstName", school.Event.Invoice.FirstName);
             schoolRecord.SetValue("invoiceSurename", school.Event.Invoice.SureName);
             schoolRecord.SetValue("invoiceEmail", school.Event.Invoice.Email);
-            //schoolRecord.SetValue("isSameContact", school.Event.IsSameContact);
 
             //schoolRecord.SetValue("studentAttendeeTypeID", school.GetStudentAttendeeID());
             //schoolRecord.SetValue("staffAttendeeTypeID", school.GetStaffAttendeeCost());
@@ -117,15 +114,66 @@ namespace SYJMA.Umbraco.Controllers
             Services.ContentService.Save(schoolRecord);
         }
 
-        /// <summary>
-        /// Convert string format of datetime to DateTime datatype
-        /// </summary>
-        /// <param name="viewModel"></param>
-        /// <returns>Preferred booking date with datetime format</returns>
-        private DateTime GetDateTime(BaseModel viewModel)
+        public void SetPostSubTourInitialPage_School(SchoolModel school)
         {
-            return DateTime.ParseExact(viewModel.PreferredDate, "MM/dd/yyyy hh:mm:ss tt", new System.Globalization.CultureInfo("en-AU"), System.Globalization.DateTimeStyles.None);
+            var schoolRecord = Services.ContentService.GetById(school.Id);
+            schoolRecord.SetValue("year", school.Year);
+            schoolRecord.SetValue("preferredDateSchool", GetDateTimeForPost(school));
+            schoolRecord.SetValue("subjectArea", school.SubjectArea);
+            schoolRecord.SetValue("numberOfStudents", school.StudentsNumber);
+            schoolRecord.SetValue("numberOfStaff", school.StaffNumber);
+            schoolRecord.SetValue("comments", school.Comments);
+            schoolRecord.Name = string.Format("{0} - Year Group: {1}", school.Id, school.Year);
+            Services.ContentService.Save(schoolRecord);
         }
+
+        public void SetPostIntialPage_School(SchoolModel school)
+        {
+            var schoolRecord = Services.ContentService.CreateContent(school.SchoolName + " - " + school.SubjectArea, CurrentPage.Id, "School");
+            schoolRecord.SetValue("nameOfSchool", school.SchoolName);
+            schoolRecord.SetValue("year", school.Year);
+            schoolRecord.SetValue("preferredDateSchool", GetDateTimeForPost(school));
+            schoolRecord.SetValue("subjectArea", school.SubjectArea);
+            schoolRecord.SetValue("numberOfStudents", school.StudentsNumber);
+            schoolRecord.SetValue("numberOfStaff", school.StaffNumber);
+            schoolRecord.SetValue("comments", school.Comments);
+            Services.ContentService.SaveAndPublishWithStatus(schoolRecord);
+            school.Id = schoolRecord.Id;
+            schoolRecord.SetValue("recordId", school.Id);
+            school.MainBookingID = school.Id;
+            schoolRecord.SetValue("mainBookingID", school.MainBookingID);
+            schoolRecord.Name = string.Format("{0} - {1}", school.MainBookingID, school.SchoolName);
+            Services.ContentService.Save(schoolRecord);
+        }
+
+        public void SetPostCalendarForm_School(SchoolModel school)
+        {
+            var schoolRecord = Services.ContentService.GetById(school.Id);
+            schoolRecord.SetValue("studentAttendeeTypeID", school.GetStudentAttendeeID());
+            schoolRecord.SetValue("staffAttendeeTypeID", school.GetStaffAttendeeID() ?? "N/A");
+            schoolRecord.SetValue("eventTitle", school.Event.title);
+            schoolRecord.SetValue("eventId", school.Event.id);
+            schoolRecord.SetValue("eventStart", school.Event.start);
+            schoolRecord.SetValue("eventEnd", school.Event.end);
+            schoolRecord.SetValue("eventPriceStudent", school.GetStudentAttendeeCost().ToString("c2"));
+            schoolRecord.SetValue("eventPriceStaff", school.GetStaffAttendeeCost().ToString("c2"));
+            Services.ContentService.Save(schoolRecord);
+        }
+
+        private DateTime GetDateTimeForPost(BaseModel viewModel)
+        {
+            return Convert.ToDateTime(viewModel.PreferredDate, new System.Globalization.CultureInfo("en-AU", true));
+        } 
+
+        ///// <summary>
+        ///// Convert string format of datetime to DateTime datatype
+        ///// </summary>
+        ///// <param name="viewModel"></param>
+        ///// <returns>Preferred booking date with datetime format</returns>
+        //private DateTime GetDateTime(BaseModel viewModel)
+        //{
+        //    return DateTime.ParseExact(viewModel.PreferredDate, "MM/dd/yyyy hh:mm:ss tt", new System.Globalization.CultureInfo("en-AU"), System.Globalization.DateTimeStyles.None);
+        //}
 
         /// <summary>
         /// Search Content ID by content name from parent path
@@ -223,7 +271,6 @@ namespace SYJMA.Umbraco.Controllers
                 id = Convert.ToString(data.GetValue("eventId") ?? ""),
                 start = Convert.ToString(data.GetValue("eventStart") ?? ""),
                 end = Convert.ToString(data.GetValue("eventEnd") ?? ""),
-                //_studentPrice = float.Parse(Convert.ToString(data.GetValue("eventPriceStudent") ?? 0)),
                 IsSameContact = Convert.ToBoolean(Convert.ToInt32(data.GetValue("isSameContact"))),
                 GroupCoordinator = GetGroupCoordinator(data),
                 Invoice = GetInvoice(data),
