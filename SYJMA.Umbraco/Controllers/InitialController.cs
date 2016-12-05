@@ -90,7 +90,7 @@ namespace SYJMA.Umbraco.Controllers
         /// <returns>Redirect to page</returns>
         public ActionResult PostInitialPage_School(SchoolModel school)
         {
-            contentController.SetPostIntialPage_School(school);
+            contentController.SetPostIntialPage_School(school,CurrentPage);
             NameValueCollection routeValues = new NameValueCollection();
             routeValues.Add("id", school.Id.ToString());
             return RedirectToUmbracoPage(contentController.GetContentIDFromParent("School Calendar Form",CurrentPage), routeValues);
@@ -142,7 +142,7 @@ namespace SYJMA.Umbraco.Controllers
 
         private DateTime GetDateTimeForInitial(BaseModel viewModel)
         {
-            return DateTime.ParseExact(viewModel.PreferredDate, "MM/dd/yyyy hh:mm:ss tt", new System.Globalization.CultureInfo("en-AU"), System.Globalization.DateTimeStyles.None);
+            return DateTime.ParseExact(viewModel.PreferredDate, "MM/d/yyyy hh:mm:ss tt", new System.Globalization.CultureInfo("en-AU"), System.Globalization.DateTimeStyles.None);
         }
 
         #endregion

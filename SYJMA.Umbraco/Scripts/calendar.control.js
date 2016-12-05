@@ -35,7 +35,6 @@
     $('#calendarForm input').on('change', function () {
         removeEvents();
         addEvents($('input[name=Program]:checked', '#calendarForm').val());
-        //$('#selectionConfirm').html('');
         $('#selectionConfirm').hide();
         $('#externalLink').show();
     });

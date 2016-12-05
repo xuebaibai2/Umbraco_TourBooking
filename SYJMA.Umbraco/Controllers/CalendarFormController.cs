@@ -62,12 +62,10 @@ namespace SYJMA.Umbraco.Controllers
         /// <returns>Redirect to next page</returns>
         public ActionResult PostCalendarForm_School(SchoolModel school)
         {
-
             SetSchoolAttendeeDetail(school);
             contentController.SetPostCalendarForm_School(school);
             NameValueCollection routeValues = new NameValueCollection();
             routeValues.Add("id", school.Id.ToString());
-
             return RedirectToUmbracoPage(contentController.GetContentIDFromSelf("SchoolConfirm", CurrentPage), routeValues);
         }
 
@@ -76,10 +74,14 @@ namespace SYJMA.Umbraco.Controllers
             var attendeeList = jsonDataController.GetJsonData_AttendeeType(school.Event.id);
             if (attendeeList != null)
             {
-                string studentAttendeeTypeID = attendeeList.Where(x => x.TYPE.Equals(ATTENDEETYPE.ATTENDEETYPE_STUDENT)).Select(x => x.ID).FirstOrDefault();
-                string staffAttendeeTypeID = attendeeList.Where(x => x.TYPE.Equals(ATTENDEETYPE.ATTENDEETYPE_STAFF)).Select(x => x.ID).FirstOrDefault();
-                float studentPrice = attendeeList.Where(x => x.TYPE.Equals(ATTENDEETYPE.ATTENDEETYPE_STUDENT)).Select(x => x.COST).FirstOrDefault();
-                float staffPrice = attendeeList.Where(x => x.TYPE.Equals(ATTENDEETYPE.ATTENDEETYPE_STAFF)).Select(x => x.COST).FirstOrDefault();
+                string studentAttendeeTypeID = attendeeList.Where(x => x.TYPE.Equals(ATTENDEETYPE.ATTENDEETYPE_STUDENT))
+                    .Select(x => x.ID).FirstOrDefault();
+                string staffAttendeeTypeID = attendeeList.Where(x => x.TYPE.Equals(ATTENDEETYPE.ATTENDEETYPE_STAFF))
+                    .Select(x => x.ID).FirstOrDefault();
+                float studentPrice = attendeeList.Where(x => x.TYPE.Equals(ATTENDEETYPE.ATTENDEETYPE_STUDENT))
+                    .Select(x => x.COST).FirstOrDefault();
+                float staffPrice = attendeeList.Where(x => x.TYPE.Equals(ATTENDEETYPE.ATTENDEETYPE_STAFF))
+                    .Select(x => x.COST).FirstOrDefault();
 
                 school.AttendeeList.Add(new Attendee
                 {

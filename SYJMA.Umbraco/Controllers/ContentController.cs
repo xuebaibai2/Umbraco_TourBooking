@@ -81,13 +81,6 @@ namespace SYJMA.Umbraco.Controllers
             schoolRecord.SetValue("numberOfStudents", school.StudentsNumber);
             schoolRecord.SetValue("numberOfStaff", school.StaffNumber);
 
-            //schoolRecord.SetValue("tourBookingID", school.TourBookingID);
-            //schoolRecord.SetValue("contentKnowledge", school.Event.AdditionalInfo.ContentKnowledge);
-            //schoolRecord.SetValue("totalCost", school.Event.AdditionalInfo.TotalCost);
-            //schoolRecord.SetValue("perCost", school.Event.AdditionalInfo.PerCost);
-            //schoolRecord.SetValue("additionalDetails", school.Event.AdditionalInfo.AdditionalDetail);
-            //schoolRecord.SetValue("cafeRequirement", school.Event.AdditionalInfo.CafeRequire);
-
             schoolRecord.SetValue("groupCoordinatorSerialNumber", school.Event.GroupCoordinator.SerialNumber);
             schoolRecord.SetValue("title", school.Event.GroupCoordinator.Title);
             schoolRecord.SetValue("firstName", school.Event.GroupCoordinator.FirstName);
@@ -101,16 +94,6 @@ namespace SYJMA.Umbraco.Controllers
             schoolRecord.SetValue("invoiceFirstName", school.Event.Invoice.FirstName);
             schoolRecord.SetValue("invoiceSurename", school.Event.Invoice.SureName);
             schoolRecord.SetValue("invoiceEmail", school.Event.Invoice.Email);
-
-            //schoolRecord.SetValue("studentAttendeeTypeID", school.GetStudentAttendeeID());
-            //schoolRecord.SetValue("staffAttendeeTypeID", school.GetStaffAttendeeCost());
-            //schoolRecord.SetValue("eventTitle", school.Event.title);
-            //schoolRecord.SetValue("eventId", school.Event.id);
-            //schoolRecord.SetValue("eventStart", school.Event.start);
-            //schoolRecord.SetValue("eventEnd", school.Event.end);
-            //schoolRecord.SetValue("eventPriceStudent", school.GetStudentAttendeeCost());
-            //schoolRecord.SetValue("eventPriceStaff", school.GetStaffAttendeeCost());
-
             Services.ContentService.Save(schoolRecord);
         }
 
@@ -127,9 +110,9 @@ namespace SYJMA.Umbraco.Controllers
             Services.ContentService.Save(schoolRecord);
         }
 
-        public void SetPostIntialPage_School(SchoolModel school)
+        public void SetPostIntialPage_School(SchoolModel school, IPublishedContent currentPage)
         {
-            var schoolRecord = Services.ContentService.CreateContent(school.SchoolName + " - " + school.SubjectArea, CurrentPage.Id, "School");
+            var schoolRecord = Services.ContentService.CreateContent(school.SchoolName + " - " + school.SubjectArea, currentPage.Id, "School");
             schoolRecord.SetValue("nameOfSchool", school.SchoolName);
             schoolRecord.SetValue("year", school.Year);
             schoolRecord.SetValue("preferredDateSchool", GetDateTimeForPost(school));
@@ -159,6 +142,47 @@ namespace SYJMA.Umbraco.Controllers
             schoolRecord.SetValue("eventPriceStaff", school.GetStaffAttendeeCost().ToString("c2"));
             Services.ContentService.Save(schoolRecord);
         }
+
+        public void SetPostBooking_School(SchoolModel school)
+        {
+            var schoolRecord = Services.ContentService.GetById(school.Id);
+
+            schoolRecord.SetValue("title", school.Event.GroupCoordinator.Title);
+            schoolRecord.SetValue("firstName", school.Event.GroupCoordinator.FirstName);
+            schoolRecord.SetValue("surename", school.Event.GroupCoordinator.SureName);
+            schoolRecord.SetValue("email", school.Event.GroupCoordinator.Email);
+            schoolRecord.SetValue("mobile", school.Event.GroupCoordinator.Mobile);
+            schoolRecord.SetValue("daytimeNumber", school.Event.GroupCoordinator.DaytimeNumber);
+            schoolRecord.SetValue("invoiceTitle", school.Event.Invoice.Title);
+            schoolRecord.SetValue("invoiceFirstName", school.Event.Invoice.FirstName);
+            schoolRecord.SetValue("invoiceSurename", school.Event.Invoice.SureName);
+            schoolRecord.SetValue("invoiceEmail", school.Event.Invoice.Email);
+            schoolRecord.SetValue("isSameContact", school.Event.IsSameContact);
+            Services.ContentService.Save(schoolRecord);
+        }
+
+        public void SetPostAdditionalBooking_School(SchoolModel school)
+        {
+            var schoolRecord = Services.ContentService.GetById(school.Id);
+            schoolRecord.SetValue("contentKnowledge", school.Event.AdditionalInfo.ContentKnowledge);
+            schoolRecord.SetValue("additionalDetails", school.Event.AdditionalInfo.AdditionalDetail);
+            schoolRecord.SetValue("cafeRequirement", school.Event.AdditionalInfo.CafeRequire);
+            schoolRecord.SetValue("schoolSerialNumber", school.SerialNumber);
+            schoolRecord.SetValue("tourBookingID", school.TourBookingID);
+            schoolRecord.SetValue("groupCoordinatorSerialNumber", school.Event.GroupCoordinator.SerialNumber);
+            schoolRecord.SetValue("invoiceeSerialNumber", school.Event.Invoice.SerialNumber);
+            Services.ContentService.Save(schoolRecord);
+        }
+
+        public void SetAddtioanlBookingDetail_School(SchoolModel school)
+        {
+            var schoolRecord = Services.ContentService.GetById(school.Id);
+            schoolRecord.SetValue("totalCost", school.Event.AdditionalInfo.TotalCost);
+            schoolRecord.SetValue("perCost", school.Event.AdditionalInfo.PerCost);
+            Services.ContentService.Save(schoolRecord);
+        }
+
+
 
         private DateTime GetDateTimeForPost(BaseModel viewModel)
         {
