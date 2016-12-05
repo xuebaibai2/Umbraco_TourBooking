@@ -3,7 +3,7 @@
 
 @using (Html.BeginUmbracoForm<AdditionalBookingDetailController>("PostAdditionalBooking_School"))
 {
-    
+    @Html.AntiForgeryToken()
     <div class="row">
         <div class="form-group col-md-12">
             @Html.Label("knowledge", "Prior Content Knowledge of your students (eg books read or films watched).")

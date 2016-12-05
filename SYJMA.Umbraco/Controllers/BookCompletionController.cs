@@ -29,7 +29,7 @@ namespace SYJMA.Umbraco.Controllers
                 {
                     return PartialView("_Error");
                 }
-                return PartialView("~/Views/Partials/School/_SchoolBookCompletion.cshtml", school);
+                return PartialView(CONSTVALUE.PARTIAL_VIEW_SCHOOL_FOLDER + "_SchoolBookCompletion.cshtml", school);
             }
             else if (type.Equals("Adult"))
             {

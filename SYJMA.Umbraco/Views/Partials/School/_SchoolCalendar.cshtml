@@ -16,8 +16,9 @@
     })
 </script>
 
-@using (Html.BeginUmbracoForm<CalendarFormController>("PostCalendarForm_School", null, new Dictionary<string, object> { { "id", "calendarForm" } }))
+@using (Html.BeginUmbracoForm<CalendarFormController>("PostCalendarForm_School", null, new Dictionary<string, object> { { "id", "calendarForm" }, {"onsubmit","return validationForm()"} }))
 {
+    @Html.AntiForgeryToken()
     <div class="row">
         <div class="form-group col-md-4">
             <b>Programs </b>

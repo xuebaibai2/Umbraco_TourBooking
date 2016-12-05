@@ -20,6 +20,7 @@
         eventStartEditable: false,
         eventDurationEditable: false,
         eventClick: function (calEvent, jsEvent, view) {
+            removeerrorMSGDiv();
             $('#externalLink').hide();
             $('#selectionConfirm').show();
             $('#selectionConfirm').html(
@@ -34,6 +35,7 @@
 
     $('#calendarForm input').on('change', function () {
         removeEvents();
+        removeerrorMSGDiv();
         addEvents($('input[name=Program]:checked', '#calendarForm').val());
         $('#selectionConfirm').hide();
         $('#externalLink').show();
@@ -57,4 +59,16 @@ function removeEvents() {
 
 function addEvent(events) {
     $('#calendar').fullCalendar('addEventSource', events);
+}
+
+function removeerrorMSGDiv() {
+    $('span[id^="errorMSG"]').remove();
+}
+
+function validationForm() {
+    if ($('#selectedEventId').val() == '') {
+        $('#externalLink').append('<span id="errorMSG" style="color:red;">Please select one event before continue</span>');
+        return false;
+    }
+    return true;
 }

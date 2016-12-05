@@ -19,6 +19,8 @@ namespace SYJMA.Umbraco.Controllers
         private ContentController contentController = new ContentController();
         private JSONDataController jsonDataController = new JSONDataController();
 
+        
+
         /// <summary>
         /// Render partial view for Initial Identification Page
         /// </summary>
@@ -35,7 +37,7 @@ namespace SYJMA.Umbraco.Controllers
                 school.YearList = jsonDataController.GetYearGroupList();
                 school.type = "School";
                 ViewBag.rootUrl = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"));
-                return PartialView("~/Views/Partials/School/_SchoolVisit.cshtml", school);
+                return PartialView(CONSTVALUE.PARTIAL_VIEW_SCHOOL_FOLDER + "_SchoolVisit.cshtml", school);
             }
             else if (bookType.Equals("Adult"))
             {
@@ -55,6 +57,24 @@ namespace SYJMA.Umbraco.Controllers
             return null;
         }
 
+        /// <summary>
+        /// Receive post data form from School partialview and save into School Visits content as a record
+        /// </summary>
+        /// <param name="school"></param>
+        /// <returns>Redirect to page</returns>
+        [ValidateAntiForgeryToken]
+        public ActionResult PostInitialPage_School(SchoolModel school)
+        {
+            if (ModelState.IsValid)
+            {
+                contentController.SetPostIntialPage_School(school, CurrentPage);
+                NameValueCollection routeValues = new NameValueCollection();
+                routeValues.Add("id", school.Id.ToString());
+                return RedirectToUmbracoPage(contentController.GetContentIDFromParent("School Calendar Form", CurrentPage), routeValues);
+            }
+            return CurrentUmbracoPage();
+        }
+
         public PartialViewResult SubtourInitialIdentification(string bookType, string id)
         {
             SchoolModel school = new SchoolModel();
@@ -70,30 +90,18 @@ namespace SYJMA.Umbraco.Controllers
             contentController.CreateNewSchoolModel(school);
             if (bookType.Equals("School"))
             {
-                return PartialView("~/Views/Partials/School/_SchoolSubtourBooking.cshtml", school);
+                return PartialView(CONSTVALUE.PARTIAL_VIEW_SCHOOL_FOLDER + "_SchoolSubtourBooking.cshtml", school);
             }
             return null;
         }
 
-
+        [ValidateAntiForgeryToken]
         public ActionResult PostSubTourInitialPage_School(SchoolModel school)
         {
             contentController.SetPostSubTourInitialPage_School(school);
             NameValueCollection routeValues = new NameValueCollection();
             routeValues.Add("id", school.Id.ToString());
-            return RedirectToUmbracoPage(contentController.GetContentIDFromParent("School Calendar Form",CurrentPage), routeValues);
-        }
-        /// <summary>
-        /// Receive post data form from School partialview and save into School Visits content as a record
-        /// </summary>
-        /// <param name="school"></param>
-        /// <returns>Redirect to page</returns>
-        public ActionResult PostInitialPage_School(SchoolModel school)
-        {
-            contentController.SetPostIntialPage_School(school,CurrentPage);
-            NameValueCollection routeValues = new NameValueCollection();
-            routeValues.Add("id", school.Id.ToString());
-            return RedirectToUmbracoPage(contentController.GetContentIDFromParent("School Calendar Form",CurrentPage), routeValues);
+            return RedirectToUmbracoPage(contentController.GetContentIDFromParent("School Calendar Form", CurrentPage), routeValues);
         }
 
         /// <summary>

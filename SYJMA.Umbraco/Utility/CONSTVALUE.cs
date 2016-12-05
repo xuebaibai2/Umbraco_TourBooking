@@ -48,5 +48,9 @@ namespace SYJMA.Umbraco.Utility
         /// </summary>
         public const string SCHOOL_VISITS_CONTENT = "School Visits";
 
+        /// <summary>
+        /// Constant partial view folder
+        /// </summary>
+        public const string PARTIAL_VIEW_SCHOOL_FOLDER = "~/Views/Partials/School/";
     }
 }
