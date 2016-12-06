@@ -91,9 +91,8 @@ namespace SYJMA.Umbraco.Controllers
                 //Save booing record on Umbraco CMS
                 contentController.SetPostAdditionalBooking_School(tempSchool);
             }
-
             NameValueCollection routeValues = new NameValueCollection();
-            routeValues.Add("id", school.Id.ToString());
+            routeValues.Add("mainBookingId", school.MainBookingID.ToString());
             routeValues.Add("type", "School");
             if (school.Event.AdditionalInfo.CafeRequire)
             {

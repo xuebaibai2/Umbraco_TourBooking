@@ -41,28 +41,7 @@ namespace SYJMA.Umbraco.Controllers
             }
         }
 
-        private SchoolModel GetSchoolModel(IContent data)
-        {
-            EventCalendar eventCalendar = GetEventCalendar(data);
-            List<Attendee> attendeeList = GetAttendeeList(data);
-            SchoolModel model = new SchoolModel()
-            {
-                Id = Convert.ToInt32(data.GetValue("recordId")),
-                MainBookingID = Convert.ToInt32(data.GetValue("mainBookingID")),
-                SerialNumber = Convert.ToString(data.GetValue("schoolSerialnumber")),
-                Year = Convert.ToString(data.GetValue("year")),
-                SchoolName = Convert.ToString(data.GetValue("nameOfSchool")),
-                PreferredDate = Convert.ToString(data.GetValue("preferredDateSchool")),
-                SubjectArea = Convert.ToString(data.GetValue("subjectArea")),
-                StudentsNumber = Convert.ToInt32(data.GetValue("numberOfStudents")),
-                StaffNumber = Convert.ToInt32(data.GetValue("numberOfStaff")),
-                Comments = Convert.ToString(data.GetValue("comments")),
-                TourBookingID = Convert.ToString(data.GetValue("tourBookingID")),
-                Event = eventCalendar,
-                AttendeeList = attendeeList
-            };
-            return model;
-        }
+
 
         public void CreateNewSchoolModel(SchoolModel school)
         {
@@ -182,13 +161,6 @@ namespace SYJMA.Umbraco.Controllers
             Services.ContentService.Save(schoolRecord);
         }
 
-
-
-        private DateTime GetDateTimeForPost(BaseModel viewModel)
-        {
-            return Convert.ToDateTime(viewModel.PreferredDate, new System.Globalization.CultureInfo("en-AU", true));
-        } 
-
         ///// <summary>
         ///// Convert string format of datetime to DateTime datatype
         ///// </summary>
@@ -224,6 +196,34 @@ namespace SYJMA.Umbraco.Controllers
         }
 
         #region 'Private Region'
+
+        private SchoolModel GetSchoolModel(IContent data)
+        {
+            EventCalendar eventCalendar = GetEventCalendar(data);
+            List<Attendee> attendeeList = GetAttendeeList(data);
+            SchoolModel model = new SchoolModel()
+            {
+                Id = Convert.ToInt32(data.GetValue("recordId")),
+                MainBookingID = Convert.ToInt32(data.GetValue("mainBookingID")),
+                SerialNumber = Convert.ToString(data.GetValue("schoolSerialnumber")),
+                Year = Convert.ToString(data.GetValue("year")),
+                SchoolName = Convert.ToString(data.GetValue("nameOfSchool")),
+                PreferredDate = Convert.ToString(data.GetValue("preferredDateSchool")),
+                SubjectArea = Convert.ToString(data.GetValue("subjectArea")),
+                StudentsNumber = Convert.ToInt32(data.GetValue("numberOfStudents")),
+                StaffNumber = Convert.ToInt32(data.GetValue("numberOfStaff")),
+                Comments = Convert.ToString(data.GetValue("comments")),
+                TourBookingID = Convert.ToString(data.GetValue("tourBookingID")),
+                Event = eventCalendar,
+                AttendeeList = attendeeList
+            };
+            return model;
+        }
+
+        private DateTime GetDateTimeForPost(BaseModel viewModel)
+        {
+            return Convert.ToDateTime(viewModel.PreferredDate, new System.Globalization.CultureInfo("en-AU", true));
+        } 
 
         private List<Attendee> GetAttendeeList(IContent data)
         {

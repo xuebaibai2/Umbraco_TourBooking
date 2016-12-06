@@ -15,21 +15,32 @@ namespace SYJMA.Umbraco.Controllers
         private ContentController contentController = new ContentController();
         private JSONDataController jsonDataController = new JSONDataController();
 
-        public PartialViewResult BookCompletion(string id,string type)
+        public PartialViewResult BookCompletion(string mainBookingId, string type)
         {
             int result;
-            if (!Int32.TryParse(id, out result))
+            if (!Int32.TryParse(mainBookingId, out result))
             {
                 return PartialView("_Error");
             }
             if (type.Equals("School"))
             {
-                SchoolModel school = contentController.GetSchoolModelById(Convert.ToInt32(id));
+                SchoolModel school = contentController.GetSchoolModelById(Convert.ToInt32(mainBookingId));
                 if (school == null)
                 {
                     return PartialView("_Error");
                 }
-                return PartialView(CONSTVALUE.PARTIAL_VIEW_SCHOOL_FOLDER + "_SchoolBookCompletion.cshtml", school);
+                List<SchoolModel> schoolList = new List<SchoolModel>() ;
+                schoolList.Add(school);
+                var childIdList = Services.ContentService.GetChildren(Convert.ToInt32(mainBookingId)).Select(x=>x.Id).ToList();
+                if (childIdList == null)
+                {
+                    return PartialView("_Error");
+                }
+                foreach (int id in childIdList)
+                {
+                    schoolList.Add(contentController.GetSchoolModelById(id));
+                }
+                return PartialView(CONSTVALUE.PARTIAL_VIEW_SCHOOL_FOLDER + "_SchoolBookCompletion.cshtml", schoolList);
             }
             else if (type.Equals("Adult"))
             {

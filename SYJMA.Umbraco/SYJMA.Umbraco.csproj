@@ -404,6 +404,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\moment.min.js" />
+    <Content Include="Scripts\toggleField_displayData.js" />
     <Content Include="Scripts\toggleField_replicateData.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -498,18 +499,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\AdditionalBookingDetail\" />
-    <Folder Include="Views\AdditionalTourInitial\" />
-    <Folder Include="Views\BookCompletion\" />
-    <Folder Include="Views\BookingDetail\" />
-    <Folder Include="Views\CalendarForm\" />
-    <Folder Include="Views\ConfirmationPanel\" />
-    <Folder Include="Views\Content\" />
-    <Folder Include="Views\DataType\" />
-    <Folder Include="Views\Initial\" />
-    <Folder Include="Views\JSONData\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -523,7 +513,7 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerPort>50902</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:60437/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
