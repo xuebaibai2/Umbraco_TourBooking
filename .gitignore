@@ -156,4 +156,5 @@ $RECYCLE.BIN/
 .DS_Store
 *.txt
 SYJMA.Umbraco/App_Data/Logs/UmbracoTraceLog.ESITOZ68.txt
-SYJMA.Umbraco/App_Data/Logs/UmbracoTraceLog.ESITOZ68.txt
+*.xml
+SYJMA.Umbraco/App_Data/TEMP/*
