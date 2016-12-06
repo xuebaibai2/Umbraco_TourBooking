@@ -41,28 +41,7 @@ namespace SYJMA.Umbraco.Controllers
             }
         }
 
-        private SchoolModel GetSchoolModel(IContent data)
-        {
-            EventCalendar eventCalendar = GetEventCalendar(data);
-            List<Attendee> attendeeList = GetAttendeeList(data);
-            SchoolModel model = new SchoolModel()
-            {
-                Id = Convert.ToInt32(data.GetValue("recordId")),
-                MainBookingID = Convert.ToInt32(data.GetValue("mainBookingID")),
-                SerialNumber = Convert.ToString(data.GetValue("schoolSerialnumber")),
-                Year = Convert.ToString(data.GetValue("year")),
-                SchoolName = Convert.ToString(data.GetValue("nameOfSchool")),
-                PreferredDate = Convert.ToString(data.GetValue("preferredDateSchool")),
-                SubjectArea = Convert.ToString(data.GetValue("subjectArea")),
-                StudentsNumber = Convert.ToInt32(data.GetValue("numberOfStudents")),
-                StaffNumber = Convert.ToInt32(data.GetValue("numberOfStaff")),
-                Comments = Convert.ToString(data.GetValue("comments")),
-                TourBookingID = Convert.ToString(data.GetValue("tourBookingID")),
-                Event = eventCalendar,
-                AttendeeList = attendeeList
-            };
-            return model;
-        }
+
 
         public void CreateNewSchoolModel(SchoolModel school)
         {
@@ -76,19 +55,10 @@ namespace SYJMA.Umbraco.Controllers
             schoolRecord.SetValue("schoolSerialNumber", school.SerialNumber);
             schoolRecord.SetValue("nameOfSchool", school.SchoolName);
             schoolRecord.SetValue("year", school.Year);
-            //schoolRecord.SetValue("preferredDateSchool", GetDateTime(school).Date);
             schoolRecord.SetValue("preferredDateSchool", school.PreferredDate);
             schoolRecord.SetValue("subjectArea", school.SubjectArea);
             schoolRecord.SetValue("numberOfStudents", school.StudentsNumber);
             schoolRecord.SetValue("numberOfStaff", school.StaffNumber);
-            //schoolRecord.SetValue("comments", school.Comments);
-
-            //schoolRecord.SetValue("tourBookingID", school.TourBookingID);
-            //schoolRecord.SetValue("contentKnowledge", school.Event.AdditionalInfo.ContentKnowledge);
-            //schoolRecord.SetValue("totalCost", school.Event.AdditionalInfo.TotalCost);
-            //schoolRecord.SetValue("perCost", school.Event.AdditionalInfo.PerCost);
-            //schoolRecord.SetValue("additionalDetails", school.Event.AdditionalInfo.AdditionalDetail);
-            //schoolRecord.SetValue("cafeRequirement", school.Event.AdditionalInfo.CafeRequire);
 
             schoolRecord.SetValue("groupCoordinatorSerialNumber", school.Event.GroupCoordinator.SerialNumber);
             schoolRecord.SetValue("title", school.Event.GroupCoordinator.Title);
@@ -103,29 +73,103 @@ namespace SYJMA.Umbraco.Controllers
             schoolRecord.SetValue("invoiceFirstName", school.Event.Invoice.FirstName);
             schoolRecord.SetValue("invoiceSurename", school.Event.Invoice.SureName);
             schoolRecord.SetValue("invoiceEmail", school.Event.Invoice.Email);
-            //schoolRecord.SetValue("isSameContact", school.Event.IsSameContact);
-
-            //schoolRecord.SetValue("studentAttendeeTypeID", school.GetStudentAttendeeID());
-            //schoolRecord.SetValue("staffAttendeeTypeID", school.GetStaffAttendeeCost());
-            //schoolRecord.SetValue("eventTitle", school.Event.title);
-            //schoolRecord.SetValue("eventId", school.Event.id);
-            //schoolRecord.SetValue("eventStart", school.Event.start);
-            //schoolRecord.SetValue("eventEnd", school.Event.end);
-            //schoolRecord.SetValue("eventPriceStudent", school.GetStudentAttendeeCost());
-            //schoolRecord.SetValue("eventPriceStaff", school.GetStaffAttendeeCost());
-
             Services.ContentService.Save(schoolRecord);
         }
 
-        /// <summary>
-        /// Convert string format of datetime to DateTime datatype
-        /// </summary>
-        /// <param name="viewModel"></param>
-        /// <returns>Preferred booking date with datetime format</returns>
-        private DateTime GetDateTime(BaseModel viewModel)
+        public void SetPostSubTourInitialPage_School(SchoolModel school)
         {
-            return DateTime.ParseExact(viewModel.PreferredDate, "MM/dd/yyyy hh:mm:ss tt", new System.Globalization.CultureInfo("en-AU"), System.Globalization.DateTimeStyles.None);
+            var schoolRecord = Services.ContentService.GetById(school.Id);
+            schoolRecord.SetValue("year", school.Year);
+            schoolRecord.SetValue("preferredDateSchool", GetDateTimeForPost(school));
+            schoolRecord.SetValue("subjectArea", school.SubjectArea);
+            schoolRecord.SetValue("numberOfStudents", school.StudentsNumber);
+            schoolRecord.SetValue("numberOfStaff", school.StaffNumber);
+            schoolRecord.SetValue("comments", school.Comments);
+            schoolRecord.Name = string.Format("{0} - Year Group: {1}", school.Id, school.Year);
+            Services.ContentService.Save(schoolRecord);
         }
+
+        public void SetPostIntialPage_School(SchoolModel school, IPublishedContent currentPage)
+        {
+            var schoolRecord = Services.ContentService.CreateContent(school.SchoolName + " - " + school.SubjectArea, currentPage.Id, "School");
+            schoolRecord.SetValue("nameOfSchool", school.SchoolName);
+            schoolRecord.SetValue("year", school.Year);
+            schoolRecord.SetValue("preferredDateSchool", GetDateTimeForPost(school));
+            schoolRecord.SetValue("subjectArea", school.SubjectArea);
+            schoolRecord.SetValue("numberOfStudents", school.StudentsNumber);
+            schoolRecord.SetValue("numberOfStaff", school.StaffNumber);
+            schoolRecord.SetValue("comments", school.Comments);
+            Services.ContentService.SaveAndPublishWithStatus(schoolRecord);
+            school.Id = schoolRecord.Id;
+            schoolRecord.SetValue("recordId", school.Id);
+            school.MainBookingID = school.Id;
+            schoolRecord.SetValue("mainBookingID", school.MainBookingID);
+            schoolRecord.Name = string.Format("{0} - {1}", school.MainBookingID, school.SchoolName);
+            Services.ContentService.Save(schoolRecord);
+        }
+
+        public void SetPostCalendarForm_School(SchoolModel school)
+        {
+            var schoolRecord = Services.ContentService.GetById(school.Id);
+            schoolRecord.SetValue("studentAttendeeTypeID", school.GetStudentAttendeeID());
+            schoolRecord.SetValue("staffAttendeeTypeID", school.GetStaffAttendeeID() ?? "N/A");
+            schoolRecord.SetValue("eventTitle", school.Event.title);
+            schoolRecord.SetValue("eventId", school.Event.id);
+            schoolRecord.SetValue("eventStart", school.Event.start);
+            schoolRecord.SetValue("eventEnd", school.Event.end);
+            schoolRecord.SetValue("eventPriceStudent", school.GetStudentAttendeeCost().ToString("c2"));
+            schoolRecord.SetValue("eventPriceStaff", school.GetStaffAttendeeCost().ToString("c2"));
+            Services.ContentService.Save(schoolRecord);
+        }
+
+        public void SetPostBooking_School(SchoolModel school)
+        {
+            var schoolRecord = Services.ContentService.GetById(school.Id);
+
+            schoolRecord.SetValue("title", school.Event.GroupCoordinator.Title);
+            schoolRecord.SetValue("firstName", school.Event.GroupCoordinator.FirstName);
+            schoolRecord.SetValue("surename", school.Event.GroupCoordinator.SureName);
+            schoolRecord.SetValue("email", school.Event.GroupCoordinator.Email);
+            schoolRecord.SetValue("mobile", school.Event.GroupCoordinator.Mobile);
+            schoolRecord.SetValue("daytimeNumber", school.Event.GroupCoordinator.DaytimeNumber);
+            schoolRecord.SetValue("invoiceTitle", school.Event.Invoice.Title);
+            schoolRecord.SetValue("invoiceFirstName", school.Event.Invoice.FirstName);
+            schoolRecord.SetValue("invoiceSurename", school.Event.Invoice.SureName);
+            schoolRecord.SetValue("invoiceEmail", school.Event.Invoice.Email);
+            schoolRecord.SetValue("isSameContact", school.Event.IsSameContact);
+            Services.ContentService.Save(schoolRecord);
+        }
+
+        public void SetPostAdditionalBooking_School(SchoolModel school)
+        {
+            var schoolRecord = Services.ContentService.GetById(school.Id);
+            schoolRecord.SetValue("contentKnowledge", school.Event.AdditionalInfo.ContentKnowledge);
+            schoolRecord.SetValue("additionalDetails", school.Event.AdditionalInfo.AdditionalDetail);
+            schoolRecord.SetValue("cafeRequirement", school.Event.AdditionalInfo.CafeRequire);
+            schoolRecord.SetValue("schoolSerialNumber", school.SerialNumber);
+            schoolRecord.SetValue("tourBookingID", school.TourBookingID);
+            schoolRecord.SetValue("groupCoordinatorSerialNumber", school.Event.GroupCoordinator.SerialNumber);
+            schoolRecord.SetValue("invoiceeSerialNumber", school.Event.Invoice.SerialNumber);
+            Services.ContentService.Save(schoolRecord);
+        }
+
+        public void SetAddtioanlBookingDetail_School(SchoolModel school)
+        {
+            var schoolRecord = Services.ContentService.GetById(school.Id);
+            schoolRecord.SetValue("totalCost", school.Event.AdditionalInfo.TotalCost);
+            schoolRecord.SetValue("perCost", school.Event.AdditionalInfo.PerCost);
+            Services.ContentService.Save(schoolRecord);
+        }
+
+        ///// <summary>
+        ///// Convert string format of datetime to DateTime datatype
+        ///// </summary>
+        ///// <param name="viewModel"></param>
+        ///// <returns>Preferred booking date with datetime format</returns>
+        //private DateTime GetDateTime(BaseModel viewModel)
+        //{
+        //    return DateTime.ParseExact(viewModel.PreferredDate, "MM/dd/yyyy hh:mm:ss tt", new System.Globalization.CultureInfo("en-AU"), System.Globalization.DateTimeStyles.None);
+        //}
 
         /// <summary>
         /// Search Content ID by content name from parent path
@@ -152,6 +196,34 @@ namespace SYJMA.Umbraco.Controllers
         }
 
         #region 'Private Region'
+
+        private SchoolModel GetSchoolModel(IContent data)
+        {
+            EventCalendar eventCalendar = GetEventCalendar(data);
+            List<Attendee> attendeeList = GetAttendeeList(data);
+            SchoolModel model = new SchoolModel()
+            {
+                Id = Convert.ToInt32(data.GetValue("recordId")),
+                MainBookingID = Convert.ToInt32(data.GetValue("mainBookingID")),
+                SerialNumber = Convert.ToString(data.GetValue("schoolSerialnumber")),
+                Year = Convert.ToString(data.GetValue("year")),
+                SchoolName = Convert.ToString(data.GetValue("nameOfSchool")),
+                PreferredDate = Convert.ToString(data.GetValue("preferredDateSchool")),
+                SubjectArea = Convert.ToString(data.GetValue("subjectArea")),
+                StudentsNumber = Convert.ToInt32(data.GetValue("numberOfStudents")),
+                StaffNumber = Convert.ToInt32(data.GetValue("numberOfStaff")),
+                Comments = Convert.ToString(data.GetValue("comments")),
+                TourBookingID = Convert.ToString(data.GetValue("tourBookingID")),
+                Event = eventCalendar,
+                AttendeeList = attendeeList
+            };
+            return model;
+        }
+
+        private DateTime GetDateTimeForPost(BaseModel viewModel)
+        {
+            return Convert.ToDateTime(viewModel.PreferredDate, new System.Globalization.CultureInfo("en-AU", true));
+        } 
 
         private List<Attendee> GetAttendeeList(IContent data)
         {
@@ -223,7 +295,6 @@ namespace SYJMA.Umbraco.Controllers
                 id = Convert.ToString(data.GetValue("eventId") ?? ""),
                 start = Convert.ToString(data.GetValue("eventStart") ?? ""),
                 end = Convert.ToString(data.GetValue("eventEnd") ?? ""),
-                //_studentPrice = float.Parse(Convert.ToString(data.GetValue("eventPriceStudent") ?? 0)),
                 IsSameContact = Convert.ToBoolean(Convert.ToInt32(data.GetValue("isSameContact"))),
                 GroupCoordinator = GetGroupCoordinator(data),
                 Invoice = GetInvoice(data),

@@ -37,7 +37,7 @@ namespace SYJMA.Umbraco.Controllers
                     return PartialView("_Error");
                 }
                 ViewBag.parentUrl = CurrentPage.Parent.Url+"?id="+id;
-                return PartialView("~/Views/Partials/School/_SchoolConfirmPanel.cshtml", school);
+                return PartialView(CONSTVALUE.PARTIAL_VIEW_SCHOOL_FOLDER + "_SchoolConfirmPanel.cshtml", school);
             }
             else if (bookType.Equals("Adult"))
             {
@@ -55,6 +55,7 @@ namespace SYJMA.Umbraco.Controllers
         /// </summary>
         /// <param name="school"></param>
         /// <returns>Redirect to next page</returns>
+        [ValidateAntiForgeryToken]
         public ActionResult PostConfirm_School(SchoolModel school)
         {
             school = contentController.GetSchoolModelById(school.Id);

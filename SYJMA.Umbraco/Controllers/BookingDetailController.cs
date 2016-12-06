@@ -38,7 +38,8 @@ namespace SYJMA.Umbraco.Controllers
                     return PartialView("_Error");
                 }
                 ViewBag.parentUrl = CurrentPage.Parent.Url + "?id=" + id;
-                return PartialView("~/Views/Partials/School/_SchoolBookingDetail.cshtml", school);
+                school.PreferredDate = GetDateTimeForInitial(school as BaseModel).ToString("dd/MM/yyyy");
+                return PartialView(CONSTVALUE.PARTIAL_VIEW_SCHOOL_FOLDER + "_SchoolBookingDetail.cshtml", school);
             }
             else if (bookType.Equals("Adult"))
             {
@@ -56,41 +57,23 @@ namespace SYJMA.Umbraco.Controllers
         /// </summary>
         /// <param name="school"></param>
         /// <returns>Redirect to next page</returns>
+        [ValidateAntiForgeryToken]
         public ActionResult PostBooking_School(SchoolModel school)
         {
-            //if (school.Event.IsSameContact)
-            //{
-            //    school.Event.GroupCoordinator.SerialNumber = jsonDataController.PostNewContact<SchoolModel>(school, CONTACTTYPE.INDIVIDUAL, INDIVISUALTYPE.GROUPCOORDINATOR).Trim('"');
-            //    school.Event.Invoice.SerialNumber = school.Event.GroupCoordinator.SerialNumber;
-            //}
-            //else
-            //{
-            //    school.Event.GroupCoordinator.SerialNumber = jsonDataController.PostNewContact<SchoolModel>(school, CONTACTTYPE.INDIVIDUAL, INDIVISUALTYPE.GROUPCOORDINATOR).Trim('"');
-            //    school.Event.Invoice.SerialNumber = jsonDataController.PostNewContact<SchoolModel>(school, CONTACTTYPE.INDIVIDUAL, INDIVISUALTYPE.INVOICEE).Trim('"');
-            //}
+            if (ModelState.IsValid)
+            {
+                contentController.SetPostBooking_School(school);
+                NameValueCollection routeValues = new NameValueCollection();
+                routeValues.Add("id", school.Id.ToString());
+                return RedirectToUmbracoPage(contentController.GetContentIDFromSelf("SchoolAdditionalDetail", CurrentPage), routeValues);
+            }
+            return CurrentUmbracoPage();
             
-            var schoolRecord = Services.ContentService.GetById(school.Id);
-            //schoolRecord.SetValue("groupCoordinatorSerialNumber", school.Event.GroupCoordinator.SerialNumber);
-            schoolRecord.SetValue("title", school.Event.GroupCoordinator.Title);
-            schoolRecord.SetValue("firstName", school.Event.GroupCoordinator.FirstName);
-            schoolRecord.SetValue("surename", school.Event.GroupCoordinator.SureName);
-            schoolRecord.SetValue("email", school.Event.GroupCoordinator.Email);
-            schoolRecord.SetValue("mobile", school.Event.GroupCoordinator.Mobile);
-            schoolRecord.SetValue("daytimeNumber", school.Event.GroupCoordinator.DaytimeNumber);
+        }
 
-            //schoolRecord.SetValue("invoiceeSerialNumber", school.Event.Invoice.SerialNumber);
-            schoolRecord.SetValue("invoiceTitle", school.Event.Invoice.Title);
-            schoolRecord.SetValue("invoiceFirstName", school.Event.Invoice.FirstName);
-            schoolRecord.SetValue("invoiceSurename", school.Event.Invoice.SureName);
-            schoolRecord.SetValue("invoiceEmail", school.Event.Invoice.Email);
-
-            schoolRecord.SetValue("isSameContact", school.Event.IsSameContact);
-            Services.ContentService.Save(schoolRecord);
-
-            NameValueCollection routeValues = new NameValueCollection();
-            routeValues.Add("id", school.Id.ToString());
-
-            return RedirectToUmbracoPage(contentController.GetContentIDFromSelf("SchoolAdditionalDetail", CurrentPage), routeValues);
+        private DateTime GetDateTimeForInitial(BaseModel viewModel)
+        {
+            return DateTime.ParseExact(viewModel.PreferredDate, "MM/d/yyyy hh:mm:ss tt", new System.Globalization.CultureInfo("en-AU"), System.Globalization.DateTimeStyles.None);
         }
 	}
 }

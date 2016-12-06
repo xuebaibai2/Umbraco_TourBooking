@@ -12,6 +12,7 @@
 </script>
 @using (Html.BeginUmbracoForm<InitialController>("PostSubTourInitialPage_School"))
 {
+    @Html.AntiForgeryToken()
     <div class="row">
         <div class="form-group col-md-12">
             @Html.Label("Name", "Name of School ")

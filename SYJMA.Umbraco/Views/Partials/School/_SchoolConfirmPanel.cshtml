@@ -4,6 +4,7 @@
 
 @using (Html.BeginUmbracoForm<ConfirmationPanelController>("PostConfirm_School"))
 {
+    @Html.AntiForgeryToken()
     <div class="row">
         <div class="col-md-12">
             <table class="table">
