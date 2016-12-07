@@ -5,10 +5,12 @@
     SelectListItem year = new SelectListItem() { Text = Model.Year, Value = Model.Year };
     SelectListItem subject = new SelectListItem() { Text = Model.SubjectArea, Value = Model.SubjectArea };
 }
-<script src="~/Scripts/getnamelist.js"></script>
 <script>
     var baseUrl = '@ViewBag.rootUrl';
 </script>
+
+<script src="~/Scripts/getnamelist.js"></script>
+
 @* Date Pciker jQuery *@
 <script src="~/Scripts/DatePicker.js"></script>
 
@@ -16,7 +18,7 @@
 {
     @Html.AntiForgeryToken()
 
-    <div class="row">
+    <div class="row form-input">
         <div class="form-group col-md-12">
             @Html.Label("Name", "Name of School ")
             @Html.TextBoxFor(m => m.SchoolName, new { @id = "Name", @class = "form-control" })
@@ -61,5 +63,8 @@
         @Html.HiddenFor(x => x.type)
         <input type="submit" name="submit" value="Next" class="btn btn-md btn-primary pull-right" />
     </div>
+    
+    
+    
     
 }

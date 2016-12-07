@@ -8,7 +8,7 @@ using  Umbraco.Web;
 using  Umbraco.ModelsBuilder;
 using  Umbraco.ModelsBuilder.Umbraco;
 [assembly: PureLiveAssembly]
-[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "c127d44ce2739e42")]
+[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "fd5a3bdad36cf0e6")]
 [assembly:System.Reflection.AssemblyVersion("0.0.0.1")]
 
 
@@ -601,12 +601,165 @@ namespace Umbraco.Web.PublishedContentModels
 		}
 
 		///<summary>
+		/// Attendee Type ID
+		///</summary>
+		[ImplementPropertyType("attendeeTypeID")]
+		public string AttendeeTypeID
+		{
+			get { return this.GetPropertyValue<string>("attendeeTypeID"); }
+		}
+
+		///<summary>
 		/// Comments: Adult booking comments
 		///</summary>
 		[ImplementPropertyType("comments")]
 		public string Comments
 		{
 			get { return this.GetPropertyValue<string>("comments"); }
+		}
+
+		///<summary>
+		/// Daytime Number: Group Coordinator Daytime Number
+		///</summary>
+		[ImplementPropertyType("daytimeNumber")]
+		public string DaytimeNumber
+		{
+			get { return this.GetPropertyValue<string>("daytimeNumber"); }
+		}
+
+		///<summary>
+		/// Email: Group Coordinator Email
+		///</summary>
+		[ImplementPropertyType("email")]
+		public string Email
+		{
+			get { return this.GetPropertyValue<string>("email"); }
+		}
+
+		///<summary>
+		/// Event End: Event end time
+		///</summary>
+		[ImplementPropertyType("eventEnd")]
+		public string EventEnd
+		{
+			get { return this.GetPropertyValue<string>("eventEnd"); }
+		}
+
+		///<summary>
+		/// Event Id: Tour ID
+		///</summary>
+		[ImplementPropertyType("eventId")]
+		public string EventId
+		{
+			get { return this.GetPropertyValue<string>("eventId"); }
+		}
+
+		///<summary>
+		/// Event Price: Adult Event Price
+		///</summary>
+		[ImplementPropertyType("eventPrice")]
+		public string EventPrice
+		{
+			get { return this.GetPropertyValue<string>("eventPrice"); }
+		}
+
+		///<summary>
+		/// Event Start: Event start time
+		///</summary>
+		[ImplementPropertyType("eventStart")]
+		public string EventStart
+		{
+			get { return this.GetPropertyValue<string>("eventStart"); }
+		}
+
+		///<summary>
+		/// Event Title: Booking  event title
+		///</summary>
+		[ImplementPropertyType("eventTitle")]
+		public string EventTitle
+		{
+			get { return this.GetPropertyValue<string>("eventTitle"); }
+		}
+
+		///<summary>
+		/// First Name: Group Coordinator Firstname
+		///</summary>
+		[ImplementPropertyType("firstName")]
+		public string FirstName
+		{
+			get { return this.GetPropertyValue<string>("firstName"); }
+		}
+
+		///<summary>
+		/// Group Coordinator Serial Number: Group Coordinator Serial Number from ThankQ DB contact Table
+		///</summary>
+		[ImplementPropertyType("groupCoordinatorSerialNumber")]
+		public string GroupCoordinatorSerialNumber
+		{
+			get { return this.GetPropertyValue<string>("groupCoordinatorSerialNumber"); }
+		}
+
+		///<summary>
+		/// Invoice Email: Invoice Receiver's Email
+		///</summary>
+		[ImplementPropertyType("invoiceEmail")]
+		public string InvoiceEmail
+		{
+			get { return this.GetPropertyValue<string>("invoiceEmail"); }
+		}
+
+		///<summary>
+		/// Invoicee Serial Number: Invoicee Serial Number from ThankQ DB Contact Table
+		///</summary>
+		[ImplementPropertyType("invoiceeSerialNumber")]
+		public string InvoiceeSerialNumber
+		{
+			get { return this.GetPropertyValue<string>("invoiceeSerialNumber"); }
+		}
+
+		///<summary>
+		/// Invoice First Name: Invoice Receiver's First Name
+		///</summary>
+		[ImplementPropertyType("invoiceFirstName")]
+		public string InvoiceFirstName
+		{
+			get { return this.GetPropertyValue<string>("invoiceFirstName"); }
+		}
+
+		///<summary>
+		/// Invoice Surename: Invoice Receiver's Surename
+		///</summary>
+		[ImplementPropertyType("invoiceSurename")]
+		public string InvoiceSurename
+		{
+			get { return this.GetPropertyValue<string>("invoiceSurename"); }
+		}
+
+		///<summary>
+		/// Invoice Title: Invoice Receiver's Title
+		///</summary>
+		[ImplementPropertyType("invoiceTitle")]
+		public string InvoiceTitle
+		{
+			get { return this.GetPropertyValue<string>("invoiceTitle"); }
+		}
+
+		///<summary>
+		/// Is Same Contact
+		///</summary>
+		[ImplementPropertyType("isSameContact")]
+		public string IsSameContact
+		{
+			get { return this.GetPropertyValue<string>("isSameContact"); }
+		}
+
+		///<summary>
+		/// Mobile: Group Coordinator Mobile
+		///</summary>
+		[ImplementPropertyType("mobile")]
+		public string Mobile
+		{
+			get { return this.GetPropertyValue<string>("mobile"); }
 		}
 
 		///<summary>
@@ -619,7 +772,7 @@ namespace Umbraco.Web.PublishedContentModels
 		}
 
 		///<summary>
-		/// Number of Adults: Number of adult for booking
+		/// Number of Adults
 		///</summary>
 		[ImplementPropertyType("numberOfAdults")]
 		public string NumberOfAdults
@@ -631,18 +784,54 @@ namespace Umbraco.Web.PublishedContentModels
 		/// Preferred Date Adult: Preferred date for adult booking
 		///</summary>
 		[ImplementPropertyType("preferredDateAdult")]
-		public DateTime PreferredDateAdult
+		public string PreferredDateAdult
 		{
-			get { return this.GetPropertyValue<DateTime>("preferredDateAdult"); }
+			get { return this.GetPropertyValue<string>("preferredDateAdult"); }
 		}
 
 		///<summary>
 		/// Program: Adult's Program / Tour
 		///</summary>
 		[ImplementPropertyType("program")]
-		public object Program
+		public string Program
 		{
-			get { return this.GetPropertyValue("program"); }
+			get { return this.GetPropertyValue<string>("program"); }
+		}
+
+		///<summary>
+		/// Record Id
+		///</summary>
+		[ImplementPropertyType("recordId")]
+		public string RecordId
+		{
+			get { return this.GetPropertyValue<string>("recordId"); }
+		}
+
+		///<summary>
+		/// Surename: Group Coordinator Surename
+		///</summary>
+		[ImplementPropertyType("surename")]
+		public string Surename
+		{
+			get { return this.GetPropertyValue<string>("surename"); }
+		}
+
+		///<summary>
+		/// Title: Group Coordinator Title
+		///</summary>
+		[ImplementPropertyType("title")]
+		public string Title
+		{
+			get { return this.GetPropertyValue<string>("title"); }
+		}
+
+		///<summary>
+		/// TourBookingID: Tour Booking ID from ThankQ DB
+		///</summary>
+		[ImplementPropertyType("tourBookingID")]
+		public string TourBookingID
+		{
+			get { return this.GetPropertyValue<string>("tourBookingID"); }
 		}
 	}
 

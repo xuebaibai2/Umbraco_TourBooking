@@ -28,7 +28,7 @@ namespace SYJMA.Umbraco.Controllers
         /// <returns>Partial view with Model</returns>
         public PartialViewResult InitialIdentification(string bookType)
         {
-            
+            ViewBag.rootUrl = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"));
             if (bookType.Equals("School"))
             {
                 Session["idList"] = new List<int>();
@@ -36,15 +36,16 @@ namespace SYJMA.Umbraco.Controllers
                 school.SubjectList = jsonDataController.GetSubjectAreaList();
                 school.YearList = jsonDataController.GetYearGroupList();
                 school.type = "School";
-                ViewBag.rootUrl = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"));
+                //ViewBag.rootUrl = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"));
                 return PartialView(CONSTVALUE.PARTIAL_VIEW_SCHOOL_FOLDER + "_SchoolVisit.cshtml", school);
             }
             else if (bookType.Equals("Adult"))
             {
                 AdultModel adult = new AdultModel();
                 adult.type = "Adult";
-                adult.ProgramList = dataTypeController.GetAdultProgramDropdownList();
-                return PartialView("_AdultVisit", adult);
+                //adult.ProgramList = dataTypeController.GetAdultProgramDropdownList();
+                adult.ProgramList = jsonDataController.GetEventNameList();
+                return PartialView(CONSTVALUE.PARTIAL_VIEW_ADULT_FOLDER + "_AdultVisit.cshtml", adult);
             }
             else if (bookType.Equals("University"))
             {
@@ -57,6 +58,8 @@ namespace SYJMA.Umbraco.Controllers
             return null;
         }
 
+        #region School
+
         /// <summary>
         /// Receive post data form from School partialview and save into School Visits content as a record
         /// </summary>
@@ -67,7 +70,7 @@ namespace SYJMA.Umbraco.Controllers
         {
             if (ModelState.IsValid)
             {
-                contentController.SetPostIntialPage_School(school, CurrentPage);
+                contentController.SetPostInitialPage_School(school, CurrentPage);
                 NameValueCollection routeValues = new NameValueCollection();
                 routeValues.Add("id", school.Id.ToString());
                 return RedirectToUmbracoPage(contentController.GetContentIDFromParent("School Calendar Form", CurrentPage), routeValues);
@@ -75,6 +78,7 @@ namespace SYJMA.Umbraco.Controllers
             return CurrentUmbracoPage();
         }
 
+       
         public PartialViewResult SubtourInitialIdentification(string bookType, string id)
         {
             SchoolModel school = new SchoolModel();
@@ -104,26 +108,30 @@ namespace SYJMA.Umbraco.Controllers
             return RedirectToUmbracoPage(contentController.GetContentIDFromParent("School Calendar Form", CurrentPage), routeValues);
         }
 
+        #endregion
+
+        #region Adult
         /// <summary>
         /// Receive post data form from Adult partialview and save into Adult Visits content as a record
         /// </summary>
         /// <param name="adult"></param>
         /// <returns>Redirect to page</returns>
-        //public ActionResult PostInitialPage_Adult(AdultModel adult)
-        //{
-        //    var adultRecord = Services.ContentService.CreateContent(adult.GroupName + " - " + adult.Program, CurrentPage.Id, "Adult");
+        [ValidateAntiForgeryToken]
+        public ActionResult PostInitialPage_Adult(AdultModel adult)
+        {
+            if (ModelState.IsValid)
+            {
+                contentController.SetPostInitialPage_Adult(adult, CurrentPage);
+                NameValueCollection routeValues = new NameValueCollection();
+                routeValues.Add("id", adult.Id.ToString());
+                return RedirectToUmbracoPage(contentController.GetContentIDFromParent("Adult Calendar Form", CurrentPage), routeValues);
+            }
+            return CurrentUmbracoPage();
+        }
 
-        //    int selectedProgramId = dataTypeController.GetAdultProgramDropdownList_SelectedID(adult);
+        #endregion
 
-        //    adultRecord.SetValue("nameOfGroup", adult.GroupName);
-        //    adultRecord.SetValue("program", selectedProgramId);
-        //    adultRecord.SetValue("preferredDateAdult", GetDateTimeForPost(adult));
-        //    adultRecord.SetValue("numberOfAdults", adult.AdultNumber);
-        //    adultRecord.SetValue("comments", adult.Comments);
-        //    Services.ContentService.SaveAndPublishWithStatus(adultRecord);
-        //    return RedirectToCurrentUmbracoPage();
-        //}
-
+        #region University
         /// <summary>
         /// Receive post data form from University partialview and save into University Visits content as a record
         /// </summary>
@@ -145,6 +153,8 @@ namespace SYJMA.Umbraco.Controllers
         //    Services.ContentService.SaveAndPublishWithStatus(uniRecord);
         //    return RedirectToCurrentUmbracoPage();
         //}
+
+        #endregion
 
         #region 'Private Region'
 

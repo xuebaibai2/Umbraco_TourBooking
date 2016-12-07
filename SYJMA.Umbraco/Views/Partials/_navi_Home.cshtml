@@ -10,10 +10,11 @@
 @{ 
     var selection = CurrentPage.Site().Children.Where("Visible");
     var homePage = Model.Content.AncestorsOrSelf(1).FirstOrDefault();
+    var img = homePage.GetPropertyValue<string>("companyLogo");
 }
 
-@* Replace with Logo *@
-@*<a href="@homePage.Url" class="navbar-brand">Sydney Jewish Museum</a>*@
-<a href="@homePage.Url" class="navbar-brand">
-    <img src="~/Images/Sydney-Jewish-Museum.png" />
+<div class="row" style="position: fixed;width:300px; top:15px; margin-left:15px;">
+<a href="@homePage.Url" class="navbar-brand" style="max-height:17.5px;padding: 0px;margin:0px;">
+    <img class="col-sm-12" style="padding: 0px; width:100%;max-height:17.25px;" src="@img" />
 </a>
+</div>

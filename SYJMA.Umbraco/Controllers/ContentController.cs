@@ -41,6 +41,40 @@ namespace SYJMA.Umbraco.Controllers
             }
         }
 
+        internal AdultModel GetAdultModelById(int id)
+        {
+            var data = ApplicationContext.Services.ContentService.GetById(id);
+            if (data == null)
+            {
+                return null;
+            }
+            else if (!data.Parent().Name.Equals(CONSTVALUE.ADULT_VISITS_CONTENT))
+            {
+                return null;
+            }
+            else
+            {
+                return GetAdultModel(data);
+            }
+        }
+
+        private AdultModel GetAdultModel(IContent data)
+        {
+            EventCalendar eventCalendar = GetEventCalendar_Adult(data);
+            //List<Attendee> attendeeList = GetAttendeeList(data);
+            AdultModel model = new AdultModel()
+            {
+                Id = Convert.ToInt32(data.GetValue("recordId")),
+                PreferredDate = Convert.ToString(data.GetValue("preferredDateAdult")),
+                AdultNumber = Convert.ToInt32(data.GetValue("numberOfAdults")),
+                Comments = Convert.ToString(data.GetValue("comments")),
+                TourBookingID = Convert.ToString(data.GetValue("tourBookingID")),
+                Program = Convert.ToString(data.GetValue("program")),
+                Event = eventCalendar,
+                //AttendeeList = attendeeList
+            };
+            return model;
+        }
 
 
         public void CreateNewSchoolModel(SchoolModel school)
@@ -89,7 +123,7 @@ namespace SYJMA.Umbraco.Controllers
             Services.ContentService.Save(schoolRecord);
         }
 
-        public void SetPostIntialPage_School(SchoolModel school, IPublishedContent currentPage)
+        public void SetPostInitialPage_School(SchoolModel school, IPublishedContent currentPage)
         {
             var schoolRecord = Services.ContentService.CreateContent(school.SchoolName + " - " + school.SubjectArea, currentPage.Id, "School");
             schoolRecord.SetValue("nameOfSchool", school.SchoolName);
@@ -108,6 +142,22 @@ namespace SYJMA.Umbraco.Controllers
             Services.ContentService.Save(schoolRecord);
         }
 
+        internal void SetPostInitialPage_Adult(AdultModel adult, IPublishedContent CurrentPage)
+        {
+            var adultRecord = Services.ContentService.CreateContent(adult.GroupName + " - " + adult.Program, CurrentPage.Id, "Adult");
+
+            adultRecord.SetValue("nameOfGroup", adult.GroupName);
+            adultRecord.SetValue("program", adult.Program);
+            adultRecord.SetValue("preferredDateAdult", GetDateTimeForPost(adult));
+            adultRecord.SetValue("numberOfAdults", adult.AdultNumber);
+            adultRecord.SetValue("comments", adult.Comments);
+            Services.ContentService.SaveAndPublishWithStatus(adultRecord);
+            adult.Id = adultRecord.Id;
+            adultRecord.SetValue("recordId", adult.Id);
+            adultRecord.Name = string.Format("{0} - {1}", adult.Id, adult.GroupName);
+            Services.ContentService.Save(adultRecord);
+        }
+
         public void SetPostCalendarForm_School(SchoolModel school)
         {
             var schoolRecord = Services.ContentService.GetById(school.Id);
@@ -120,6 +170,19 @@ namespace SYJMA.Umbraco.Controllers
             schoolRecord.SetValue("eventPriceStudent", school.GetStudentAttendeeCost().ToString("c2"));
             schoolRecord.SetValue("eventPriceStaff", school.GetStaffAttendeeCost().ToString("c2"));
             Services.ContentService.Save(schoolRecord);
+        }
+
+
+        internal void SetPostCalendarForm_Adult(AdultModel adult)
+        {
+            var adultRecord = Services.ContentService.GetById(adult.Id);
+            adultRecord.SetValue("attendeeTypeID", adult.AttendeeList.Single().ID);
+            adultRecord.SetValue("eventTitle", adult.Event.title);
+            adultRecord.SetValue("eventId", adult.Event.id);
+            adultRecord.SetValue("eventStart", adult.Event.start);
+            adultRecord.SetValue("eventEnd", adult.Event.end);
+            adultRecord.SetValue("eventPrice", adult.AttendeeList.Single().Cost.ToString("c2"));
+            Services.ContentService.Save(adultRecord);
         }
 
         public void SetPostBooking_School(SchoolModel school)
@@ -299,6 +362,21 @@ namespace SYJMA.Umbraco.Controllers
                 GroupCoordinator = GetGroupCoordinator(data),
                 Invoice = GetInvoice(data),
                 AdditionalInfo = GetAdditionalinfo(data)
+            };
+        }
+
+        private EventCalendar GetEventCalendar_Adult(IContent data)
+        {
+            return new EventCalendar()
+            {
+                title = Convert.ToString(data.GetValue("eventTitle") ?? ""),
+                id = Convert.ToString(data.GetValue("eventId") ?? ""),
+                start = Convert.ToString(data.GetValue("eventStart") ?? ""),
+                end = Convert.ToString(data.GetValue("eventEnd") ?? ""),
+                IsSameContact = Convert.ToBoolean(Convert.ToInt32(data.GetValue("isSameContact"))),
+                //GroupCoordinator = GetGroupCoordinator(data),
+                //Invoice = GetInvoice(data),
+                //AdditionalInfo = GetAdditionalinfo(data)
             };
         }
 

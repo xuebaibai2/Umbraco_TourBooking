@@ -31,7 +31,7 @@ namespace SYJMA.Umbraco.Controllers
             {
                 return PartialView("_Error");
             }
-
+            ViewBag.rootUrl = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"));
             if (bookType.Equals("School"))
             {
                 SchoolModel school = contentController.GetSchoolModelById(Convert.ToInt32(id));
@@ -39,14 +39,21 @@ namespace SYJMA.Umbraco.Controllers
                 {
                     return PartialView("_Error");
                 }
-                ViewBag.rootUrl = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"));
+                
                 ViewBag.parentUrl = ViewBag.rootUrl + "school-visits/";
                 school.ProgramList = jsonDataController.GetEventNameList();
                 return PartialView(CONSTVALUE.PARTIAL_VIEW_SCHOOL_FOLDER + "_SchoolCalendar.cshtml", school);
             }
             else if (bookType.Equals("Adult"))
             {
+                AdultModel adult = contentController.GetAdultModelById(Convert.ToInt32(id));
+                if (adult == null)
+                {
+                    return PartialView("_Error");
+                }
 
+                ViewBag.parentUrl = ViewBag.rootUrl + "adult-visits/";
+                return PartialView(CONSTVALUE.PARTIAL_VIEW_ADULT_FOLDER + "_AdultCalendar.cshtml", adult);
             }
             else if (bookType.Equals("University"))
             {
@@ -68,6 +75,28 @@ namespace SYJMA.Umbraco.Controllers
             NameValueCollection routeValues = new NameValueCollection();
             routeValues.Add("id", school.Id.ToString());
             return RedirectToUmbracoPage(contentController.GetContentIDFromSelf("SchoolConfirm", CurrentPage), routeValues);
+        }
+
+        [ValidateAntiForgeryToken]
+        public ActionResult PostCalendarForm_Adult(AdultModel adult)
+        {
+            SetAdultAttendeeDetail(adult);
+            contentController.SetPostCalendarForm_Adult(adult);
+            NameValueCollection routeValues = new NameValueCollection();
+            routeValues.Add("id", adult.Id.ToString());
+            return RedirectToUmbracoPage(contentController.GetContentIDFromSelf("AdultConfirm", CurrentPage), routeValues);
+        }
+
+        private void SetAdultAttendeeDetail(AdultModel adult)
+        {
+            //Have to have one Attendee
+            var attendeeList = jsonDataController.GetJsonData_AttendeeType(adult.Event.id);
+            adult.AttendeeList.Add(new Attendee
+            {
+                ID = attendeeList.Where(x=>x.TYPE.Equals(ATTENDEETYPE.ATTENDEETYPE_ADULT)).Select(x=>x.ID).SingleOrDefault(),
+                Type = ATTENDEETYPE.ATTENDEETYPE_ADULT,
+                Cost = attendeeList.Where(x=>x.TYPE.Equals(ATTENDEETYPE.ATTENDEETYPE_ADULT)).Select(x=>x.COST).SingleOrDefault()
+            });
         }
 
         private void SetSchoolAttendeeDetail(SchoolModel school)

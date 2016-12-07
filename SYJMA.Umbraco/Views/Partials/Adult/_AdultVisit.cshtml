@@ -1,0 +1,41 @@
+﻿@using SYJMA.Umbraco.Controllers;
+@inherits Umbraco.Web.Mvc.UmbracoViewPage<SYJMA.Umbraco.Models.AdultModel>
+
+@* Date Pciker jQuery *@
+<script src="~/Scripts/DatePicker.js"></script>
+
+@using (Html.BeginUmbracoForm<InitialController>("PostInitialPage_Adult"))
+{
+    <div class="row form-input">
+        <div class="form-group col-md-12">
+            @Html.Label("Name", "Name of Group ")
+            @Html.TextBoxFor(m => m.GroupName, new { @id = "Name", @class = "form-control" })
+        </div>
+
+        <div class="form-group col-md-12">
+            @Html.Label("Program", "Program / Tour Required ")
+            @Html.DropDownListFor(m => m.Program, Model.ProgramList, new { @id = "Program", @class = "form-control" })
+        </div>
+
+        <div class="form-group col-sm-12">
+            @Html.Label("datepicker", "Preferred Date (you can check availability on the next page) ")
+            @Html.TextBoxFor(m => m.PreferredDate, new { @id = "datepicker", @class = "form-control" })
+        </div>
+
+        <div class="form-group col-md-12">
+            @Html.Label("adultNo", "Number of Adult ")
+            @Html.TextBoxFor(m => m.AdultNumber, new { @id = "adultNo", @class = "form-control" })
+        </div>
+
+        <div class="form-group col-md-12">
+            @Html.Label("comment", "Comments / Special Requirements ")
+            @Html.TextAreaFor(m => m.Comments, new { @id = "comment", @class = "form-control" })
+        </div>
+
+        @Html.HiddenFor(x => x.type)
+        <input type="submit" name="submit" value="Next" class="btn btn-md btn-primary pull-right" />
+    </div>
+    
+    
+    
+}

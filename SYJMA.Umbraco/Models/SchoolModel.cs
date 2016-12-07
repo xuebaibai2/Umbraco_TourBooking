@@ -11,13 +11,19 @@ namespace SYJMA.Umbraco.Models
     public class SchoolModel : BaseModel
     {
         public string SerialNumber { get; set; }
+
         [Required(ErrorMessage="School name is required to process further")]
         public string SchoolName { get; set; }
+
         public string Year { get; set; }
+
         public string SubjectArea { get; set; }
+
         public int MainBookingID { get; set; }
+
         [Required(ErrorMessage = "Staff Number is required")]
         public int StaffNumber { get; set; }
+
         [Required(ErrorMessage = "Student Number is required")]
         public int StudentsNumber { get; set; }
         

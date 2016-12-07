@@ -67,6 +67,10 @@ namespace SYJMA.Umbraco.Controllers
             return GetDeserializedJsonDataList<API_TOURATTENDEETYPE>(attendeeTypeResult).ToList();
         }
 
+        /// <summary>
+        /// Used to retrieve school name list. This method is been called from getnamelist.js file under Scripts folder
+        /// </summary>
+        /// <returns></returns>
         public JsonResult GetSchoolNameList()
         {
             List<string> schooResultlList = new List<string>();

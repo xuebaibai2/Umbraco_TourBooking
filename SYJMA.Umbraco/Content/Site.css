@@ -6,9 +6,14 @@
 .body-content {
     padding-left: 25px;
     padding-right: 25px;
-    min-height: 670px;
-    padding-bottom:10px;
+    min-height: 600px;
+    padding-bottom:40px;
 }
+
+/*.form-input
+{
+    height: 500px;
+}*/
 
 /* Override the default bootstrap behavior where horizontal description lists 
    will truncate terms that are too long to fit in the left column 
