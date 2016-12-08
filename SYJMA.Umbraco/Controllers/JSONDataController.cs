@@ -22,10 +22,10 @@ namespace SYJMA.Umbraco.Controllers
         /// </summary>
         /// <param name="eventName"></param>
         /// <returns></returns>
-        public JsonResult GetJsonData_Event(string eventName)
+        public JsonResult GetJsonData_Event(string eventName, string category)
         {
             List<EventCalendar> eventList = new List<EventCalendar>();
-            var jsonResult = GetJsonResultAsString(CONSTVALUE.GET_EVENTFROMNAME + eventName);
+            var jsonResult = GetJsonResultAsString(CONSTVALUE.TOUR_API +"?tourname="+ eventName+"&category=" + category);
             IEnumerable<API_TOUR> tourList = GetDeserializedJsonDataList<API_TOUR>(jsonResult); 
             foreach (var tour in tourList)
             {
@@ -194,10 +194,10 @@ namespace SYJMA.Umbraco.Controllers
         /// </summary>
         /// <param name="eventTitle"></param>
         /// <returns>String format Json Data</returns>
-        private string GetSerializedJsonData(string eventTitle)
-        {
-            return new JavaScriptSerializer().Serialize(GetJsonData_Event(eventTitle).Data);
-        }
+        //private string GetSerializedJsonData(string eventTitle)
+        //{
+        //    return new JavaScriptSerializer().Serialize(GetJsonData_Event(eventTitle).Data);
+        //}
 
         /// <summary>
         /// Convert Serialized Json Data to a List of Object
