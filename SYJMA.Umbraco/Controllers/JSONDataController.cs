@@ -88,20 +88,20 @@ namespace SYJMA.Umbraco.Controllers
         /// Get all available event name as a SelectListItem List
         /// </summary>
         /// <returns></returns>
-        public List<SelectListItem> GetEventNameList()
+        public List<SelectListItem> GetEventNameList(string category)
         {
-            List<SelectListItem> schoolProgramList = new List<SelectListItem>();
-            var jsonResult = GetJsonResultAsString(CONSTVALUE.GET_ALLEVENTNAME);
+            List<SelectListItem> tourProgramList = new List<SelectListItem>();
+            var jsonResult = GetJsonResultAsString(CONSTVALUE.TOUR_API+ category + CONSTVALUE.GET_ALLEVENTNAME_SUFFIX);
             List<string> nameList = GetDeserializedJsonDataList<string>(jsonResult).ToList();
             foreach (var name in nameList)
             {
-                schoolProgramList.Add(new SelectListItem()
+                tourProgramList.Add(new SelectListItem()
                 {
                     Text = name,
                     Value = name
                 });
             }
-            return schoolProgramList;
+            return tourProgramList;
         }
 
         /// <summary>

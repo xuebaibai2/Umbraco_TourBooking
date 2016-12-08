@@ -15,4 +15,10 @@ namespace SYJMA.Umbraco.Utility
         public const string GROUPCOORDINATOR = "GroupCoordinator";
         public const string INVOICEE = "Invoicee";
     }
+    public struct TOURCATEGORY
+    {
+        public const string SCHOOL = "School";
+        public const string ADULT = "Adult";
+        public const string UNIVERSITY = "University";
+    }
 }

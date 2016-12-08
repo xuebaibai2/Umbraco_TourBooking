@@ -19,8 +19,8 @@ using Umbraco.ModelsBuilder;
 using Umbraco.ModelsBuilder.Umbraco;
 
 [assembly: PureLiveAssembly]
-[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "fd5a3bdad36cf0e6")]
-[assembly:System.Reflection.AssemblyVersion("0.0.0.2")]
+[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "9eca64145b2c36db")]
+[assembly:System.Reflection.AssemblyVersion("0.0.0.1")]
 
 namespace Umbraco.Web.PublishedContentModels
 {
@@ -585,6 +585,15 @@ namespace Umbraco.Web.PublishedContentModels
 		}
 
 		///<summary>
+		/// Address: Group Coordinator Address
+		///</summary>
+		[ImplementPropertyType("address")]
+		public string Address
+		{
+			get { return this.GetPropertyValue<string>("address"); }
+		}
+
+		///<summary>
 		/// Attendee Type ID
 		///</summary>
 		[ImplementPropertyType("attendeeTypeID")]
@@ -684,6 +693,15 @@ namespace Umbraco.Web.PublishedContentModels
 		}
 
 		///<summary>
+		/// Invoice Company: Invoice Receiver's Company
+		///</summary>
+		[ImplementPropertyType("invoiceCompany")]
+		public string InvoiceCompany
+		{
+			get { return this.GetPropertyValue<string>("invoiceCompany"); }
+		}
+
+		///<summary>
 		/// Invoice Email: Invoice Receiver's Email
 		///</summary>
 		[ImplementPropertyType("invoiceEmail")]
@@ -708,6 +726,24 @@ namespace Umbraco.Web.PublishedContentModels
 		public string InvoiceFirstName
 		{
 			get { return this.GetPropertyValue<string>("invoiceFirstName"); }
+		}
+
+		///<summary>
+		/// Invoice Job Title: Invoice Receiver's Job Title
+		///</summary>
+		[ImplementPropertyType("invoiceJobTitle")]
+		public string InvoiceJobTitle
+		{
+			get { return this.GetPropertyValue<string>("invoiceJobTitle"); }
+		}
+
+		///<summary>
+		/// Invoice Phone: Invoice Receiver's Phone
+		///</summary>
+		[ImplementPropertyType("invoicePhone")]
+		public string InvoicePhone
+		{
+			get { return this.GetPropertyValue<string>("invoicePhone"); }
 		}
 
 		///<summary>
@@ -765,6 +801,15 @@ namespace Umbraco.Web.PublishedContentModels
 		}
 
 		///<summary>
+		/// Postcode: Group Coordinator Postcode
+		///</summary>
+		[ImplementPropertyType("postcode")]
+		public string Postcode
+		{
+			get { return this.GetPropertyValue<string>("postcode"); }
+		}
+
+		///<summary>
 		/// Preferred Date Adult: Preferred date for adult booking
 		///</summary>
 		[ImplementPropertyType("preferredDateAdult")]
@@ -789,6 +834,24 @@ namespace Umbraco.Web.PublishedContentModels
 		public string RecordId
 		{
 			get { return this.GetPropertyValue<string>("recordId"); }
+		}
+
+		///<summary>
+		/// State: Group Coordinator State
+		///</summary>
+		[ImplementPropertyType("state")]
+		public string State
+		{
+			get { return this.GetPropertyValue<string>("state"); }
+		}
+
+		///<summary>
+		/// Suburb: Group Coordinator Suburb
+		///</summary>
+		[ImplementPropertyType("suburb")]
+		public string Suburb
+		{
+			get { return this.GetPropertyValue<string>("suburb"); }
 		}
 
 		///<summary>
@@ -1170,6 +1233,76 @@ namespace Umbraco.Web.PublishedContentModels
 		public string BookTypeDescription
 		{
 			get { return this.GetPropertyValue<string>("bookTypeDescription"); }
+		}
+	}
+
+	/// <summary>Invoice</summary>
+	[PublishedContentModel("invoice")]
+	public partial class Invoice : Master
+	{
+#pragma warning disable 0109 // new is redundant
+		public new const string ModelTypeAlias = "invoice";
+		public new const PublishedItemType ModelItemType = PublishedItemType.Content;
+#pragma warning restore 0109
+
+		public Invoice(IPublishedContent content)
+			: base(content)
+		{ }
+
+#pragma warning disable 0109 // new is redundant
+		public new static PublishedContentType GetModelContentType()
+		{
+			return PublishedContentType.Get(ModelItemType, ModelTypeAlias);
+		}
+#pragma warning restore 0109
+
+		public static PublishedPropertyType GetModelPropertyType<TValue>(Expression<Func<Invoice, TValue>> selector)
+		{
+			return PublishedContentModelUtility.GetModelPropertyType(GetModelContentType(), selector);
+		}
+
+		///<summary>
+		/// Book Type: Booking Type
+		///</summary>
+		[ImplementPropertyType("bookType")]
+		public object BookType
+		{
+			get { return this.GetPropertyValue("bookType"); }
+		}
+
+		///<summary>
+		/// Page Header
+		///</summary>
+		[ImplementPropertyType("pageHeader")]
+		public string PageHeader
+		{
+			get { return this.GetPropertyValue<string>("pageHeader"); }
+		}
+	}
+
+	/// <summary>Payment</summary>
+	[PublishedContentModel("payment")]
+	public partial class Payment : Master
+	{
+#pragma warning disable 0109 // new is redundant
+		public new const string ModelTypeAlias = "payment";
+		public new const PublishedItemType ModelItemType = PublishedItemType.Content;
+#pragma warning restore 0109
+
+		public Payment(IPublishedContent content)
+			: base(content)
+		{ }
+
+#pragma warning disable 0109 // new is redundant
+		public new static PublishedContentType GetModelContentType()
+		{
+			return PublishedContentType.Get(ModelItemType, ModelTypeAlias);
+		}
+#pragma warning restore 0109
+
+		public static PublishedPropertyType GetModelPropertyType<TValue>(Expression<Func<Payment, TValue>> selector)
+		{
+			return PublishedContentModelUtility.GetModelPropertyType(GetModelContentType(), selector);
 		}
 	}
 

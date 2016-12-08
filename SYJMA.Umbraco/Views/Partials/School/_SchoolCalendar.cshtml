@@ -10,7 +10,9 @@
 <link href="~/Content/calendar.control.css" rel="stylesheet" />
 <script>
     var baseUrl = '@ViewBag.rootUrl';
+    var category = '@ViewBag.bookType';
     $(document).ready(function () {
+        
         $('#selectionConfirm').hide();
         $('#calendar').fullCalendar('gotoDate', '@Model.PreferredDate.AsDateTime().ToString("yyyy-MM-dd")');
     })

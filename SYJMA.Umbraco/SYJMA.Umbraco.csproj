@@ -426,6 +426,7 @@
     <Compile Include="Controllers\ContentController.cs" />
     <Compile Include="Controllers\DataTypeController.cs" />
     <Compile Include="Controllers\InitialController.cs" />
+    <Compile Include="Controllers\InvoiceController.cs" />
     <Compile Include="Controllers\JSONDataController.cs" />
     <Compile Include="Models\AdditionalInfoModel.cs" />
     <Compile Include="Models\AdultModel.cs" />
@@ -493,6 +494,12 @@
     <Content Include="Views\InitialIdentificationSubtour.cshtml" />
     <Content Include="Views\Partials\School\_SchoolSubtourBooking.cshtml" />
     <Content Include="Views\Partials\Adult\_AdultCalendar.cshtml" />
+    <Content Include="Views\Partials\Adult\_AdultConfirmPanel.cshtml" />
+    <Content Include="Views\Partials\Adult\_AdultBookingDetail.cshtml" />
+    <Content Include="Views\Invoice.cshtml" />
+    <Content Include="Views\Payment.cshtml" />
+    <Content Include="Views\Partials\Adult\_AdultInvoice.cshtml" />
+    <Content Include="Views\Partials\Adult\_AdultBookCompletion.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -500,7 +507,9 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Views\Invoice\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

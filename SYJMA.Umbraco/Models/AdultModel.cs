@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using SYJMA.Umbraco.Utility;
 
 namespace SYJMA.Umbraco.Models
 {
@@ -14,6 +15,11 @@ namespace SYJMA.Umbraco.Models
         
         [Required(ErrorMessage="Adult Number is required")]
         public int AdultNumber { get; set; }
-        
+
+        public float GetAdultAttendeeCost()
+        {
+            return this.AttendeeList.Select(x => x.Cost)
+                .FirstOrDefault();
+        }
     }
 }

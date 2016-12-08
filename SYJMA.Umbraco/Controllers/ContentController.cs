@@ -61,7 +61,7 @@ namespace SYJMA.Umbraco.Controllers
         private AdultModel GetAdultModel(IContent data)
         {
             EventCalendar eventCalendar = GetEventCalendar_Adult(data);
-            //List<Attendee> attendeeList = GetAttendeeList(data);
+            List<Attendee> attendeeList = GetAttendeeList_Adult(data);
             AdultModel model = new AdultModel()
             {
                 Id = Convert.ToInt32(data.GetValue("recordId")),
@@ -70,10 +70,25 @@ namespace SYJMA.Umbraco.Controllers
                 Comments = Convert.ToString(data.GetValue("comments")),
                 TourBookingID = Convert.ToString(data.GetValue("tourBookingID")),
                 Program = Convert.ToString(data.GetValue("program")),
+                GroupName = Convert.ToString(data.GetValue("nameofGroup")),
                 Event = eventCalendar,
-                //AttendeeList = attendeeList
+                AttendeeList = attendeeList
             };
             return model;
+        }
+
+        private List<Attendee> GetAttendeeList_Adult(IContent data)
+        {
+            string _adultPrice = Convert.ToString(data.GetValue("eventPrice"));
+            float adultPrice = _adultPrice.Equals("") ? 0 : float.Parse(_adultPrice, NumberStyles.Currency);
+            List<Attendee> temp = new List<Attendee>();
+            temp.Add(new Attendee()
+            {
+                ID = Convert.ToString(data.GetValue("attendeeTypeID") ?? ""),
+                Cost = adultPrice,
+                Type = ATTENDEETYPE.ATTENDEETYPE_ADULT
+            });
+            return temp;
         }
 
 
@@ -176,7 +191,7 @@ namespace SYJMA.Umbraco.Controllers
         internal void SetPostCalendarForm_Adult(AdultModel adult)
         {
             var adultRecord = Services.ContentService.GetById(adult.Id);
-            adultRecord.SetValue("attendeeTypeID", adult.AttendeeList.Single().ID);
+            adultRecord.SetValue("attendeeTypeID", adult.AttendeeList.First().ID);
             adultRecord.SetValue("eventTitle", adult.Event.title);
             adultRecord.SetValue("eventId", adult.Event.id);
             adultRecord.SetValue("eventStart", adult.Event.start);
@@ -188,7 +203,6 @@ namespace SYJMA.Umbraco.Controllers
         public void SetPostBooking_School(SchoolModel school)
         {
             var schoolRecord = Services.ContentService.GetById(school.Id);
-
             schoolRecord.SetValue("title", school.Event.GroupCoordinator.Title);
             schoolRecord.SetValue("firstName", school.Event.GroupCoordinator.FirstName);
             schoolRecord.SetValue("surename", school.Event.GroupCoordinator.SureName);
@@ -200,6 +214,36 @@ namespace SYJMA.Umbraco.Controllers
             schoolRecord.SetValue("invoiceSurename", school.Event.Invoice.SureName);
             schoolRecord.SetValue("invoiceEmail", school.Event.Invoice.Email);
             schoolRecord.SetValue("isSameContact", school.Event.IsSameContact);
+            Services.ContentService.Save(schoolRecord);
+        }
+
+        internal void SetPostBooking_Adult(AdultModel adult)
+        {
+            var adultRecord = Services.ContentService.GetById(adult.Id);
+            adultRecord.SetValue("title", adult.Event.GroupCoordinator.Title);
+            adultRecord.SetValue("firstName", adult.Event.GroupCoordinator.FirstName);
+            adultRecord.SetValue("surename", adult.Event.GroupCoordinator.SureName);
+            adultRecord.SetValue("email", adult.Event.GroupCoordinator.Email);
+            adultRecord.SetValue("mobile", adult.Event.GroupCoordinator.Mobile);
+            adultRecord.SetValue("daytimeNumber", adult.Event.GroupCoordinator.DaytimeNumber);
+            adultRecord.SetValue("mobile", adult.Event.GroupCoordinator.Mobile);
+            adultRecord.SetValue("address", adult.Event.GroupCoordinator.Address);
+            adultRecord.SetValue("suburb", adult.Event.GroupCoordinator.Suburb);
+            adultRecord.SetValue("state", adult.Event.GroupCoordinator.State);
+            adultRecord.SetValue("postcode", adult.Event.GroupCoordinator.Postcode);
+            Services.ContentService.Save(adultRecord);
+        }
+
+        internal void SetPostInvoice_Adult(AdultModel adult)
+        {
+            var schoolRecord = Services.ContentService.GetById(adult.Id);
+            schoolRecord.SetValue("invoiceTitle", adult.Event.Invoice.Title);
+            schoolRecord.SetValue("invoiceFirstName", adult.Event.Invoice.FirstName);
+            schoolRecord.SetValue("invoiceSurename", adult.Event.Invoice.SureName);
+            schoolRecord.SetValue("invoiceEmail", adult.Event.Invoice.Email);
+            schoolRecord.SetValue("invoiceJobTitle", adult.Event.Invoice.JobTitle);
+            schoolRecord.SetValue("invoiceCompany", adult.Event.Invoice.Company);
+            schoolRecord.SetValue("invoicePhone", adult.Event.Invoice.Phone);
             Services.ContentService.Save(schoolRecord);
         }
 
@@ -262,8 +306,8 @@ namespace SYJMA.Umbraco.Controllers
 
         private SchoolModel GetSchoolModel(IContent data)
         {
-            EventCalendar eventCalendar = GetEventCalendar(data);
-            List<Attendee> attendeeList = GetAttendeeList(data);
+            EventCalendar eventCalendar = GetEventCalendar_School(data);
+            List<Attendee> attendeeList = GetAttendeeList_School(data);
             SchoolModel model = new SchoolModel()
             {
                 Id = Convert.ToInt32(data.GetValue("recordId")),
@@ -288,7 +332,7 @@ namespace SYJMA.Umbraco.Controllers
             return Convert.ToDateTime(viewModel.PreferredDate, new System.Globalization.CultureInfo("en-AU", true));
         } 
 
-        private List<Attendee> GetAttendeeList(IContent data)
+        private List<Attendee> GetAttendeeList_School(IContent data)
         {
             string _studentPrice = Convert.ToString(data.GetValue("eventPriceStudent"));
             float studentPrice = _studentPrice.Equals("") ? 0 : float.Parse(_studentPrice, NumberStyles.Currency);
@@ -314,7 +358,7 @@ namespace SYJMA.Umbraco.Controllers
         /// </summary>
         /// <param name="data"></param>
         /// <returns>Invoice Model</returns>
-        private Invoice GetInvoice(IContent data)
+        private Invoice GetInvoice_School(IContent data)
         {
             return new Invoice()
             {
@@ -326,12 +370,27 @@ namespace SYJMA.Umbraco.Controllers
             };
         }
 
+        private Invoice GetInvoice_Adult(IContent data)
+        {
+            return new Invoice()
+            {
+                Title = Convert.ToString(data.GetValue("invoiceTitle") ?? ""),
+                FirstName = Convert.ToString(data.GetValue("invoiceFirstName") ?? ""),
+                SureName = Convert.ToString(data.GetValue("invoiceSurename") ?? ""),
+                Email = Convert.ToString(data.GetValue("invoiceEmail") ?? ""),
+                SerialNumber = Convert.ToString(data.GetValue("invoiceeSerialNumber") ?? ""),
+                Company = Convert.ToString(data.GetValue("invoiceCompany") ?? ""),
+                JobTitle = Convert.ToString(data.GetValue("invoiceJobTitle") ?? ""),
+                Phone = Convert.ToString(data.GetValue("invoicePhone") ?? ""),
+            };
+        }
+
         /// <summary>
         /// Get GroupCoordinator object from Umbraco record 
         /// </summary>
         /// <param name="data"></param>
         /// <returns>GroupCoordinator Model</returns>
-        private GroupCoordinator GetGroupCoordinator(IContent data)
+        private GroupCoordinator GetGroupCoordinator_School(IContent data)
         {
             return new GroupCoordinator()
             {
@@ -345,12 +404,30 @@ namespace SYJMA.Umbraco.Controllers
             };
         }
 
+        private GroupCoordinator GetGroupCoordinator_Adult(IContent data)
+        {
+            return new GroupCoordinator()
+            {
+                Title = Convert.ToString(data.GetValue("title") ?? ""),
+                FirstName = Convert.ToString(data.GetValue("firstName") ?? ""),
+                SureName = Convert.ToString(data.GetValue("surename") ?? ""),
+                Email = Convert.ToString(data.GetValue("email") ?? ""),
+                Mobile = Convert.ToString(data.GetValue("mobile") ?? ""),
+                DaytimeNumber = Convert.ToString(data.GetValue("daytimeNumber") ?? ""),
+                SerialNumber = Convert.ToString(data.GetValue("groupCoordinatorSerialNumber") ?? ""),
+                Address = Convert.ToString(data.GetValue("address") ?? ""),
+                Suburb = Convert.ToString(data.GetValue("suburb") ?? ""),
+                State = Convert.ToString(data.GetValue("state") ?? ""),
+                Postcode = Convert.ToString(data.GetValue("postcode") ?? ""),
+            };
+        }
+
         /// <summary>
         /// Get EventCalendar object from Umbraco record 
         /// </summary>
         /// <param name="data"></param>
         /// <returns>Event Calendar Model</returns>
-        private EventCalendar GetEventCalendar(IContent data)
+        private EventCalendar GetEventCalendar_School(IContent data)
         {
             return new EventCalendar()
             {
@@ -359,8 +436,8 @@ namespace SYJMA.Umbraco.Controllers
                 start = Convert.ToString(data.GetValue("eventStart") ?? ""),
                 end = Convert.ToString(data.GetValue("eventEnd") ?? ""),
                 IsSameContact = Convert.ToBoolean(Convert.ToInt32(data.GetValue("isSameContact"))),
-                GroupCoordinator = GetGroupCoordinator(data),
-                Invoice = GetInvoice(data),
+                GroupCoordinator = GetGroupCoordinator_School(data),
+                Invoice = GetInvoice_School(data),
                 AdditionalInfo = GetAdditionalinfo(data)
             };
         }
@@ -373,7 +450,8 @@ namespace SYJMA.Umbraco.Controllers
                 id = Convert.ToString(data.GetValue("eventId") ?? ""),
                 start = Convert.ToString(data.GetValue("eventStart") ?? ""),
                 end = Convert.ToString(data.GetValue("eventEnd") ?? ""),
-                IsSameContact = Convert.ToBoolean(Convert.ToInt32(data.GetValue("isSameContact"))),
+                GroupCoordinator = GetGroupCoordinator_Adult(data),
+                Invoice = GetInvoice_Adult(data)
                 //GroupCoordinator = GetGroupCoordinator(data),
                 //Invoice = GetInvoice(data),
                 //AdditionalInfo = GetAdditionalinfo(data)
@@ -398,6 +476,8 @@ namespace SYJMA.Umbraco.Controllers
         }
 
         #endregion
+
+
 
     }
 }

@@ -30,6 +30,8 @@ namespace SYJMA.Umbraco.Controllers
                 return PartialView("_Error");
             }
 
+            ViewBag.parentUrl = CurrentPage.Parent.Url + "?id=" + id;
+
             if (bookType.Equals("School"))
             {
                 SchoolModel school = contentController.GetSchoolModelById(Convert.ToInt32(id));
@@ -37,13 +39,18 @@ namespace SYJMA.Umbraco.Controllers
                 {
                     return PartialView("_Error");
                 }
-                ViewBag.parentUrl = CurrentPage.Parent.Url + "?id=" + id;
                 school.PreferredDate = GetDateTimeForInitial(school as BaseModel).ToString("dd/MM/yyyy");
                 return PartialView(CONSTVALUE.PARTIAL_VIEW_SCHOOL_FOLDER + "_SchoolBookingDetail.cshtml", school);
             }
             else if (bookType.Equals("Adult"))
             {
-
+                AdultModel adult = contentController.GetAdultModelById(Convert.ToInt32(id));
+                if (adult == null)
+                {
+                    return PartialView("_Error");
+                }
+                adult.PreferredDate = GetDateTimeForInitial(adult as BaseModel).ToString("dd/MM/yyyy");
+                return PartialView(CONSTVALUE.PARTIAL_VIEW_ADULT_FOLDER + "_AdultBookingDetail.cshtml", adult);
             }
             else if (bookType.Equals("University"))
             {
@@ -68,7 +75,19 @@ namespace SYJMA.Umbraco.Controllers
                 return RedirectToUmbracoPage(contentController.GetContentIDFromSelf("SchoolAdditionalDetail", CurrentPage), routeValues);
             }
             return CurrentUmbracoPage();
-            
+        }
+
+        [ValidateAntiForgeryToken]
+        public ActionResult PostBooking_Adult(AdultModel adult)
+        {
+            if (ModelState.IsValid)
+            {
+                contentController.SetPostBooking_Adult(adult);
+                NameValueCollection routeValues = new NameValueCollection();
+                routeValues.Add("id", adult.Id.ToString());
+                return RedirectToUmbracoPage(contentController.GetContentIDFromSelf("AdultInvoice", CurrentPage), routeValues);
+            }
+            return CurrentUmbracoPage();
         }
 
         private DateTime GetDateTimeForInitial(BaseModel viewModel)

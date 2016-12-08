@@ -1,0 +1,8 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage<ContentModels.Invoice>
+@using ContentModels = Umbraco.Web.PublishedContentModels;
+@{
+	Layout = "Master.cshtml";
+    string bookType = CurrentPage.bookType;
+}
+<h3>@CurrentPage.pageHeader</h3>
+@Html.Action("Invoice", "Invoice", new {bookType = bookType, id = Request.QueryString.Get("id")})

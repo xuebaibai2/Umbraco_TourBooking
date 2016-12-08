@@ -29,6 +29,9 @@ namespace SYJMA.Umbraco.Controllers
             {
                 return PartialView("_Error");
             }
+
+            ViewBag.parentUrl = CurrentPage.Parent.Url + "?id=" + id;
+
             if (bookType.Equals("School"))
             {
                 SchoolModel school = contentController.GetSchoolModelById(Convert.ToInt32(id));
@@ -36,12 +39,16 @@ namespace SYJMA.Umbraco.Controllers
                 {
                     return PartialView("_Error");
                 }
-                ViewBag.parentUrl = CurrentPage.Parent.Url+"?id="+id;
                 return PartialView(CONSTVALUE.PARTIAL_VIEW_SCHOOL_FOLDER + "_SchoolConfirmPanel.cshtml", school);
             }
             else if (bookType.Equals("Adult"))
             {
-
+                AdultModel adult = contentController.GetAdultModelById(Convert.ToInt32(id));
+                if (adult == null)
+                {
+                    return PartialView("_Error");
+                }
+                return PartialView(CONSTVALUE.PARTIAL_VIEW_ADULT_FOLDER + "_AdultConfirmPanel.cshtml", adult);
             }
             else if (bookType.Equals("University"))
             {
@@ -64,6 +71,17 @@ namespace SYJMA.Umbraco.Controllers
             routeValues.Add("id", school.Id.ToString());
 
             return RedirectToUmbracoPage(contentController.GetContentIDFromSelf("SchoolDetail", CurrentPage), routeValues);
+        }
+
+        [ValidateAntiForgeryToken]
+        public ActionResult PostConfirm_Adult(AdultModel adult)
+        {
+            adult = contentController.GetAdultModelById(adult.Id);
+
+            NameValueCollection routeValues = new NameValueCollection();
+            routeValues.Add("id", adult.Id.ToString());
+
+            return RedirectToUmbracoPage(contentController.GetContentIDFromSelf("AdultDetail", CurrentPage), routeValues);
         }
 	}
 }

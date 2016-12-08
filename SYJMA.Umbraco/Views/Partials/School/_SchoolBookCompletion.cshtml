@@ -67,9 +67,15 @@
                     <td><b>Students total price</b></td>
                     <td>@school.GetStudentAttendeeCost().ToString("c2")</td>
                 </tr>
+
                 <tr>
                     <td><b>Number of Staff</b></td>
                     <td>@school.StaffNumber</td>
+                </tr>
+
+                <tr>
+                    <td><b>Staff total price</b></td>
+                    <td>@school.GetStaffAttendeeCost().ToString("c2")</td>
                 </tr>
 
                 <tr>

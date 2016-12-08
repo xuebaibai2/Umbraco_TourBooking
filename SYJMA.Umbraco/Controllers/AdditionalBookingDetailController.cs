@@ -98,7 +98,7 @@ namespace SYJMA.Umbraco.Controllers
             {
                 //Do Something About Cafe Catering Sending Email?
             }
-            return RedirectToUmbracoPage(1210, routeValues);
+            return RedirectToUmbracoPage(CONSTVALUE.BOOK_COMPLETION_CONTENT_ID, routeValues);
         }
 
         #region 'Private Region'

@@ -32,6 +32,7 @@ namespace SYJMA.Umbraco.Controllers
                 return PartialView("_Error");
             }
             ViewBag.rootUrl = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"));
+            ViewBag.bookType = bookType;
             if (bookType.Equals("School"))
             {
                 SchoolModel school = contentController.GetSchoolModelById(Convert.ToInt32(id));
@@ -41,7 +42,7 @@ namespace SYJMA.Umbraco.Controllers
                 }
                 
                 ViewBag.parentUrl = ViewBag.rootUrl + "school-visits/";
-                school.ProgramList = jsonDataController.GetEventNameList();
+                school.ProgramList = jsonDataController.GetEventNameList(TOURCATEGORY.SCHOOL);
                 return PartialView(CONSTVALUE.PARTIAL_VIEW_SCHOOL_FOLDER + "_SchoolCalendar.cshtml", school);
             }
             else if (bookType.Equals("Adult"))
@@ -70,7 +71,7 @@ namespace SYJMA.Umbraco.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult PostCalendarForm_School(SchoolModel school)
         {
-            SetSchoolAttendeeDetail(school);
+            SetAttendeeDetail_School(school);
             contentController.SetPostCalendarForm_School(school);
             NameValueCollection routeValues = new NameValueCollection();
             routeValues.Add("id", school.Id.ToString());
@@ -80,14 +81,14 @@ namespace SYJMA.Umbraco.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult PostCalendarForm_Adult(AdultModel adult)
         {
-            SetAdultAttendeeDetail(adult);
+            SetAttendeeDetail_Adult(adult);
             contentController.SetPostCalendarForm_Adult(adult);
             NameValueCollection routeValues = new NameValueCollection();
             routeValues.Add("id", adult.Id.ToString());
             return RedirectToUmbracoPage(contentController.GetContentIDFromSelf("AdultConfirm", CurrentPage), routeValues);
         }
 
-        private void SetAdultAttendeeDetail(AdultModel adult)
+        private void SetAttendeeDetail_Adult(AdultModel adult)
         {
             //Have to have one Attendee
             var attendeeList = jsonDataController.GetJsonData_AttendeeType(adult.Event.id);
@@ -99,7 +100,7 @@ namespace SYJMA.Umbraco.Controllers
             });
         }
 
-        private void SetSchoolAttendeeDetail(SchoolModel school)
+        private void SetAttendeeDetail_School(SchoolModel school)
         {
             var attendeeList = jsonDataController.GetJsonData_AttendeeType(school.Event.id);
             if (attendeeList != null)

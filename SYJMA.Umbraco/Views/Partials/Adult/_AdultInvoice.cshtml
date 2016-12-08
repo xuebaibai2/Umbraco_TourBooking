@@ -1,0 +1,61 @@
+﻿@using SYJMA.Umbraco.Controllers;
+@inherits Umbraco.Web.Mvc.UmbracoViewPage<SYJMA.Umbraco.Models.AdultModel>
+
+
+@using (Html.BeginUmbracoForm<InvoiceController>("PostInvoice_Adult"))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
+    <div class="row">
+        <div id="invoicee">
+            <div class="invoice">
+                <div class="form-group col-md-4">
+                    @Html.Label("title_i", "Title *")
+                    @Html.TextBoxFor(x => x.Event.Invoice.Title, new { @id = "title_i", @class = "form-control" })
+                    <span style="color: red;">@Html.ValidationMessageFor(x => x.Event.Invoice.Title)</span>
+                </div>
+
+                <div class="form-group col-md-4">
+                    @Html.Label("firstname_i", "Firtst Name *")
+                    @Html.TextBoxFor(x => x.Event.Invoice.FirstName, new { @id = "firstname_i", @class = "form-control" })
+                    <span style="color: red;">@Html.ValidationMessageFor(x => x.Event.Invoice.FirstName)</span>
+                </div>
+
+                <div class="form-group col-md-4">
+                    @Html.Label("surename_i", "Surename *")
+                    @Html.TextBoxFor(x => x.Event.Invoice.SureName, new { @id = "surename_i", @class = "form-control" })
+                    <span style="color: red;">@Html.ValidationMessageFor(x => x.Event.Invoice.SureName)</span>
+                </div>
+
+                <div class="form-group col-md-12">
+                    @Html.Label("jobtitle_i", "Job Title ")
+                    @Html.TextBoxFor(x => x.Event.Invoice.JobTitle, new { @id = "jobtitle_i", @class = "form-control" })
+                </div>
+
+                <div class="form-group col-md-12">
+                    @Html.Label("conmpany_i", "Company / Institution")
+                    @Html.TextBoxFor(x => x.Event.Invoice.Company, new { @id = "conmpany_i", @class = "form-control" })
+                </div>
+
+                <div class="form-group col-md-12">
+                    @Html.Label("email_i", "Email *")
+                    @Html.TextBoxFor(x => x.Event.Invoice.Email, new { @id = "email_i", @class = "form-control" })
+                    <span style="color: red;">@Html.ValidationMessageFor(x => x.Event.Invoice.Email)</span>
+                </div>
+
+                <div class="form-group col-md-12">
+                    @Html.Label("phone_i", "Daytime Phone Number *")
+                    @Html.TextBoxFor(x => x.Event.Invoice.Phone, new { @id = "phone_i", @class = "form-control" })
+                    <span style="color: red;">@Html.ValidationMessageFor(x => x.Event.Invoice.Phone)</span>
+                </div>
+            </div>
+        </div>
+        @Html.HiddenFor(x => x.GroupName)
+        @Html.HiddenFor(x => x.PreferredDate)
+        <div class="col-md-12">
+            <a href="@ViewBag.parentUrl" class="btn btn-md btn-primary pull-left">Back</a>
+            <input type="submit" name="submit" value="Next" class="btn btn-md btn-primary pull-right" />
+        </div>
+
+    </div>
+}

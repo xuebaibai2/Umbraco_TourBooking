@@ -15,7 +15,7 @@ namespace SYJMA.Umbraco.Controllers
         private ContentController contentController = new ContentController();
         private JSONDataController jsonDataController = new JSONDataController();
 
-        public PartialViewResult BookCompletion(string mainBookingId, string type)
+        public PartialViewResult BookCompletion(string type, string mainBookingId)
         {
             int result;
             if (!Int32.TryParse(mainBookingId, out result))
@@ -44,7 +44,12 @@ namespace SYJMA.Umbraco.Controllers
             }
             else if (type.Equals("Adult"))
             {
-
+                AdultModel adult = contentController.GetAdultModelById(Convert.ToInt32(mainBookingId));
+                if (adult == null)
+                {
+                    return PartialView("_Error");
+                }
+                return PartialView(CONSTVALUE.PARTIAL_VIEW_ADULT_FOLDER + "_AdultBookCompletion.cshtml", adult);
             }
             else if (type.Equals("University"))
             {

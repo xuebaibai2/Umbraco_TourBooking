@@ -36,15 +36,13 @@ namespace SYJMA.Umbraco.Controllers
                 school.SubjectList = jsonDataController.GetSubjectAreaList();
                 school.YearList = jsonDataController.GetYearGroupList();
                 school.type = "School";
-                //ViewBag.rootUrl = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"));
                 return PartialView(CONSTVALUE.PARTIAL_VIEW_SCHOOL_FOLDER + "_SchoolVisit.cshtml", school);
             }
             else if (bookType.Equals("Adult"))
             {
                 AdultModel adult = new AdultModel();
                 adult.type = "Adult";
-                //adult.ProgramList = dataTypeController.GetAdultProgramDropdownList();
-                adult.ProgramList = jsonDataController.GetEventNameList();
+                adult.ProgramList = jsonDataController.GetEventNameList(TOURCATEGORY.ADULT);
                 return PartialView(CONSTVALUE.PARTIAL_VIEW_ADULT_FOLDER + "_AdultVisit.cshtml", adult);
             }
             else if (bookType.Equals("University"))

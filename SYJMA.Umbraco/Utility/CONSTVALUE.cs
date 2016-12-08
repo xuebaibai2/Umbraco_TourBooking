@@ -23,7 +23,7 @@ namespace SYJMA.Umbraco.Utility
         public const string TOUR_API = DOMAIN + "Tour/";
 
         public const string GET_EVENTFROMNAME = DOMAIN + "Tour?tourname=";
-        public const string GET_ALLEVENTNAME = DOMAIN + "Tour/AllNames";
+        public const string GET_ALLEVENTNAME_SUFFIX ="/AllNames";
         public const string GET_ATTENDEETYPE = "/TourAttendeeType";
         public const string GET_YEARGROUP = DOMAIN + "LookupValue?lookupname=yeargroup&bomtype=event";
         public const string GET_SUBJECTAREA = DOMAIN + "LookupValue?lookupname=subjectarea&bomtype=event";
@@ -53,5 +53,7 @@ namespace SYJMA.Umbraco.Utility
         /// </summary>
         public const string PARTIAL_VIEW_SCHOOL_FOLDER = "~/Views/Partials/School/";
         public const string PARTIAL_VIEW_ADULT_FOLDER = "~/Views/Partials/Adult/";
+
+        public const int BOOK_COMPLETION_CONTENT_ID = 1210;
     }
 }

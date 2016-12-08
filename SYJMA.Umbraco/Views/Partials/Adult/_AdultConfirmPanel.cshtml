@@ -1,0 +1,39 @@
+﻿@using SYJMA.Umbraco.Controllers;
+@using SYJMA.Umbraco.Utility;
+@inherits Umbraco.Web.Mvc.UmbracoViewPage<SYJMA.Umbraco.Models.AdultModel>
+
+@using (Html.BeginUmbracoForm<ConfirmationPanelController>("PostConfirm_Adult"))
+{
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table">
+                <tr>
+                    <td><b>Name of Group</b></td>
+                    <td>@Html.DisplayFor(x => x.GroupName)</td>
+                </tr>
+
+                <tr>
+                    <td><b>Date and Time of Tour</b></td>
+                    <td>@Model.Event.GetDateDescription()</td>
+                </tr>
+
+                <tr>
+                    <td><b>Program / Tour</b></td>
+                    <td>@Html.DisplayFor(x => x.Event.title)</td>
+                </tr>
+
+                <tr>
+                    <td><b>Number of Adults</b></td>
+                    <td>@Html.DisplayFor(x => x.AdultNumber)</td>
+                </tr>
+            </table>
+        </div>
+        @Html.HiddenFor(x => x.Id)
+
+        <div class="col-md-12">
+            <a href="@ViewBag.parentUrl" class="btn btn-md btn-primary pull-left">Back</a>
+            <input type="submit" name="submit" value="Next" class="btn btn-md btn-primary pull-right" />
+        </div>
+    </div>
+}

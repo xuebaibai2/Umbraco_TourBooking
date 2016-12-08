@@ -45,7 +45,7 @@
 function addEvents(url) {
     $.ajax({
         type: 'POST',
-        url: baseUrl + 'umbraco/Surface/JSONData/GetJsonData_Event?eventName=' + url,
+        url: baseUrl + 'umbraco/Surface/JSONData/GetJsonData_Event?eventName=' + url + '&category=' + category,//Modify this function to add category paramater like addEvents(url, category) category should be like School, Adult, University
         success: function (result) {
             removeEvents();
             addEvent(result);

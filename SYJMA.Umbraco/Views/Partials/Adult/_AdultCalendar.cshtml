@@ -5,7 +5,7 @@
         var baseUrl = '@ViewBag.rootUrl';
         $.ajax({
             type: 'POST',
-            url: baseUrl + 'umbraco/Surface/JSONData/GetJsonData_Event?eventName=@Model.Program',
+            url: baseUrl + 'umbraco/Surface/JSONData/GetJsonData_Event?eventName=@Model.Program&category=Adult',
             success: function (result) {
                 addEvent(result);
             }
