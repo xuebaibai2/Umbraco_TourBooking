@@ -9,6 +9,7 @@ namespace SYJMA.Umbraco.Models
     {
         public string ContentKnowledge { get; set; }
         public string TotalCost { get; set; }
+        public string StaffTotalCost { get; set; }
         public string PerCost { get; set; }
         public string AdditionalDetail { get; set; }
         public bool CafeRequire { get; set; }

@@ -1,6 +1,13 @@
 ﻿$(document).ready(function () {
     var c = false;
-    $('#checkbox').checked = false;
+    //$('#checkbox').checked = $('#IsSameContact').val();
+    //$('#checkbox').prop('checked', $('#IsSameContact').val());
+    //alert($('#IsSameContact').val());
+    //if ($('#IsSameContact').val()) {
+    //    $(".invoice").toggle();
+    //}
+    $('#IsSameContact').val('false');
+    //alert($('#IsSameContact').val());
     $('#checkbox').change(function () {
         c = this.checked ? true : false;
         $(".invoice").toggle();

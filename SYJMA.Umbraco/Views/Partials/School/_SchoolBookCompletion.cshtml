@@ -21,7 +21,7 @@
     @{
         foreach (SchoolModel school in Model)
         {
-            <button id="btn_@school.Id" style="background-color:#eee;" class="btn btn-Primary btn-lg btn-block">
+            <button id="btn_@school.Id" style="background-color:#eee;" class="btn btn-Primary btn-block">
                 <span class="pull-left">@school.TourBookingID</span>
                 <span id="icon_@school.Id" class="fa fa-caret-square-o-down pull-right" aria-hidden="true"></span>
             </button>
@@ -65,7 +65,7 @@
 
                 <tr>
                     <td><b>Students total price</b></td>
-                    <td>@school.GetStudentAttendeeCost().ToString("c2")</td>
+                    <td>@school.Event.AdditionalInfo.TotalCost</td>
                 </tr>
 
                 <tr>
@@ -73,10 +73,10 @@
                     <td>@school.StaffNumber</td>
                 </tr>
 
-                <tr>
+@*                <tr>
                     <td><b>Staff total price</b></td>
                     <td>@school.GetStaffAttendeeCost().ToString("c2")</td>
-                </tr>
+                </tr>*@
 
                 <tr>
                     <td colspan="2">

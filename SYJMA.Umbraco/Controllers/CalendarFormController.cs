@@ -42,7 +42,7 @@ namespace SYJMA.Umbraco.Controllers
                 }
                 
                 ViewBag.parentUrl = ViewBag.rootUrl + "school-visits/";
-                school.ProgramList = jsonDataController.GetEventNameList(TOURCATEGORY.SCHOOL);
+                school.ProgramList = jsonDataController.GetJsonData_EventNameList(TOURCATEGORY.SCHOOL);
                 return PartialView(CONSTVALUE.PARTIAL_VIEW_SCHOOL_FOLDER + "_SchoolCalendar.cshtml", school);
             }
             else if (bookType.Equals("Adult"))
@@ -72,6 +72,8 @@ namespace SYJMA.Umbraco.Controllers
         public ActionResult PostCalendarForm_School(SchoolModel school)
         {
             SetAttendeeDetail_School(school);
+            school.Event.AdditionalInfo.StaffTotalCost = GetTotalPrice(school.StaffNumber, school.GetStaffAttendeeCost()).ToString("c2");
+            school.Event.AdditionalInfo.TotalCost = GetTotalPrice(school.StudentsNumber, school.GetStudentAttendeeCost()).ToString("c2");
             contentController.SetPostCalendarForm_School(school);
             NameValueCollection routeValues = new NameValueCollection();
             routeValues.Add("id", school.Id.ToString());
@@ -82,6 +84,7 @@ namespace SYJMA.Umbraco.Controllers
         public ActionResult PostCalendarForm_Adult(AdultModel adult)
         {
             SetAttendeeDetail_Adult(adult);
+            adult.Event.AdditionalInfo.TotalCost = GetTotalPrice(adult.AdultNumber, adult.GetAdultAttendeeCost()).ToString("c2");
             contentController.SetPostCalendarForm_Adult(adult);
             NameValueCollection routeValues = new NameValueCollection();
             routeValues.Add("id", adult.Id.ToString());
@@ -144,5 +147,9 @@ namespace SYJMA.Umbraco.Controllers
             }
         }
 
+        private float GetTotalPrice(int number, float price)
+        {
+            return number * price;
+        }
     }
 }

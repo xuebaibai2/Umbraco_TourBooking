@@ -184,6 +184,8 @@ namespace SYJMA.Umbraco.Controllers
             schoolRecord.SetValue("eventEnd", school.Event.end);
             schoolRecord.SetValue("eventPriceStudent", school.GetStudentAttendeeCost().ToString("c2"));
             schoolRecord.SetValue("eventPriceStaff", school.GetStaffAttendeeCost().ToString("c2"));
+            schoolRecord.SetValue("totalCost", school.Event.AdditionalInfo.TotalCost);
+            schoolRecord.SetValue("staffTotalCost", school.Event.AdditionalInfo.StaffTotalCost);
             Services.ContentService.Save(schoolRecord);
         }
 
@@ -197,6 +199,7 @@ namespace SYJMA.Umbraco.Controllers
             adultRecord.SetValue("eventStart", adult.Event.start);
             adultRecord.SetValue("eventEnd", adult.Event.end);
             adultRecord.SetValue("eventPrice", adult.AttendeeList.Single().Cost.ToString("c2"));
+            adultRecord.SetValue("totalCost", adult.Event.AdditionalInfo.TotalCost);
             Services.ContentService.Save(adultRecord);
         }
 
@@ -260,13 +263,14 @@ namespace SYJMA.Umbraco.Controllers
             Services.ContentService.Save(schoolRecord);
         }
 
-        public void SetAddtioanlBookingDetail_School(SchoolModel school)
-        {
-            var schoolRecord = Services.ContentService.GetById(school.Id);
-            schoolRecord.SetValue("totalCost", school.Event.AdditionalInfo.TotalCost);
-            schoolRecord.SetValue("perCost", school.Event.AdditionalInfo.PerCost);
-            Services.ContentService.Save(schoolRecord);
-        }
+        //public void SetAddtioanlBookingDetail_School(SchoolModel school)
+        //{
+        //    var schoolRecord = Services.ContentService.GetById(school.Id);
+        //    schoolRecord.SetValue("totalCost", school.Event.AdditionalInfo.TotalCost);
+        //    schoolRecord.SetValue("perCost", school.Event.AdditionalInfo.PerCost);
+        //    Services.ContentService.Save(schoolRecord);
+        //}
+
 
         ///// <summary>
         ///// Convert string format of datetime to DateTime datatype
@@ -438,7 +442,7 @@ namespace SYJMA.Umbraco.Controllers
                 IsSameContact = Convert.ToBoolean(Convert.ToInt32(data.GetValue("isSameContact"))),
                 GroupCoordinator = GetGroupCoordinator_School(data),
                 Invoice = GetInvoice_School(data),
-                AdditionalInfo = GetAdditionalinfo(data)
+                AdditionalInfo = GetAdditionalinfo_School(data)
             };
         }
 
@@ -451,10 +455,8 @@ namespace SYJMA.Umbraco.Controllers
                 start = Convert.ToString(data.GetValue("eventStart") ?? ""),
                 end = Convert.ToString(data.GetValue("eventEnd") ?? ""),
                 GroupCoordinator = GetGroupCoordinator_Adult(data),
-                Invoice = GetInvoice_Adult(data)
-                //GroupCoordinator = GetGroupCoordinator(data),
-                //Invoice = GetInvoice(data),
-                //AdditionalInfo = GetAdditionalinfo(data)
+                Invoice = GetInvoice_Adult(data),
+                AdditionalInfo = GetAdditionalinfo_Adult(data)
             };
         }
 
@@ -463,15 +465,23 @@ namespace SYJMA.Umbraco.Controllers
         /// </summary>
         /// <param name="data"></param>
         /// <returns>AdditionalInfo Model</returns>
-        private AdditionalInfoModel GetAdditionalinfo(IContent data)
+        private AdditionalInfoModel GetAdditionalinfo_School(IContent data)
         {
             return new AdditionalInfoModel()
             {
                 ContentKnowledge = Convert.ToString(data.GetValue("contentKnowledge") ?? ""),
                 TotalCost = Convert.ToString(data.GetValue("totalCost") ?? ""),
-                PerCost = Convert.ToString(data.GetValue("perCost") ?? ""),
+                PerCost = Convert.ToString(data.GetValue("eventPriceStudent") ?? ""),
                 AdditionalDetail = Convert.ToString(data.GetValue("additionalDetails") ?? ""),
                 CafeRequire = Convert.ToInt32(data.GetValue("cafeRequirement") ?? 0) == 1
+            };
+        }
+
+        private AdditionalInfoModel GetAdditionalinfo_Adult(IContent data)
+        {
+            return new AdditionalInfoModel()
+            {
+                TotalCost = Convert.ToString(data.GetValue("totalCost") ?? "")
             };
         }
 

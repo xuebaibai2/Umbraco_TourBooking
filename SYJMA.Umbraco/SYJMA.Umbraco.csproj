@@ -428,6 +428,7 @@
     <Compile Include="Controllers\InitialController.cs" />
     <Compile Include="Controllers\InvoiceController.cs" />
     <Compile Include="Controllers\JSONDataController.cs" />
+    <Compile Include="Controllers\_JSONDataController.cs" />
     <Compile Include="Models\AdditionalInfoModel.cs" />
     <Compile Include="Models\AdultModel.cs" />
     <Compile Include="Models\API\API_CONTACT.cs" />
@@ -500,6 +501,7 @@
     <Content Include="Views\Payment.cshtml" />
     <Content Include="Views\Partials\Adult\_AdultInvoice.cshtml" />
     <Content Include="Views\Partials\Adult\_AdultBookCompletion.cshtml" />
+    <Content Include="Views\Partials\_SessionTimeout.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -509,6 +511,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Invoice\" />
+    <Folder Include="Views\_JSONData\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

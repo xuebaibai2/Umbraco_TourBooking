@@ -47,6 +47,8 @@
         @Html.HiddenFor(x => x.Event.end, new { @id = "selectedEventEnd" })
         @Html.HiddenFor(x => x.Event.id, new { @id = "selectedEventId" })
         @Html.HiddenFor(x => x.Id)
+        @Html.HiddenFor(x => x.StaffNumber)
+        @Html.HiddenFor(x => x.StudentsNumber)
         <div class="col-md-12">
             <a href="@ViewBag.parentUrl" class="btn btn-md btn-primary pull-left">Back</a>
             <input type="submit" name="submit" value="Next" class="btn btn-md btn-primary pull-right" />

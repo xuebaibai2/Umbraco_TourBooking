@@ -21,13 +21,20 @@ namespace SYJMA.Umbraco.Utility
         private const string DOMAIN = "http://localhost:58015/";
         //private const string DOMAIN = "https://www.thankq.net.au/apiREST/v105/";
         public const string TOUR_API = DOMAIN + "Tour/";
-
-        public const string GET_EVENTFROMNAME = DOMAIN + "Tour?tourname=";
-        public const string GET_ALLEVENTNAME_SUFFIX ="/AllNames";
-        public const string GET_ATTENDEETYPE = "/TourAttendeeType";
-        public const string GET_YEARGROUP = DOMAIN + "LookupValue?lookupname=yeargroup&bomtype=event";
-        public const string GET_SUBJECTAREA = DOMAIN + "LookupValue?lookupname=subjectarea&bomtype=event";
+        public const string GET_EVENTNAMELIST = DOMAIN + "Tour/{0}/AllNames";
+        public const string GET_EVENTFROMNAME = DOMAIN + "Tour/?tourname={0}&category={1}";
+        public const string GET_ATTENDEETYPE = DOMAIN + "Tour/{0}/TourAttendeeType";
+        public const string GET_YEARGROUP = DOMAIN + "LookupValue?lookupname=yeargroup&bomtype=event";//Update bomtype from event to tour
+        public const string GET_SUBJECTAREA = DOMAIN + "LookupValue?lookupname=subjectarea&bomtype=event";//Update bomtype from event to tour
         public const string GET_SCHOOLCONTACTS = DOMAIN + "Contacts?primarycategory=Schools";
+
+        public const string POST_TOURBOOKING = DOMAIN + "Tour/{0}/TourBooking";
+        public const string POST_TOURBOOKINGATTENDEESUMMARY = DOMAIN + "Tour/{0}/TourBooking/{1}/TourBookingAttendeeSummary";
+        
+        //public const string GET_EVENTFROMNAME = DOMAIN + "Tour?tourname=";
+        //public const string GET_ALLEVENTNAME_SUFFIX ="/AllNames";
+        
+        
 
         public const string POST_CONTACT = DOMAIN + "Contacts/";
         public const string POST_TOURBOOKING_SUFFIX = "/TourBooking";

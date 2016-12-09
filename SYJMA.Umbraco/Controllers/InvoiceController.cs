@@ -14,6 +14,7 @@ namespace SYJMA.Umbraco.Controllers
     {
         private DataTypeController dataTypeController = new DataTypeController();
         private ContentController contentController = new ContentController();
+        private JSONDataController jsonDataController = new JSONDataController();
 
         public PartialViewResult Invoice(string bookType, string id)
         {
@@ -60,6 +61,9 @@ namespace SYJMA.Umbraco.Controllers
                 contentController.SetPostInvoice_Adult(adult);
                 adult = contentController.GetAdultModelById(adult.Id);
 
+                jsonDataController.CreateNewContactOnThankQ<AdultModel>(adult);
+
+
                 NameValueCollection routeValues = new NameValueCollection();
                 routeValues.Add("mainBookingId", adult.Id.ToString());
                 routeValues.Add("type", "Adult");
@@ -68,7 +72,6 @@ namespace SYJMA.Umbraco.Controllers
             }
             return CurrentUmbracoPage();
         }
-
 
         private DateTime GetDateTimeForInitial(BaseModel viewModel)
         {

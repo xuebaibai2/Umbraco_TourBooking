@@ -40,6 +40,7 @@ namespace SYJMA.Umbraco.Controllers
                     return PartialView("_Error");
                 }
                 school.PreferredDate = GetDateTimeForInitial(school as BaseModel).ToString("dd/MM/yyyy");
+                school.Event.Invoice.Phone = "0";
                 return PartialView(CONSTVALUE.PARTIAL_VIEW_SCHOOL_FOLDER + "_SchoolBookingDetail.cshtml", school);
             }
             else if (bookType.Equals("Adult"))

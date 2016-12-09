@@ -14,18 +14,19 @@ using Umbraco.Web.Mvc;
 
 namespace SYJMA.Umbraco.Controllers
 {
-    public class JSONDataController : SurfaceController
+    public partial class JSONDataController : SurfaceController
     {
         #region 'Get'
         /// <summary>
         /// Retrieve available Event/Tour information throught web services and return JSON data
+        /// Called from calendar.control.js, _AdultCalendar.cshtml file
         /// </summary>
         /// <param name="eventName"></param>
         /// <returns></returns>
         public JsonResult GetJsonData_Event(string eventName, string category)
         {
             List<EventCalendar> eventList = new List<EventCalendar>();
-            var jsonResult = GetJsonResultAsString(CONSTVALUE.TOUR_API +"?tourname="+ eventName+"&category=" + category);
+            var jsonResult = GetJsonResultAsString(string.Format(CONSTVALUE.GET_EVENTFROMNAME,eventName,category));
             IEnumerable<API_TOUR> tourList = GetDeserializedJsonDataList<API_TOUR>(jsonResult); 
             foreach (var tour in tourList)
             {
@@ -46,20 +47,20 @@ namespace SYJMA.Umbraco.Controllers
         /// <param name="eventID"></param>
         /// <param name="attendeeType"></param>
         /// <returns></returns>
-        public float GetJsonData_AttendeeCost(string eventID, string attendeeType)
-        {
-            var attendeeTypeResult = GetJsonResultAsString(CONSTVALUE.TOUR_API + eventID + CONSTVALUE.GET_ATTENDEETYPE);
-            if (attendeeTypeResult == null)
-            {
-                return 0;
-            }
-            IEnumerable<API_TOURATTENDEETYPE> attendeeTypeList = GetDeserializedJsonDataList<API_TOURATTENDEETYPE>(attendeeTypeResult);
-            return attendeeTypeList.Where(x => x.TYPE.Equals(attendeeType)).Select(x => x.COST).FirstOrDefault();
-        }
+        //public float GetJsonData_AttendeeCost(string eventID, string attendeeType)
+        //{
+        //    var attendeeTypeResult = GetJsonResultAsString(CONSTVALUE.TOUR_API + eventID + CONSTVALUE.GET_ATTENDEETYPE);
+        //    if (attendeeTypeResult == null)
+        //    {
+        //        return 0;
+        //    }
+        //    IEnumerable<API_TOURATTENDEETYPE> attendeeTypeList = GetDeserializedJsonDataList<API_TOURATTENDEETYPE>(attendeeTypeResult);
+        //    return attendeeTypeList.Where(x => x.TYPE.Equals(attendeeType)).Select(x => x.COST).FirstOrDefault();
+        //}
 
         public List<API_TOURATTENDEETYPE> GetJsonData_AttendeeType(string eventID)
         {
-            var attendeeTypeResult = GetJsonResultAsString(CONSTVALUE.TOUR_API + eventID + CONSTVALUE.GET_ATTENDEETYPE);
+            var attendeeTypeResult = GetJsonResultAsString(string.Format(CONSTVALUE.GET_ATTENDEETYPE, eventID));
             if (attendeeTypeResult == null)
             {
                 return null;
@@ -69,9 +70,10 @@ namespace SYJMA.Umbraco.Controllers
 
         /// <summary>
         /// Used to retrieve school name list. This method is been called from getnamelist.js file under Scripts folder
+        /// Called from getnamelist.js file
         /// </summary>
         /// <returns></returns>
-        public JsonResult GetSchoolNameList()
+        public JsonResult GetJsonData_SchoolNameList()
         {
             List<string> schooResultlList = new List<string>();
             var jsonResult = GetJsonResultAsString(CONSTVALUE.GET_SCHOOLCONTACTS);
@@ -88,10 +90,10 @@ namespace SYJMA.Umbraco.Controllers
         /// Get all available event name as a SelectListItem List
         /// </summary>
         /// <returns></returns>
-        public List<SelectListItem> GetEventNameList(string category)
+        public List<SelectListItem> GetJsonData_EventNameList(string category)
         {
             List<SelectListItem> tourProgramList = new List<SelectListItem>();
-            var jsonResult = GetJsonResultAsString(CONSTVALUE.TOUR_API+ category + CONSTVALUE.GET_ALLEVENTNAME_SUFFIX);
+            var jsonResult = GetJsonResultAsString(string.Format(CONSTVALUE.GET_EVENTNAMELIST,category));
             List<string> nameList = GetDeserializedJsonDataList<string>(jsonResult).ToList();
             foreach (var name in nameList)
             {
@@ -108,7 +110,7 @@ namespace SYJMA.Umbraco.Controllers
         /// Get all YEARGROUP record from thankQ DB LOOKUPVALUE table
         /// </summary>
         /// <returns></returns>
-        public List<SelectListItem> GetYearGroupList()
+        public List<SelectListItem> GetJsonData_YearGroupList()
         {
             List<SelectListItem> yearGroupList = new List<SelectListItem>();
             var jsonResult = GetJsonResultAsString(CONSTVALUE.GET_YEARGROUP);
@@ -128,7 +130,7 @@ namespace SYJMA.Umbraco.Controllers
         /// Get all SUBJECTAREA record from thankQ DB LOOKUPVALUE table
         /// </summary>
         /// <returns></returns>
-        public List<SelectListItem> GetSubjectAreaList()
+        public List<SelectListItem> GetJsonData_SubjectAreaList()
         {
             List<SelectListItem> subjectAreaList = new List<SelectListItem>();
             var jsonResult = GetJsonResultAsString(CONSTVALUE.GET_SUBJECTAREA);
@@ -149,13 +151,14 @@ namespace SYJMA.Umbraco.Controllers
         #endregion
 
         #region 'POST'
-        public string PostNewContact<T>(Object obj, string contactType, string indivisualType = INDIVISUALTYPE.GROUPCOORDINATOR)
+        public string PostJsonData_NewContact<T>(Object obj, string contactType, string indivisualType = INDIVISUALTYPE.GROUPCOORDINATOR)
         {
             API_CONTACT contact = new API_CONTACT();
+            contact.CONTACTTYPE = contactType;
+
             if (typeof(T).Equals(new SchoolModel().GetType()))
             {
                 SchoolModel model = (SchoolModel)obj;
-                contact.CONTACTTYPE = contactType;
                 if (contactType.Equals(CONTACTTYPE.ORGANISATION))
                 {
                     MapSchoolContact(contact, model);
@@ -164,10 +167,29 @@ namespace SYJMA.Umbraco.Controllers
                 {
                     if (indivisualType.Equals(INDIVISUALTYPE.GROUPCOORDINATOR))
                     {
-                        MapSchoolCoordinatorContact(contact,model);
+                        MapCoordinatorContact_School(contact,model);
                     }else if (indivisualType.Equals(INDIVISUALTYPE.INVOICEE))
                     {
-                        MapSchoolInvoiceeContact(contact, model);
+                        MapInvoiceeContact_School(contact, model);
+                    }
+                }
+            }
+            else if (typeof(T).Equals(new AdultModel().GetType()))
+            {
+                AdultModel adult = (AdultModel)obj;
+                if (contactType.Equals(CONTACTTYPE.ORGANISATION))
+                {
+
+                }
+                else if (contactType.Equals(CONTACTTYPE.INDIVIDUAL))
+                {
+                    if (indivisualType.Equals(INDIVISUALTYPE.GROUPCOORDINATOR))
+                    {
+                        MapCoordinatorContact_Adult(contact, adult);
+                    }
+                    else if (indivisualType.Equals(INDIVISUALTYPE.INVOICEE))
+                    {
+                        MapInvoiceeContact_Adult(contact, adult);
                     }
                 }
             }
@@ -175,16 +197,16 @@ namespace SYJMA.Umbraco.Controllers
             return PostAPI(CONSTVALUE.POST_CONTACT, data);
         }
 
-        public string PostNewTourBooking(string tourID, API_TOURBOOKING tourBooking)
+        public string PostJsonData_NewTourBooking(string tourID, API_TOURBOOKING tourBooking)
         {
             string data = new JavaScriptSerializer().Serialize(tourBooking);
-            return PostAPI(CONSTVALUE.TOUR_API + tourID + CONSTVALUE.POST_TOURBOOKING_SUFFIX, data);
+            return PostAPI(string.Format(CONSTVALUE.POST_TOURBOOKING, tourID), data);
         }
 
-        public string PostNewTourBookingAttendeeSummary(API_TOURBOOKINGATTENDEESUMMARY attemdeeSummary)
+        public string PostJsonData_NewTourBookingAttendeeSummary(API_TOURBOOKINGATTENDEESUMMARY attendeeSummary)
         {
-            string data = new JavaScriptSerializer().Serialize(attemdeeSummary);
-            return PostAPI(CONSTVALUE.TOUR_API + attemdeeSummary.TOURID + CONSTVALUE.POST_TOURBOOKINGATTENDEESUMMARY_MIDDLE+ attemdeeSummary.TOURBOOKINGID + CONSTVALUE.POST_TOURBOOKINGATTENDEESUMMARY_SUFFIX, data);
+            string data = new JavaScriptSerializer().Serialize(attendeeSummary);
+            return PostAPI(string.Format(CONSTVALUE.POST_TOURBOOKINGATTENDEESUMMARY, attendeeSummary.TOURID, attendeeSummary.TOURBOOKINGID), data);
         }
         #endregion
 
@@ -270,7 +292,7 @@ namespace SYJMA.Umbraco.Controllers
             contact.KEYNAME = model.SchoolName;
         }
 
-        private void MapSchoolCoordinatorContact(API_CONTACT contact, SchoolModel model)
+        private void MapCoordinatorContact_School(API_CONTACT contact, SchoolModel model)
         {
             contact.PRIMARYCATEGORY = "Individual";
             contact.FIRSTNAME = model.Event.GroupCoordinator.FirstName;
@@ -281,7 +303,31 @@ namespace SYJMA.Umbraco.Controllers
             contact.DAYTELEPHONE = model.Event.GroupCoordinator.DaytimeNumber;
         }
 
-        private void MapSchoolInvoiceeContact(API_CONTACT contact, SchoolModel model)
+        private void MapInvoiceeContact_School(API_CONTACT contact, SchoolModel model)
+        {
+            contact.PRIMARYCATEGORY = "Individual";
+            contact.FIRSTNAME = model.Event.Invoice.FirstName;
+            contact.KEYNAME = model.Event.Invoice.SureName;
+            contact.TITLE = model.Event.Invoice.Title;
+            contact.EMAILADDRESS = model.Event.Invoice.Email;
+        }
+
+        private void MapCoordinatorContact_Adult(API_CONTACT contact, AdultModel model)
+        {
+            contact.PRIMARYCATEGORY = "Individual";
+            contact.FIRSTNAME = model.Event.GroupCoordinator.FirstName;
+            contact.KEYNAME = model.Event.GroupCoordinator.SureName;
+            contact.TITLE = model.Event.GroupCoordinator.Title;
+            contact.EMAILADDRESS = model.Event.GroupCoordinator.Email;
+            contact.MOBILENUMBER = model.Event.GroupCoordinator.Mobile;
+            contact.DAYTELEPHONE = model.Event.GroupCoordinator.DaytimeNumber;
+            contact.ADDRESSLINE1 = model.Event.GroupCoordinator.Address;
+            contact.SUBURB = model.Event.GroupCoordinator.Suburb;
+            contact.STATE = model.Event.GroupCoordinator.State;
+            contact.POSTCODE = model.Event.GroupCoordinator.Postcode;
+        }
+
+        private void MapInvoiceeContact_Adult(API_CONTACT contact, AdultModel model)
         {
             contact.PRIMARYCATEGORY = "Individual";
             contact.FIRSTNAME = model.Event.Invoice.FirstName;

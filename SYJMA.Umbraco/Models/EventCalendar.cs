@@ -10,6 +10,7 @@ namespace SYJMA.Umbraco.Models
         public EventCalendar()
         {
             this.IsSameContact = false;
+            AdditionalInfo = new AdditionalInfoModel();
         }
         
         public string id { get; set; }

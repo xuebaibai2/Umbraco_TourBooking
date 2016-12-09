@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using SYJMA.Umbraco.Models;
 using SYJMA.Umbraco.Utility;
+using umbraco;
 using umbraco.NodeFactory;
 using Umbraco.Core.Models;
 using Umbraco.Core.Models.PublishedContent;
@@ -33,8 +34,8 @@ namespace SYJMA.Umbraco.Controllers
             {
                 Session["idList"] = new List<int>();
                 SchoolModel school = new SchoolModel();
-                school.SubjectList = jsonDataController.GetSubjectAreaList();
-                school.YearList = jsonDataController.GetYearGroupList();
+                school.SubjectList = jsonDataController.GetJsonData_SubjectAreaList();
+                school.YearList = jsonDataController.GetJsonData_YearGroupList();
                 school.type = "School";
                 return PartialView(CONSTVALUE.PARTIAL_VIEW_SCHOOL_FOLDER + "_SchoolVisit.cshtml", school);
             }
@@ -42,7 +43,7 @@ namespace SYJMA.Umbraco.Controllers
             {
                 AdultModel adult = new AdultModel();
                 adult.type = "Adult";
-                adult.ProgramList = jsonDataController.GetEventNameList(TOURCATEGORY.ADULT);
+                adult.ProgramList = jsonDataController.GetJsonData_EventNameList(TOURCATEGORY.ADULT);
                 return PartialView(CONSTVALUE.PARTIAL_VIEW_ADULT_FOLDER + "_AdultVisit.cshtml", adult);
             }
             else if (bookType.Equals("University"))
@@ -86,8 +87,8 @@ namespace SYJMA.Umbraco.Controllers
                 return PartialView("_Error");
             }
             school = contentController.GetSchoolModelById(Convert.ToInt32(id));
-            school.SubjectList = jsonDataController.GetSubjectAreaList();
-            school.YearList = jsonDataController.GetYearGroupList();
+            school.SubjectList = jsonDataController.GetJsonData_SubjectAreaList();
+            school.YearList = jsonDataController.GetJsonData_YearGroupList();
             school.PreferredDate = GetDateTimeForInitial(school as BaseModel).ToString("dd/MM/yyyy");
             contentController.CreateNewSchoolModel(school);
             if (bookType.Equals("School"))

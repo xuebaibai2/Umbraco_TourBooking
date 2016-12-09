@@ -19,7 +19,7 @@ using Umbraco.ModelsBuilder;
 using Umbraco.ModelsBuilder.Umbraco;
 
 [assembly: PureLiveAssembly]
-[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "9eca64145b2c36db")]
+[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "330e386cd2a9f231")]
 [assembly:System.Reflection.AssemblyVersion("0.0.0.1")]
 
 namespace Umbraco.Web.PublishedContentModels
@@ -451,15 +451,6 @@ namespace Umbraco.Web.PublishedContentModels
 		}
 
 		///<summary>
-		/// Per Cost: Cost per Students Attending
-		///</summary>
-		[ImplementPropertyType("perCost")]
-		public string PerCost
-		{
-			get { return this.GetPropertyValue<string>("perCost"); }
-		}
-
-		///<summary>
 		/// Preferred Date School: Preferred date for school booking
 		///</summary>
 		[ImplementPropertyType("preferredDateSchool")]
@@ -493,6 +484,15 @@ namespace Umbraco.Web.PublishedContentModels
 		public string StaffAttendeeTypeID
 		{
 			get { return this.GetPropertyValue<string>("staffAttendeeTypeID"); }
+		}
+
+		///<summary>
+		/// Staff Total Cost
+		///</summary>
+		[ImplementPropertyType("staffTotalCost")]
+		public string StaffTotalCost
+		{
+			get { return this.GetPropertyValue<string>("staffTotalCost"); }
 		}
 
 		///<summary>
@@ -870,6 +870,15 @@ namespace Umbraco.Web.PublishedContentModels
 		public string Title
 		{
 			get { return this.GetPropertyValue<string>("title"); }
+		}
+
+		///<summary>
+		/// Total Cost: Total Cost for adult booking
+		///</summary>
+		[ImplementPropertyType("totalCost")]
+		public string TotalCost
+		{
+			get { return this.GetPropertyValue<string>("totalCost"); }
 		}
 
 		///<summary>

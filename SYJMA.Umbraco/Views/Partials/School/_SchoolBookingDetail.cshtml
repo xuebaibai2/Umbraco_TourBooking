@@ -74,10 +74,10 @@
                 <span style="color: red;">@Html.ValidationMessageFor(x => x.Event.Invoice.Email)</span>
             </div>
         </div>
-        @*<input type="hidden" name="isSameInvoice" value="false">*@
         @Html.HiddenFor(x => x.Event.IsSameContact, new { @id = "IsSameContact" })
         @Html.HiddenFor(x => x.SchoolName)
         @Html.HiddenFor(x => x.PreferredDate)
+        @Html.HiddenFor(x=>x.Event.Invoice.Phone)
         <div class="col-md-12">
             <a href="@ViewBag.parentUrl" class="btn btn-md btn-primary pull-left">Back</a>
             <input type="submit" name="submit" value="Next" class="btn btn-md btn-primary pull-right" />

@@ -27,13 +27,13 @@
             </tr>
 
             <tr>
-                <td><b>Number of Students</b></td>
+                <td><b>Number of Adult</b></td>
                 <td>@Html.DisplayFor(x => x.AdultNumber)</td>
             </tr>
 
             <tr>
                 <td><b>Adult total price</b></td>
-                <td>@Model.GetAdultAttendeeCost().ToString("c2")</td>
+                <td>@Model.Event.AdditionalInfo.TotalCost</td>
             </tr>
 
             <tr>

@@ -1,7 +1,15 @@
 ﻿@using SYJMA.Umbraco.Controllers;
 @inherits Umbraco.Web.Mvc.UmbracoViewPage<SYJMA.Umbraco.Models.SchoolModel>
-
-@using (Html.BeginUmbracoForm<AdditionalBookingDetailController>("PostAdditionalBooking_School"))
+<script>
+    $(document).ready(function () {
+        var tempData = '@TempData["SessionTimeout"]';
+        if (!tempData == "") {
+            $('#form').hide();
+            $('#msg').append('<br /><br /><div class="col-md-8 col-md-offset-2 text-center"><h4>' + tempData + '</h4><br/><a href="/school-visits/" class="btn btn-md btn-primary">Back to home</a></div>');
+        }
+    });
+</script>
+@using (Html.BeginUmbracoForm<AdditionalBookingDetailController>("PostAdditionalBooking_School", FormMethod.Post, new Dictionary<string, object> { {"id","form"}}))
 {
     @Html.AntiForgeryToken()
     <div class="row">
@@ -39,13 +47,14 @@
 
         @Html.HiddenFor(x => x.Event.AdditionalInfo.PerCost)
         @Html.HiddenFor(x => x.Event.AdditionalInfo.TotalCost)
+        @Html.HiddenFor(x => x.MainBookingID)
         @Html.HiddenFor(x => x.Event.id)
 
         <div class="col-md-12 text-center">
             <a href="@ViewBag.parentUrl" class="btn btn-md btn-primary pull-left">Back</a>
-            <a href="~/school-visits/?id=@Model.MainBookingID" class="btn btn-md btn-primary">Add Another Booking</a>
-            <input type="submit" name="submit" value="Next" class="btn btn-md btn-primary pull-right" />
-
+            <button type="submit" id="publish" name="command" value="subtour" class="btn btn-md btn-primary">Add Another Booking</button>
+            <button type="submit" id="next" name="command" value="complete" class="btn btn-md btn-primary pull-right">Complete Booking</button>
         </div>
     </div>
 }
+<div class="row " id="msg"></div>
