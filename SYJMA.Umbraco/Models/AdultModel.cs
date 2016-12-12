@@ -21,5 +21,11 @@ namespace SYJMA.Umbraco.Models
             return this.AttendeeList.Select(x => x.Cost)
                 .FirstOrDefault();
         }
+
+        public string GetAdultAttendeeID()
+        {
+            return this.AttendeeList.Select(x => x.ID)
+                .FirstOrDefault();
+        }
     }
 }

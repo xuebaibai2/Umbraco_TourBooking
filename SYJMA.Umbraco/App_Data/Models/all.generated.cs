@@ -8,7 +8,7 @@ using  Umbraco.Web;
 using  Umbraco.ModelsBuilder;
 using  Umbraco.ModelsBuilder.Umbraco;
 [assembly: PureLiveAssembly]
-[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "330e386cd2a9f231")]
+[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "8f680320847392f4")]
 [assembly:System.Reflection.AssemblyVersion("0.0.0.1")]
 
 
@@ -781,6 +781,15 @@ namespace Umbraco.Web.PublishedContentModels
 		}
 
 		///<summary>
+		/// Is Invoice Only: Determine whether group will receive invoice or pay directly after booking
+		///</summary>
+		[ImplementPropertyType("isInvoiceOnly")]
+		public string IsInvoiceOnly
+		{
+			get { return this.GetPropertyValue<string>("isInvoiceOnly"); }
+		}
+
+		///<summary>
 		/// Is Same Contact
 		///</summary>
 		[ImplementPropertyType("isSameContact")]
@@ -1328,6 +1337,15 @@ namespace Umbraco.Web.PublishedContentModels
 		public static PublishedPropertyType GetModelPropertyType<TValue>(Expression<Func<Payment, TValue>> selector)
 		{
 			return PublishedContentModelUtility.GetModelPropertyType(GetModelContentType(), selector);
+		}
+
+		///<summary>
+		/// BookType
+		///</summary>
+		[ImplementPropertyType("bookType")]
+		public object BookType
+		{
+			get { return this.GetPropertyValue("bookType"); }
 		}
 	}
 

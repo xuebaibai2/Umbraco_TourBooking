@@ -50,7 +50,7 @@ namespace SYJMA.Umbraco.Controllers
             {
 
             }
-            return null;
+            return PartialView("_Error");
         }
 
         [ValidateAntiForgeryToken]
@@ -61,9 +61,14 @@ namespace SYJMA.Umbraco.Controllers
                 contentController.SetPostInvoice_Adult(adult);
                 adult = contentController.GetAdultModelById(adult.Id);
 
+                //Save Group Coordinator and Invoicee on ThankQ BD
                 jsonDataController.CreateNewContactOnThankQ<AdultModel>(adult);
-
-
+                //Create new Tour Booking Record on ThankQ DB
+                adult.TourBookingID = jsonDataController.CreateNewTourBookingOnThankQ<AdultModel>(adult);
+                //Create new Attendee Summary on ThankQ DB
+                jsonDataController.CreateNewTourBookingAttendeeSummaryOnThankQ<AdultModel>(adult);
+                //Save booking record on Umbraco CMS
+                contentController.SetPostAdditionalBooking_Adult(adult);
                 NameValueCollection routeValues = new NameValueCollection();
                 routeValues.Add("mainBookingId", adult.Id.ToString());
                 routeValues.Add("type", "Adult");

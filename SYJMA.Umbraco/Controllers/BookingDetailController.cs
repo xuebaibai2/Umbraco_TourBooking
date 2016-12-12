@@ -86,7 +86,15 @@ namespace SYJMA.Umbraco.Controllers
                 contentController.SetPostBooking_Adult(adult);
                 NameValueCollection routeValues = new NameValueCollection();
                 routeValues.Add("id", adult.Id.ToString());
-                return RedirectToUmbracoPage(contentController.GetContentIDFromSelf("AdultInvoice", CurrentPage), routeValues);
+
+                if (adult.Event.IsInvoiceOnly)
+                {
+                    return RedirectToUmbracoPage(contentController.GetContentIDFromSelf("AdultInvoice", CurrentPage), routeValues);
+                }
+                else
+                {
+                    return RedirectToUmbracoPage(contentController.GetContentIDFromSelf("AdultPayment", CurrentPage), routeValues);
+                }
             }
             return CurrentUmbracoPage();
         }

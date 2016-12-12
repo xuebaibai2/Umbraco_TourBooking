@@ -11,5 +11,6 @@ namespace SYJMA.Umbraco.Models.API
         public string NAME { get; set; }
         public string AVAILABLEFROM { get; set; }
         public string AVAILABLETO { get; set; }
+        public bool INVOICEONLY { get; set; }
     }
 }

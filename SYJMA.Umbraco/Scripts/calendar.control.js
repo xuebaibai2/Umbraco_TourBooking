@@ -30,6 +30,7 @@
             $('#selectedEventTitle').val(calEvent.title);
             $('#selectedEventStart').val(calEvent.start.format());
             $('#selectedEventEnd').val(calEvent.end.format());
+            $('#isInvoiceOnly').val(calEvent.IsInvoiceOnly);
         }
     });
 
@@ -45,7 +46,7 @@
 function addEvents(url) {
     $.ajax({
         type: 'POST',
-        url: baseUrl + 'umbraco/Surface/JSONData/GetJsonData_Event?eventName=' + url + '&category=' + category,//Modify this function to add category paramater like addEvents(url, category) category should be like School, Adult, University
+        url: baseUrl + 'umbraco/Surface/JSONData/GetJsonData_Event?eventName=' + url + '&category=' + category,
         success: function (result) {
             removeEvents();
             addEvent(result);

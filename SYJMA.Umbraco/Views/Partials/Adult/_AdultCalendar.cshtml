@@ -43,7 +43,8 @@
         @Html.HiddenFor(x => x.Event.start, new { @id = "selectedEventStart" })
         @Html.HiddenFor(x => x.Event.end, new { @id = "selectedEventEnd" })
         @Html.HiddenFor(x => x.Event.id, new { @id = "selectedEventId" })
-        @Html.HiddenFor(x=>x.AdultNumber)
+        @Html.HiddenFor(x => x.Event.IsInvoiceOnly, new { @id = "isInvoiceOnly" })
+        @Html.HiddenFor(x => x.AdultNumber)
         @Html.HiddenFor(x => x.Id)
         <div class="col-md-12">
             <a href="@ViewBag.parentUrl" class="btn btn-md btn-primary pull-left">Back</a>

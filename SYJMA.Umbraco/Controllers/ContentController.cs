@@ -200,6 +200,7 @@ namespace SYJMA.Umbraco.Controllers
             adultRecord.SetValue("eventEnd", adult.Event.end);
             adultRecord.SetValue("eventPrice", adult.AttendeeList.Single().Cost.ToString("c2"));
             adultRecord.SetValue("totalCost", adult.Event.AdditionalInfo.TotalCost);
+            adultRecord.SetValue("isInvoiceOnly", adult.Event.IsInvoiceOnly);
             Services.ContentService.Save(adultRecord);
         }
 
@@ -263,24 +264,14 @@ namespace SYJMA.Umbraco.Controllers
             Services.ContentService.Save(schoolRecord);
         }
 
-        //public void SetAddtioanlBookingDetail_School(SchoolModel school)
-        //{
-        //    var schoolRecord = Services.ContentService.GetById(school.Id);
-        //    schoolRecord.SetValue("totalCost", school.Event.AdditionalInfo.TotalCost);
-        //    schoolRecord.SetValue("perCost", school.Event.AdditionalInfo.PerCost);
-        //    Services.ContentService.Save(schoolRecord);
-        //}
-
-
-        ///// <summary>
-        ///// Convert string format of datetime to DateTime datatype
-        ///// </summary>
-        ///// <param name="viewModel"></param>
-        ///// <returns>Preferred booking date with datetime format</returns>
-        //private DateTime GetDateTime(BaseModel viewModel)
-        //{
-        //    return DateTime.ParseExact(viewModel.PreferredDate, "MM/dd/yyyy hh:mm:ss tt", new System.Globalization.CultureInfo("en-AU"), System.Globalization.DateTimeStyles.None);
-        //}
+        public void SetPostAdditionalBooking_Adult(AdultModel adult)
+        {
+            var adultRecord = Services.ContentService.GetById(adult.Id);
+            adultRecord.SetValue("tourBookingID", adult.TourBookingID);
+            adultRecord.SetValue("groupCoordinatorSerialNumber", adult.Event.GroupCoordinator.SerialNumber);
+            adultRecord.SetValue("invoiceeSerialNumber", adult.Event.Invoice.SerialNumber);
+            Services.ContentService.Save(adultRecord);
+        }
 
         /// <summary>
         /// Search Content ID by content name from parent path
@@ -454,6 +445,7 @@ namespace SYJMA.Umbraco.Controllers
                 id = Convert.ToString(data.GetValue("eventId") ?? ""),
                 start = Convert.ToString(data.GetValue("eventStart") ?? ""),
                 end = Convert.ToString(data.GetValue("eventEnd") ?? ""),
+                IsInvoiceOnly = Convert.ToBoolean(Convert.ToInt32(data.GetValue("isInvoiceOnly"))),
                 GroupCoordinator = GetGroupCoordinator_Adult(data),
                 Invoice = GetInvoice_Adult(data),
                 AdditionalInfo = GetAdditionalinfo_Adult(data)

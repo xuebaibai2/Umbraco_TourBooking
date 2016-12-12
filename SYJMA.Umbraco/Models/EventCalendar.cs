@@ -18,6 +18,7 @@ namespace SYJMA.Umbraco.Models
         public string start { get; set; }
         public string end { get; set; }
         public bool IsSameContact { get; set; }
+        public bool IsInvoiceOnly { get; set; }
         public GroupCoordinator GroupCoordinator { get; set; }
         public Invoice Invoice { get; set; }
         public AdditionalInfoModel AdditionalInfo{ get; set; }

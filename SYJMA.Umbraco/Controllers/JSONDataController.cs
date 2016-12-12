@@ -35,7 +35,8 @@ namespace SYJMA.Umbraco.Controllers
                     id = tour.ID,
                     title = tour.NAME,
                     start = tour.AVAILABLEFROM,
-                    end = tour.AVAILABLETO
+                    end = tour.AVAILABLETO,
+                    IsInvoiceOnly = tour.INVOICEONLY
                 });
             }
             return Json(eventList);

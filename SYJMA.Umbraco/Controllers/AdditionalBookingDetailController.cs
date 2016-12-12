@@ -45,10 +45,10 @@ namespace SYJMA.Umbraco.Controllers
                 if (school.SubTourIDList != null)
                 {
                     school.SubTourIDList.Add(int.Parse(id));
+                    Session["idList"] = school.SubTourIDList;
                 }
                 else
                 {
-                    Session["idList"] = school.SubTourIDList;
                     TempData["SessionTimeout"] = "Your session has timed out. Please try to book again.";
                 }
                 ViewBag.parentUrl = CurrentPage.Parent.Url + "?id=" + id;
@@ -81,6 +81,11 @@ namespace SYJMA.Umbraco.Controllers
                 Node node = uQuery.GetNodesByName("School Visits").FirstOrDefault();
                 return RedirectToUmbracoPage(node.Id, subTourRouteValues);
             }
+
+            school = contentController.GetSchoolModelById(school.Id);
+            //Create new contact with primary category as schools and contacttype as organisation
+            string schoolSerialNumber = jsonDataController.CreateNewSchoolContactOnThankQ(school);
+
             school.SubTourIDList = Session["idList"] as List<int>;
             if (school.SubTourIDList == null)
             {
@@ -88,9 +93,6 @@ namespace SYJMA.Umbraco.Controllers
                 return CurrentUmbracoPage();
             }
 
-            school = contentController.GetSchoolModelById(school.Id);
-            //Create new contact with primary category as schools and contacttype as organisation
-            string schoolSerialNumber = jsonDataController.CreateNewSchoolContactOnThankQ(school);
             foreach (int id in school.SubTourIDList)
             {
                 SchoolModel tempSchool = contentController.GetSchoolModelById(id);
@@ -98,10 +100,11 @@ namespace SYJMA.Umbraco.Controllers
                 //Create new contact for Group Coordinator and Invoicee on ThankQ DB
                 jsonDataController.CreateNewContactOnThankQ<SchoolModel>(tempSchool);
                 //Create new Tour Booking Record on ThankQ DB
-                tempSchool.TourBookingID = jsonDataController.CreateNewTourBookingOnThankQ(tempSchool);
+                //tempSchool.TourBookingID = jsonDataController.CreateNewTourBookingOnThankQ(tempSchool);
+                tempSchool.TourBookingID = jsonDataController.CreateNewTourBookingOnThankQ<SchoolModel>(tempSchool);
                 //Create new Attendee Summary on ThankQ DB
-                jsonDataController.CreateNewTourBookingAttendeeSummaryOnThankQ(tempSchool);
-                //Save booing record on Umbraco CMS
+                jsonDataController.CreateNewTourBookingAttendeeSummaryOnThankQ<SchoolModel>(tempSchool);
+                //Save booking record on Umbraco CMS
                 contentController.SetPostAdditionalBooking_School(tempSchool);
             }
             NameValueCollection routeValues = new NameValueCollection();

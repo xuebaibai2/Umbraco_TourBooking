@@ -31,23 +31,11 @@ namespace SYJMA.Umbraco.Utility
         public const string POST_TOURBOOKING = DOMAIN + "Tour/{0}/TourBooking";
         public const string POST_TOURBOOKINGATTENDEESUMMARY = DOMAIN + "Tour/{0}/TourBooking/{1}/TourBookingAttendeeSummary";
         
-        //public const string GET_EVENTFROMNAME = DOMAIN + "Tour?tourname=";
-        //public const string GET_ALLEVENTNAME_SUFFIX ="/AllNames";
-        
-        
-
         public const string POST_CONTACT = DOMAIN + "Contacts/";
         public const string POST_TOURBOOKING_SUFFIX = "/TourBooking";
-        public const string POST_TOURBOOKINGATTENDEESUMMARY_SUFFIX = "/TourBookingAttendeeSummary";
-        public const string POST_TOURBOOKINGATTENDEESUMMARY_MIDDLE = "/TourBooking/";
 
         public const string API_USERNAME = "SYJMA";
         public const string API_PASSWORD = "slowghost30";
-        /// <summary>
-        /// Custom Datatype Names
-        /// </summary>
-        public const string SCHOOL_YEAR_DROPDOWNLIST_NAME = "SchoolYearDropdown";
-        public const string SCHOOL_SUBJECT_DROPDOWNLIST_NAME = "SchoolSubjectDropdown";
 
         /// <summary>
         /// Content Names
@@ -60,6 +48,7 @@ namespace SYJMA.Umbraco.Utility
         /// </summary>
         public const string PARTIAL_VIEW_SCHOOL_FOLDER = "~/Views/Partials/School/";
         public const string PARTIAL_VIEW_ADULT_FOLDER = "~/Views/Partials/Adult/";
+        public const string PARTIAL_VIEW_UNIVERSITY_FOLDER = "~/Views/Partials/Uni/";
 
         public const int BOOK_COMPLETION_CONTENT_ID = 1210;
     }

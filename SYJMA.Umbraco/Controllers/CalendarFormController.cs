@@ -91,6 +91,7 @@ namespace SYJMA.Umbraco.Controllers
             return RedirectToUmbracoPage(contentController.GetContentIDFromSelf("AdultConfirm", CurrentPage), routeValues);
         }
 
+        #region Private
         private void SetAttendeeDetail_Adult(AdultModel adult)
         {
             //Have to have one Attendee
@@ -102,7 +103,7 @@ namespace SYJMA.Umbraco.Controllers
                 Cost = attendeeList.Where(x=>x.TYPE.Equals(ATTENDEETYPE.ATTENDEETYPE_ADULT)).Select(x=>x.COST).SingleOrDefault()
             });
         }
-
+        
         private void SetAttendeeDetail_School(SchoolModel school)
         {
             var attendeeList = jsonDataController.GetJsonData_AttendeeType(school.Event.id);
@@ -151,5 +152,6 @@ namespace SYJMA.Umbraco.Controllers
         {
             return number * price;
         }
+        #endregion
     }
 }
