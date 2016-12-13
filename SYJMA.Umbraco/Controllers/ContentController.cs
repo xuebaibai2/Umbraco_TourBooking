@@ -270,6 +270,7 @@ namespace SYJMA.Umbraco.Controllers
             adultRecord.SetValue("tourBookingID", adult.TourBookingID);
             adultRecord.SetValue("groupCoordinatorSerialNumber", adult.Event.GroupCoordinator.SerialNumber);
             adultRecord.SetValue("invoiceeSerialNumber", adult.Event.Invoice.SerialNumber);
+            adultRecord.SetValue("paymentFingerprint", adult.Payment.EPS_FINGERPRINT);
             Services.ContentService.Save(adultRecord);
         }
 

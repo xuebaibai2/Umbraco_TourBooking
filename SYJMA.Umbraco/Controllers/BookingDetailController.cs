@@ -84,6 +84,7 @@ namespace SYJMA.Umbraco.Controllers
             if (ModelState.IsValid)
             {
                 contentController.SetPostBooking_Adult(adult);
+                adult = contentController.GetAdultModelById(adult.Id);
                 NameValueCollection routeValues = new NameValueCollection();
                 routeValues.Add("id", adult.Id.ToString());
 

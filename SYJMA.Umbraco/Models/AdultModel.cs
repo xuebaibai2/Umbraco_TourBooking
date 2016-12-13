@@ -10,6 +10,10 @@ namespace SYJMA.Umbraco.Models
 {
     public class AdultModel : BaseModel
     {
+        public AdultModel()
+        {
+            Payment = new Payment();
+        }
         [Required(ErrorMessage = "Group Name is required")]
         public string GroupName { get; set; }
         

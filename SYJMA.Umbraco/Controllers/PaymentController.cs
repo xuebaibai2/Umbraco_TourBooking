@@ -27,7 +27,6 @@ namespace SYJMA.Umbraco.Controllers
             }
 
             ViewBag.rootUrl = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"));
-
             ViewBag.parentUrl = CurrentPage.Parent.Url + "?id=" + id;
 
             if (bookType.Equals("School"))
@@ -41,10 +40,16 @@ namespace SYJMA.Umbraco.Controllers
                 {
                     return PartialView("_Error");
                 }
+                //Save Group Coordinator on ThankQ DB
+                jsonDataController.CreateNewContactOnThankQ<AdultModel>(adult);
+                //Create new Tour Booking Record on ThankQ DB
+                adult.TourBookingID = jsonDataController.CreateNewTourBookingOnThankQ<AdultModel>(adult);
+                //Create new Attendee Summary on ThankQ DB
+                jsonDataController.CreateNewTourBookingAttendeeSummaryOnThankQ<AdultModel>(adult);
                 //Set Payment for adult
                 SetPayment(adult);
-                //Save Payment Footprint to umbraco
-                contentController.SetPaymentFingerprint_Adult(adult.Id, adult.Payment.EPS_FINGERPRINT);
+                //Save booking record on Umbraco CMS
+                contentController.SetPostAdditionalBooking_Adult(adult);
                 return PartialView(CONSTVALUE.PARTIAL_VIEW_ADULT_FOLDER + "_AdultPayment.cshtml", adult);
             }
             else if (bookType.Equals("University"))
@@ -64,7 +69,7 @@ namespace SYJMA.Umbraco.Controllers
         {
             adult.Payment = System.Configuration.ConfigurationManager.GetSection("paymentForm/paymentFormTest") as Payment;
             adult.Payment.EPS_TXNTYPE = "0";
-            adult.Payment.EPS_REFERENCEID = "SYJMA" + adult.Id + " - " + adult.GroupName;
+            adult.Payment.EPS_REFERENCEID = "SYJMA"+ " - " + adult.TourBookingID + " - " + adult.GroupName;
             adult.Payment.EPS_AMOUNT = double.Parse(adult.Event.AdditionalInfo.TotalCost, System.Globalization.NumberStyles.Currency).ToString("0.00");
             adult.Payment.EPS_TIMESTAMP = DateTime.UtcNow.ToString("yyyyMMddHHmmss");
 

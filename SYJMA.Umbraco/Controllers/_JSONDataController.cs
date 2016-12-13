@@ -75,46 +75,46 @@ namespace SYJMA.Umbraco.Controllers
             return null;
         }
 
-        public List<string> CreateNewTourBookingAttendeeSummaryOnThankQ(SchoolModel school)
-        {
-            List<string> results = new List<string>();
-            API_TOURBOOKINGATTENDEESUMMARY attendeeSummary = new API_TOURBOOKINGATTENDEESUMMARY();
-            attendeeSummary.TOURID = school.Event.id;
-            attendeeSummary.TOURBOOKINGID = school.TourBookingID;
+        //public List<string> CreateNewTourBookingAttendeeSummaryOnThankQ(SchoolModel school)
+        //{
+        //    List<string> results = new List<string>();
+        //    API_TOURBOOKINGATTENDEESUMMARY attendeeSummary = new API_TOURBOOKINGATTENDEESUMMARY();
+        //    attendeeSummary.TOURID = school.Event.id;
+        //    attendeeSummary.TOURBOOKINGID = school.TourBookingID;
 
-            for (int i = 0; i < school.AttendeeList.Count; i++)
-            {
-                if (school.AttendeeList[i].Type.Equals(ATTENDEETYPE.ATTENDEETYPE_STUDENT))
-                {
-                    float studentPrice = school.GetStudentAttendeeCost();
-                    int studentNumber = school.StudentsNumber;
-                    float discount = 0;
+        //    for (int i = 0; i < school.AttendeeList.Count; i++)
+        //    {
+        //        if (school.AttendeeList[i].Type.Equals(ATTENDEETYPE.ATTENDEETYPE_STUDENT))
+        //        {
+        //            float studentPrice = school.GetStudentAttendeeCost();
+        //            int studentNumber = school.StudentsNumber;
+        //            float discount = 0;
 
-                    attendeeSummary.ATTENDEETYPEID = school.GetStudentAttendeeID();
-                    attendeeSummary.QUANTITYBOOKED = school.StudentsNumber;
-                    attendeeSummary.QUANTITYATTENDED = school.StudentsNumber;
-                    attendeeSummary.ATTENDEECOST = GetTotalPrice(studentNumber, studentPrice);
-                    attendeeSummary.DISCOUNT = discount;
-                    attendeeSummary.FINALCOST = GetFinalPrice(attendeeSummary.ATTENDEECOST, attendeeSummary.DISCOUNT);
-                    results.Add(PostJsonData_NewTourBookingAttendeeSummary(attendeeSummary));
-                }
-                else if (school.AttendeeList[i].Type.Equals(ATTENDEETYPE.ATTENDEETYPE_STAFF))
-                {
-                    float staffPrice = school.GetStaffAttendeeCost();
-                    int staffNumber = school.StaffNumber;
-                    float discount = 0;
+        //            attendeeSummary.ATTENDEETYPEID = school.GetStudentAttendeeID();
+        //            attendeeSummary.QUANTITYBOOKED = school.StudentsNumber;
+        //            attendeeSummary.QUANTITYATTENDED = school.StudentsNumber;
+        //            attendeeSummary.ATTENDEECOST = GetTotalPrice(studentNumber, studentPrice);
+        //            attendeeSummary.DISCOUNT = discount;
+        //            attendeeSummary.FINALCOST = GetFinalPrice(attendeeSummary.ATTENDEECOST, attendeeSummary.DISCOUNT);
+        //            results.Add(PostJsonData_NewTourBookingAttendeeSummary(attendeeSummary));
+        //        }
+        //        else if (school.AttendeeList[i].Type.Equals(ATTENDEETYPE.ATTENDEETYPE_STAFF))
+        //        {
+        //            float staffPrice = school.GetStaffAttendeeCost();
+        //            int staffNumber = school.StaffNumber;
+        //            float discount = 0;
 
-                    attendeeSummary.ATTENDEETYPEID = school.GetStaffAttendeeID();
-                    attendeeSummary.QUANTITYBOOKED = school.StaffNumber;
-                    attendeeSummary.QUANTITYATTENDED = school.StaffNumber;
-                    attendeeSummary.ATTENDEECOST = GetTotalPrice(staffNumber, staffPrice);
-                    attendeeSummary.DISCOUNT = discount;
-                    attendeeSummary.FINALCOST = GetFinalPrice(attendeeSummary.ATTENDEECOST, attendeeSummary.DISCOUNT);
-                    results.Add(PostJsonData_NewTourBookingAttendeeSummary(attendeeSummary));
-                }
-            }
-            return results;
-        }
+        //            attendeeSummary.ATTENDEETYPEID = school.GetStaffAttendeeID();
+        //            attendeeSummary.QUANTITYBOOKED = school.StaffNumber;
+        //            attendeeSummary.QUANTITYATTENDED = school.StaffNumber;
+        //            attendeeSummary.ATTENDEECOST = GetTotalPrice(staffNumber, staffPrice);
+        //            attendeeSummary.DISCOUNT = discount;
+        //            attendeeSummary.FINALCOST = GetFinalPrice(attendeeSummary.ATTENDEECOST, attendeeSummary.DISCOUNT);
+        //            results.Add(PostJsonData_NewTourBookingAttendeeSummary(attendeeSummary));
+        //        }
+        //    }
+        //    return results;
+        //}
 
         public List<string> CreateNewTourBookingAttendeeSummaryOnThankQ<T>(BaseModel model)
         {
