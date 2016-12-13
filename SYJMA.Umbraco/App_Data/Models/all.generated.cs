@@ -8,7 +8,7 @@ using  Umbraco.Web;
 using  Umbraco.ModelsBuilder;
 using  Umbraco.ModelsBuilder.Umbraco;
 [assembly: PureLiveAssembly]
-[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "8f680320847392f4")]
+[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "1f42ecbb8b61fc52")]
 [assembly:System.Reflection.AssemblyVersion("0.0.0.1")]
 
 
@@ -823,6 +823,15 @@ namespace Umbraco.Web.PublishedContentModels
 		public string NumberOfAdults
 		{
 			get { return this.GetPropertyValue<string>("numberOfAdults"); }
+		}
+
+		///<summary>
+		/// Payment Fingerprint: User Payment Fingerprint
+		///</summary>
+		[ImplementPropertyType("paymentFingerprint")]
+		public string PaymentFingerprint
+		{
+			get { return this.GetPropertyValue<string>("paymentFingerprint"); }
 		}
 
 		///<summary>

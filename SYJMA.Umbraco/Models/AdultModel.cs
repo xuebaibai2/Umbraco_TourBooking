@@ -16,6 +16,8 @@ namespace SYJMA.Umbraco.Models
         [Required(ErrorMessage="Adult Number is required")]
         public int AdultNumber { get; set; }
 
+        public Payment Payment { get; set; }
+
         public float GetAdultAttendeeCost()
         {
             return this.AttendeeList.Select(x => x.Cost)

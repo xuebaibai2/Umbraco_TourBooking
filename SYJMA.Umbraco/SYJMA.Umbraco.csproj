@@ -442,6 +442,7 @@
     <Compile Include="Models\BaseModel.cs" />
     <Compile Include="Models\Invoice.cs" />
     <Compile Include="Models\API\API_TOUR.cs" />
+    <Compile Include="Models\Payment.cs" />
     <Compile Include="Models\SchoolModel.cs" />
     <Compile Include="Models\UniversityModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -453,7 +454,9 @@
   <ItemGroup>
     <Content Include="packages.config" />
     <Content Include="App_Plugins\ModelsBuilder\package.manifest" />
-    <Content Include="Views\Web.config" />
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Views\Partials\Grid\Editors\Textstring.cshtml" />
     <Content Include="Views\Partials\Grid\Editors\Rte.cshtml" />
     <Content Include="Views\Partials\Grid\Editors\Media.cshtml" />

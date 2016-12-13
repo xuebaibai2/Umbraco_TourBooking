@@ -273,6 +273,13 @@ namespace SYJMA.Umbraco.Controllers
             Services.ContentService.Save(adultRecord);
         }
 
+        internal void SetPaymentFingerprint_Adult(int id, string fingerPrint)
+        {
+            var adultRecord = Services.ContentService.GetById(id);
+            adultRecord.SetValue("paymentFingerprint", fingerPrint);
+            Services.ContentService.Save(adultRecord);
+        }
+
         /// <summary>
         /// Search Content ID by content name from parent path
         /// </summary>
@@ -296,6 +303,7 @@ namespace SYJMA.Umbraco.Controllers
             return Services.ContentService.GetChildren(page.Id)
                 .First(x => x.Name == contentName).Id;
         }
+
 
         #region 'Private Region'
 
@@ -478,6 +486,8 @@ namespace SYJMA.Umbraco.Controllers
         }
 
         #endregion
+
+
 
 
 

@@ -1,79 +1,69 @@
 ﻿@using SYJMA.Umbraco.Controllers;
 @inherits Umbraco.Web.Mvc.UmbracoViewPage<SYJMA.Umbraco.Models.AdultModel>
-@{
-    double amount = double.Parse(Model.Event.AdditionalInfo.TotalCost, System.Globalization.NumberStyles.Currency);
-    string a = amount.ToString("0.00");
-}
 <script src="~/Scripts/moment.min.js"></script>
-<script>
-    
-    $(document).ready(function () {
-        var baseUrl = '@ViewBag.rootUrl';
-        $('#payment').submit(function () {
-            var time = moment().format('YYYYMMDDHHmmss');
-            $("#EPS_TIMESTAMP").val(time);
-            var input = $('#EPS_MERCHANT').val() + '||' + $('#EPS_TXNTYPE').val() + '|' + $('#EPS_REFERENCEID').val() + '|' + @a + '|' + $('#EPS_TIMESTAMP').val();
-            alert(input);
-            $.ajax({
-                type: 'POST',
-                url: baseUrl + 'umbraco/Surface/Payment/GetFingerprint?input=' + input,
-                success: function (result) {
-                    $("#EPS_FINGERPRINT").val(result);
-                    return true;
-                }
-            });
-        });
 
-        $('#btn').click(function () {
-            var baseUrl = '@ViewBag.rootUrl';
-            var time = moment().format('YYYYMMDDHHmmss');
-            $("#EPS_TIMESTAMP").val(time);
-            alert(@a);
-            alert($('#EPS_TIMESTAMP').val());
-            var input = $('#EPS_MERCHANT').val() + '||' + $('#EPS_TXNTYPE').val() + '|' + $('#EPS_REFERENCEID').val() + '|' + @a + '|' + $('#EPS_TIMESTAMP').val();
-            alert(input);
-            $.ajax({
-                type: 'POST',
-                url: baseUrl + 'umbraco/Surface/Payment/GetFingerprint?input=' + input,
-                success: function (result) {
-                    $("#EPS_FINGERPRINT").val(result);
-                }
-            });
-        });
-    });
-</script>
+<h3>Payment Details</h3>
+<form action="https://api.securepay.com.au/test/directpost/authorise" method="post">
+    <div class="row form-input">
 
-<form id="payment" action="https://api.securepay.com.au/test/directpost/authorise" method="post">
-    <div class="row">
         <div class="form-group col-md-12">
-            CardNumber: 
-            <input type="text" name="EPS_CARDNUMBER">
+            @Html.Label("Amount to be paid", new { @for = "EPS_AMOUNT_DISPLAY" })
+            <input class="form-control"  id="EPS_AMOUNT_DISPLAY" type="text" disabled="disabled" name="EPS_AMOUNT_DISPLAY" value="@Model.Event.AdditionalInfo.TotalCost" />
+        </div>
+
+        <div class="form-group col-md-12">
+            @Html.Label("CardNumber", new { @for = "EPS_CARDNUMBER" })
+            <input class="form-control" id="EPS_CARDNUMBER" type="text" name="EPS_CARDNUMBER">
+        </div>
+        <div class="form-group col-md-6">
+            @Html.Label("Expiry Month", new { @for = "EPS_EXPIRYMONTH" })
+            <select class="form-control" id="EPS_EXPIRYMONTH" name="EPS_EXPIRYMONTH">
+                <option value="01">01 </option>
+                <option value="02">02 </option>
+                <option value="03">03 </option>
+                <option value="04">04 </option>
+                <option value="05">05 </option>
+                <option value="06">06 </option>
+                <option value="07">07 </option>
+                <option value="08">08 </option>
+                <option value="09">09 </option>
+                <option value="10">10 </option>
+                <option value="11">11 </option>
+                <option value="12">12 </option>
+            </select>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.Label("Expiry Year", new { @for = "EPS_EXPIRYYEAR" })
+            <select class="form-control" id="EPS_EXPIRYYEAR" name="EPS_EXPIRYYEAR">
+                <option value="2016">2016</option>
+                <option value="2017">2017</option>
+                <option value="2018">2018</option>
+                <option value="2019">2019</option>
+                <option value="2020">2020</option>
+                <option value="2021">2021</option>
+                <option value="2022">2022</option>
+                <option value="2023">2023</option>
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+                <option value="2026">2026</option>
+                <option value="2027">2027</option>
+            </select>
         </div>
         <div class="form-group col-md-12">
-            Expiry Month: 
-            <input type="text" name="EPS_EXPIRYMONTH">
-        </div>
-        <div class="form-group col-md-12">
-            Expiry Year: 
-            <input type="text" name="EPS_EXPIRYYEAR">
-        </div>
-        <div class="form-group col-md-12">
-            CCV: 
-            <input type="text" name="EPS_CCV">
-        </div>
-        <div class="form-group col-md-12">
-            Amount: 
-            <input type="text" id ="EPS_AMOUNT" disabled="disabled" name="EPS_AMOUNT" value="@Model.Event.AdditionalInfo.TotalCost" />
+            @Html.Label("CCV", new { @for = "EPS_CCV" })
+            <input class="form-control" id="EPS_CCV" type="text" name="EPS_CCV">
         </div>
 
 
+        <input type="hidden" id="EPS_MERCHANT" name="EPS_MERCHANT" value="@Model.Payment.EPS_MERCHANT" />
+        <input type="hidden" id="EPS_TXNTYPE" name="EPS_TXNTYPE" value="@Model.Payment.EPS_TXNTYPE" />
+        <input type="hidden" id ="EPS_REFERENCEID" name="EPS_REFERENCEID" value="@Model.Payment.EPS_REFERENCEID" />
+        <input type="hidden" id="EPS_AMOUNT" name="EPS_AMOUNT" value="@Model.Payment.EPS_AMOUNT" />
+
+        <input type="hidden" id="EPS_TIMESTAMP" name="EPS_TIMESTAMP" value="@Model.Payment.EPS_TIMESTAMP" />
+        <input type="hidden" id="EPS_FINGERPRINT" name="EPS_FINGERPRINT" value="@Model.Payment.EPS_FINGERPRINT" />
+        <input type="hidden" id="EPS_RESULTURL" name="EPS_RESULTURL" value="@Model.Payment.EPS_RESULTURL">
+        <a href="@ViewBag.parentUrl" class="btn btn-md btn-primary pull-left">Back</a>
+        <input class="btn btn-md btn-primary pull-right" type="submit" name="submit" value="Submit Payment" />
     </div>
-    <input type="hidden" id ="EPS_MERCHANT" name="EPS_MERCHANT" value="ESQ0030" />
-    <input type="hidden" id ="EPS_TXNTYPE" name="EPS_TXNTYPE" value="0" />
-    <input type="hidden" id ="EPS_REFERENCEID" name="EPS_REFERENCEID" value="Tour Booking #@Model.TourBookingID" />
-
-    <input type="hidden" id ="EPS_TIMESTAMP" name="EPS_TIMESTAMP" value="201612121515" />
-    <input type="hidden" id ="EPS_FINGERPRINT" name="EPS_FINGERPRINT" value="" />
-    <input type="hidden" id ="EPS_RESULTURL" name="EPS_RESULTURL" value="https://www.google.com">
-    <input id="btn" type="button" name="test" value="Test" />
 </form>

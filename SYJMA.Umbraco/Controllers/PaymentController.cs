@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using SYJMA.Umbraco.Models;
@@ -40,7 +41,10 @@ namespace SYJMA.Umbraco.Controllers
                 {
                     return PartialView("_Error");
                 }
-                
+                //Set Payment for adult
+                SetPayment(adult);
+                //Save Payment Footprint to umbraco
+                contentController.SetPaymentFingerprint_Adult(adult.Id, adult.Payment.EPS_FINGERPRINT);
                 return PartialView(CONSTVALUE.PARTIAL_VIEW_ADULT_FOLDER + "_AdultPayment.cshtml", adult);
             }
             else if (bookType.Equals("University"))
@@ -56,18 +60,41 @@ namespace SYJMA.Umbraco.Controllers
             return CurrentUmbracoPage();
         }
 
-        public string GetFingerprint(string input)
+        private void SetPayment(AdultModel adult)
         {
-            int index = input.IndexOf('|');
-            string ESP_PASSWORD = System.Configuration.ConfigurationManager.AppSettings["ESP_PASSWORD"].ToString();
-            string temp = input.Insert(++index, ESP_PASSWORD);
-            byte[] buffer = System.Text.Encoding.UTF8.GetBytes(temp);
-            // Initialize the engine
-            SHA1 engine = new SHA1CryptoServiceProvider();
-            // Compute the hash
-            byte[] hash = engine.ComputeHash(buffer);
+            adult.Payment = System.Configuration.ConfigurationManager.GetSection("paymentForm/paymentFormTest") as Payment;
+            adult.Payment.EPS_TXNTYPE = "0";
+            adult.Payment.EPS_REFERENCEID = "SYJMA" + adult.Id + " - " + adult.GroupName;
+            adult.Payment.EPS_AMOUNT = double.Parse(adult.Event.AdditionalInfo.TotalCost, System.Globalization.NumberStyles.Currency).ToString("0.00");
+            adult.Payment.EPS_TIMESTAMP = DateTime.UtcNow.ToString("yyyyMMddHHmmss");
 
-            return System.Text.Encoding.UTF8.GetString(hash, 0, hash.Length);
+            string temp_FINGERPRINT = adult.Payment.EPS_MERCHANT + "|" + adult.Payment.ESP_PASSWORD + "|" + adult.Payment.EPS_TXNTYPE
+                + "|" + adult.Payment.EPS_REFERENCEID + "|" + adult.Payment.EPS_AMOUNT + "|" + adult.Payment.EPS_TIMESTAMP;
+
+            adult.Payment.EPS_FINGERPRINT = GetFingerprint(temp_FINGERPRINT);
         }
+
+        private string GetFingerprint(string input)
+        {
+            byte[] buffer = System.Text.Encoding.UTF8.GetBytes(input);
+
+            using (var sha1 = SHA1.Create())
+            {
+                byte[] hash = sha1.ComputeHash(buffer);
+                return HexStringFromBytes(hash);
+            }
+        }
+
+        private static string HexStringFromBytes(byte[] bytes)
+        {
+            var sb = new StringBuilder();
+            foreach (byte b in bytes)
+            {
+                var hex = b.ToString("x2");
+                sb.Append(hex);
+            }
+            return sb.ToString();
+        }
+
 	}
 }
