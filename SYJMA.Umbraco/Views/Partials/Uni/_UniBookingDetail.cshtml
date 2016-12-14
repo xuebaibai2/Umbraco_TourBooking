@@ -1,0 +1,74 @@
+﻿@using SYJMA.Umbraco.Controllers;
+@inherits Umbraco.Web.Mvc.UmbracoViewPage<SYJMA.Umbraco.Models.UniversityModel>
+
+@using (Html.BeginUmbracoForm<BookingDetailController>("PostBooking_University"))
+{
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div id="coordinator">
+            <h2>Your Details (Group Coordinator)</h2>
+            <div class="form-group col-md-4">
+                @Html.Label("title", "Title *")
+                @Html.TextBoxFor(x => x.Event.GroupCoordinator.Title, new { @id = "title", @class = "form-control" })
+                <span style="color: red;">@Html.ValidationMessageFor(x => x.Event.GroupCoordinator.Title)</span>
+            </div>
+
+            <div class="form-group col-md-4">
+                @Html.Label("firstname", "Firtst Name *")
+                @Html.TextBoxFor(x => x.Event.GroupCoordinator.FirstName, new { @id = "firstname", @class = "form-control" })
+                <span style="color: red;">@Html.ValidationMessageFor(x => x.Event.GroupCoordinator.FirstName)</span>
+            </div>
+
+            <div class="form-group col-md-4">
+                @Html.Label("surename", "Surename *")
+                @Html.TextBoxFor(x => x.Event.GroupCoordinator.SureName, new { @id = "surename", @class = "form-control" })
+                <span style="color: red;">@Html.ValidationMessageFor(x => x.Event.GroupCoordinator.SureName)</span>
+            </div>
+
+            <div class="form-group col-md-12">
+                @Html.Label("email", "Email *")
+                @Html.TextBoxFor(x => x.Event.GroupCoordinator.Email, new { @id = "email", @class = "form-control" })
+                <span style="color: red;">@Html.ValidationMessageFor(x => x.Event.GroupCoordinator.Email)</span>
+            </div>
+
+            <div class="form-group col-md-4">
+                @Html.Label("mobile", "Mobile Number *")
+                @Html.TextBoxFor(x => x.Event.GroupCoordinator.Mobile, new { @id = "mobile", @class = "form-control" })
+                <span style="color: red;">@Html.ValidationMessageFor(x => x.Event.GroupCoordinator.Mobile)</span>
+            </div>
+
+            <div class="form-group col-md-8">
+                @Html.Label("daytime", "Daytime Number")
+                @Html.TextBoxFor(x => x.Event.GroupCoordinator.DaytimeNumber, new { @id = "daytime", @class = "form-control" })
+            </div>
+
+            <div class="form-group col-md-12">
+                @Html.Label("address", "Address (line 1)")
+                @Html.TextAreaFor(x => x.Event.GroupCoordinator.Address, new { @id = "address", @class = "form-control" })
+            </div>
+
+            <div class="form-group col-md-12">
+                @Html.Label("suburb", "Suburb")
+                @Html.TextBoxFor(x => x.Event.GroupCoordinator.Suburb, new { @id = "suburb", @class = "form-control" })
+            </div>
+
+            <div class="form-group col-md-6">
+                @Html.Label("state", "State")
+                @Html.TextBoxFor(x => x.Event.GroupCoordinator.State, new { @id = "state", @class = "form-control" })
+            </div>
+
+            <div class="form-group col-md-6">
+                @Html.Label("postcode", "Post code")
+                @Html.TextBoxFor(x => x.Event.GroupCoordinator.Postcode, new { @id = "postcode", @class = "form-control" })
+            </div>
+        </div>
+        @Html.HiddenFor(x => x.UniName)
+        @Html.HiddenFor(x => x.PreferredDate)
+        @Html.HiddenFor(x => x.Event.IsInvoiceOnly)
+        <div class="col-md-12">
+            <a href="@ViewBag.parentUrl" class="btn btn-md btn-primary pull-left">Back</a>
+            <input type="submit" name="submit" value="Next" class="btn btn-md btn-primary pull-right" />
+        </div>
+
+    </div>
+}

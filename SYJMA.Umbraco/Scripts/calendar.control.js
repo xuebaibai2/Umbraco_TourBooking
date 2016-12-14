@@ -24,7 +24,7 @@
             $('#externalLink').hide();
             $('#selectionConfirm').show();
             $('#selectionConfirm').html(
-                'You have chosen <b>' + calEvent.title + '</b> from ' + calEvent.start.format('hha') + ' until ' + calEvent.end.format('hha') + ' on ' + calEvent.start.format('DD MMMM YYYY') + '.  Click Next to confirm.'
+                'You have chosen <b>' + calEvent.title + '</b> from ' + calEvent.start.format('hh:mma') + ' until ' + calEvent.end.format('hh:mma') + ' on ' + calEvent.start.format('DD MMMM YYYY') + '.  Click Next to confirm.'
         );
             $('#selectedEventId').val(calEvent.id);
             $('#selectedEventTitle').val(calEvent.title);

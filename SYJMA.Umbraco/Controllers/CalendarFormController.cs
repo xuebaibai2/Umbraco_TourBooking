@@ -33,9 +33,9 @@ namespace SYJMA.Umbraco.Controllers
             }
             ViewBag.rootUrl = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"));
             ViewBag.bookType = bookType;
-            if (bookType.Equals("School"))
+            if (bookType.Equals(TOURCATEGORY.SCHOOL))
             {
-                SchoolModel school = contentController.GetSchoolModelById(Convert.ToInt32(id));
+                SchoolModel school = contentController.GetModelById_School(Convert.ToInt32(id));
                 if (school == null)
                 {
                     return PartialView("_Error");
@@ -45,9 +45,9 @@ namespace SYJMA.Umbraco.Controllers
                 school.ProgramList = jsonDataController.GetJsonData_EventNameList(TOURCATEGORY.SCHOOL);
                 return PartialView(CONSTVALUE.PARTIAL_VIEW_SCHOOL_FOLDER + "_SchoolCalendar.cshtml", school);
             }
-            else if (bookType.Equals("Adult"))
+            else if (bookType.Equals(TOURCATEGORY.ADULT))
             {
-                AdultModel adult = contentController.GetAdultModelById(Convert.ToInt32(id));
+                AdultModel adult = contentController.GetModelById_Adult(Convert.ToInt32(id));
                 if (adult == null)
                 {
                     return PartialView("_Error");
@@ -56,9 +56,16 @@ namespace SYJMA.Umbraco.Controllers
                 ViewBag.parentUrl = ViewBag.rootUrl + "adult-visits/";
                 return PartialView(CONSTVALUE.PARTIAL_VIEW_ADULT_FOLDER + "_AdultCalendar.cshtml", adult);
             }
-            else if (bookType.Equals("University"))
+            else if (bookType.Equals(TOURCATEGORY.UNIVERSITY))
             {
+                UniversityModel uni = contentController.GetModelById_University(Convert.ToInt32(id));
+                if (uni == null)
+                {
+                    return PartialView("_Error");
+                }
 
+                ViewBag.parentUrl = ViewBag.rootUrl + "university-visits/";
+                return PartialView(CONSTVALUE.PARTIAL_VIEW_UNIVERSITY_FOLDER + "_UniCalendar.cshtml", uni);
             }
             return null;
         }
@@ -71,7 +78,7 @@ namespace SYJMA.Umbraco.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult PostCalendarForm_School(SchoolModel school)
         {
-            SetAttendeeDetail_School(school);
+            SetAttendeeDetail_School_Uni(school);
             school.Event.AdditionalInfo.StaffTotalCost = GetTotalPrice(school.StaffNumber, school.GetStaffAttendeeCost()).ToString("c2");
             school.Event.AdditionalInfo.TotalCost = GetTotalPrice(school.StudentsNumber, school.GetStudentAttendeeCost()).ToString("c2");
             contentController.SetPostCalendarForm_School(school);
@@ -91,6 +98,20 @@ namespace SYJMA.Umbraco.Controllers
             return RedirectToUmbracoPage(contentController.GetContentIDFromSelf("AdultConfirm", CurrentPage), routeValues);
         }
 
+        [ValidateAntiForgeryToken]
+        public ActionResult PostCalendarForm_University(UniversityModel uni)
+        {
+            SetAttendeeDetail_School_Uni(uni);
+            uni.Event.AdditionalInfo.StaffTotalCost= GetTotalPrice(uni.StaffNumber, uni.GetStaffAttendeeCost()).ToString("c2");
+            uni.Event.AdditionalInfo.TotalCost = GetTotalPrice(uni.StudentNumber, uni.GetStudentAttendeeCost()).ToString("c2");
+            contentController.SetPostCalendarForm_University(uni);
+            NameValueCollection routeValues = new NameValueCollection();
+            routeValues.Add("id", uni.Id.ToString());
+            return RedirectToUmbracoPage(contentController.GetContentIDFromSelf("UniversityConfirm", CurrentPage), routeValues);
+        }
+
+
+
         #region Private
         private void SetAttendeeDetail_Adult(AdultModel adult)
         {
@@ -104,9 +125,53 @@ namespace SYJMA.Umbraco.Controllers
             });
         }
         
-        private void SetAttendeeDetail_School(SchoolModel school)
+        //private void SetAttendeeDetail_School(SchoolModel school)
+        //{
+        //    var attendeeList = jsonDataController.GetJsonData_AttendeeType(school.Event.id);
+        //    if (attendeeList != null)
+        //    {
+        //        string studentAttendeeTypeID = attendeeList.Where(x => x.TYPE.Equals(ATTENDEETYPE.ATTENDEETYPE_STUDENT))
+        //            .Select(x => x.ID).FirstOrDefault();
+        //        string staffAttendeeTypeID = attendeeList.Where(x => x.TYPE.Equals(ATTENDEETYPE.ATTENDEETYPE_STAFF))
+        //            .Select(x => x.ID).FirstOrDefault();
+        //        float studentPrice = attendeeList.Where(x => x.TYPE.Equals(ATTENDEETYPE.ATTENDEETYPE_STUDENT))
+        //            .Select(x => x.COST).FirstOrDefault();
+        //        float staffPrice = attendeeList.Where(x => x.TYPE.Equals(ATTENDEETYPE.ATTENDEETYPE_STAFF))
+        //            .Select(x => x.COST).FirstOrDefault();
+
+        //        school.AttendeeList.Add(new Attendee
+        //        {
+        //            ID = studentAttendeeTypeID,
+        //            Type = ATTENDEETYPE.ATTENDEETYPE_STUDENT,
+        //            Cost = studentPrice
+        //        });
+        //        school.AttendeeList.Add(new Attendee
+        //        {
+        //            ID = staffAttendeeTypeID,
+        //            Type = ATTENDEETYPE.ATTENDEETYPE_STAFF,
+        //            Cost = staffPrice
+        //        });
+        //    }
+        //    else
+        //    {
+        //        school.AttendeeList.Add(new Attendee
+        //        {
+        //            ID = "",
+        //            Type = ATTENDEETYPE.ATTENDEETYPE_STUDENT,
+        //            Cost = 0
+        //        });
+        //        school.AttendeeList.Add(new Attendee
+        //        {
+        //            ID = "",
+        //            Type = ATTENDEETYPE.ATTENDEETYPE_STAFF,
+        //            Cost = 0
+        //        });
+        //    }
+        //}
+
+        private void SetAttendeeDetail_School_Uni(BaseModel model)
         {
-            var attendeeList = jsonDataController.GetJsonData_AttendeeType(school.Event.id);
+            var attendeeList = jsonDataController.GetJsonData_AttendeeType(model.Event.id);
             if (attendeeList != null)
             {
                 string studentAttendeeTypeID = attendeeList.Where(x => x.TYPE.Equals(ATTENDEETYPE.ATTENDEETYPE_STUDENT))
@@ -118,13 +183,13 @@ namespace SYJMA.Umbraco.Controllers
                 float staffPrice = attendeeList.Where(x => x.TYPE.Equals(ATTENDEETYPE.ATTENDEETYPE_STAFF))
                     .Select(x => x.COST).FirstOrDefault();
 
-                school.AttendeeList.Add(new Attendee
+                model.AttendeeList.Add(new Attendee
                 {
                     ID = studentAttendeeTypeID,
                     Type = ATTENDEETYPE.ATTENDEETYPE_STUDENT,
                     Cost = studentPrice
                 });
-                school.AttendeeList.Add(new Attendee
+                model.AttendeeList.Add(new Attendee
                 {
                     ID = staffAttendeeTypeID,
                     Type = ATTENDEETYPE.ATTENDEETYPE_STAFF,
@@ -133,13 +198,13 @@ namespace SYJMA.Umbraco.Controllers
             }
             else
             {
-                school.AttendeeList.Add(new Attendee
+                model.AttendeeList.Add(new Attendee
                 {
                     ID = "",
                     Type = ATTENDEETYPE.ATTENDEETYPE_STUDENT,
                     Cost = 0
                 });
-                school.AttendeeList.Add(new Attendee
+                model.AttendeeList.Add(new Attendee
                 {
                     ID = "",
                     Type = ATTENDEETYPE.ATTENDEETYPE_STAFF,
@@ -147,6 +212,50 @@ namespace SYJMA.Umbraco.Controllers
                 });
             }
         }
+
+        //private void SetAttendeeDetail_University(UniversityModel uni)
+        //{
+        //    var attendeeList = jsonDataController.GetJsonData_AttendeeType(uni.Event.id);
+        //    if (attendeeList != null)
+        //    {
+        //        string studentAttendeeTypeID = attendeeList.Where(x => x.TYPE.Equals(ATTENDEETYPE.ATTENDEETYPE_STUDENT))
+        //            .Select(x => x.ID).FirstOrDefault();
+        //        string staffAttendeeTypeID = attendeeList.Where(x => x.TYPE.Equals(ATTENDEETYPE.ATTENDEETYPE_STAFF))
+        //            .Select(x => x.ID).FirstOrDefault();
+        //        float studentPrice = attendeeList.Where(x => x.TYPE.Equals(ATTENDEETYPE.ATTENDEETYPE_STUDENT))
+        //            .Select(x => x.COST).FirstOrDefault();
+        //        float staffPrice = attendeeList.Where(x => x.TYPE.Equals(ATTENDEETYPE.ATTENDEETYPE_STAFF))
+        //            .Select(x => x.COST).FirstOrDefault();
+
+        //        uni.AttendeeList.Add(new Attendee
+        //        {
+        //            ID = studentAttendeeTypeID,
+        //            Type = ATTENDEETYPE.ATTENDEETYPE_STUDENT,
+        //            Cost = studentPrice
+        //        });
+        //        uni.AttendeeList.Add(new Attendee
+        //        {
+        //            ID = staffAttendeeTypeID,
+        //            Type = ATTENDEETYPE.ATTENDEETYPE_STAFF,
+        //            Cost = staffPrice
+        //        });
+        //    }
+        //    else
+        //    {
+        //        uni.AttendeeList.Add(new Attendee
+        //        {
+        //            ID = "",
+        //            Type = ATTENDEETYPE.ATTENDEETYPE_STUDENT,
+        //            Cost = 0
+        //        });
+        //        uni.AttendeeList.Add(new Attendee
+        //        {
+        //            ID = "",
+        //            Type = ATTENDEETYPE.ATTENDEETYPE_STAFF,
+        //            Cost = 0
+        //        });
+        //    }
+        //}
 
         private float GetTotalPrice(int number, float price)
         {

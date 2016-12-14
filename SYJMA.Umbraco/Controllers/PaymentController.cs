@@ -35,7 +35,7 @@ namespace SYJMA.Umbraco.Controllers
             }
             else if (bookType.Equals("Adult"))
             {
-                AdultModel adult = contentController.GetAdultModelById(Convert.ToInt32(id));
+                AdultModel adult = contentController.GetModelById_Adult(Convert.ToInt32(id));
                 if (adult == null)
                 {
                     return PartialView("_Error");

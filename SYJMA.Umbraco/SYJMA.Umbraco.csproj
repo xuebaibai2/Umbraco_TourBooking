@@ -507,6 +507,12 @@
     <Content Include="Views\Partials\Adult\_AdultBookCompletion.cshtml" />
     <Content Include="Views\Partials\_SessionTimeout.cshtml" />
     <Content Include="Views\Partials\Adult\_AdultPayment.cshtml" />
+    <Content Include="Views\Partials\Uni\_UniVisit.cshtml" />
+    <Content Include="Views\Partials\Uni\_UniCalendar.cshtml" />
+    <Content Include="Views\Partials\Uni\_UniConfirmPanel.cshtml" />
+    <Content Include="Views\Partials\Uni\_UniBookingDetail.cshtml" />
+    <Content Include="Views\Partials\Uni\_UniInvoice.cshtml" />
+    <Content Include="Views\Partials\Uni\_UniBookCompletion.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -515,7 +521,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Views\Partials\Uni\" />
     <Folder Include="Views\Payment\" />
   </ItemGroup>
   <PropertyGroup>

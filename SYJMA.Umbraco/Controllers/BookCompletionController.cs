@@ -22,9 +22,9 @@ namespace SYJMA.Umbraco.Controllers
             {
                 return PartialView("_Error");
             }
-            if (type.Equals("School"))
+            if (type.Equals(TOURCATEGORY.SCHOOL))
             {
-                SchoolModel school = contentController.GetSchoolModelById(Convert.ToInt32(mainBookingId));
+                SchoolModel school = contentController.GetModelById_School(Convert.ToInt32(mainBookingId));
                 if (school == null)
                 {
                     return PartialView("_Error");
@@ -38,22 +38,27 @@ namespace SYJMA.Umbraco.Controllers
                 }
                 foreach (int id in childIdList)
                 {
-                    schoolList.Add(contentController.GetSchoolModelById(id));
+                    schoolList.Add(contentController.GetModelById_School(id));
                 }
                 return PartialView(CONSTVALUE.PARTIAL_VIEW_SCHOOL_FOLDER + "_SchoolBookCompletion.cshtml", schoolList);
             }
-            else if (type.Equals("Adult"))
+            else if (type.Equals(TOURCATEGORY.ADULT))
             {
-                AdultModel adult = contentController.GetAdultModelById(Convert.ToInt32(mainBookingId));
+                AdultModel adult = contentController.GetModelById_Adult(Convert.ToInt32(mainBookingId));
                 if (adult == null)
                 {
                     return PartialView("_Error");
                 }
                 return PartialView(CONSTVALUE.PARTIAL_VIEW_ADULT_FOLDER + "_AdultBookCompletion.cshtml", adult);
             }
-            else if (type.Equals("University"))
+            else if (type.Equals(TOURCATEGORY.UNIVERSITY))
             {
-
+                UniversityModel uni = contentController.GetModelById_University(Convert.ToInt32(mainBookingId));
+                if (uni == null)
+                {
+                    return PartialView("_Error");
+                }
+                return PartialView(CONSTVALUE.PARTIAL_VIEW_UNIVERSITY_FOLDER + "_UniBookCompletion.cshtml", uni);
             }
             return null;
         }

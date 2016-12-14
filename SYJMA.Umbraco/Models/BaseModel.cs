@@ -10,6 +10,10 @@ namespace SYJMA.Umbraco.Models
 {
     public class BaseModel
     {
+        public BaseModel()
+        {
+            Event = new EventCalendar();
+        }
         public int Id { get; set; }
 
         [Required(ErrorMessage="Please select one preferred date")]

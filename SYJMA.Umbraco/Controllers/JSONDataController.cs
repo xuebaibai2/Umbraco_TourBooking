@@ -42,23 +42,6 @@ namespace SYJMA.Umbraco.Controllers
             return Json(eventList);
         }
 
-        /// <summary>
-        /// Retrieve AttendeeCost based on Attendee Type and Event/Tour ID, if no value been retrieved than set cost as 0
-        /// </summary>
-        /// <param name="eventID"></param>
-        /// <param name="attendeeType"></param>
-        /// <returns></returns>
-        //public float GetJsonData_AttendeeCost(string eventID, string attendeeType)
-        //{
-        //    var attendeeTypeResult = GetJsonResultAsString(CONSTVALUE.TOUR_API + eventID + CONSTVALUE.GET_ATTENDEETYPE);
-        //    if (attendeeTypeResult == null)
-        //    {
-        //        return 0;
-        //    }
-        //    IEnumerable<API_TOURATTENDEETYPE> attendeeTypeList = GetDeserializedJsonDataList<API_TOURATTENDEETYPE>(attendeeTypeResult);
-        //    return attendeeTypeList.Where(x => x.TYPE.Equals(attendeeType)).Select(x => x.COST).FirstOrDefault();
-        //}
-
         public List<API_TOURATTENDEETYPE> GetJsonData_AttendeeType(string eventID)
         {
             var attendeeTypeResult = GetJsonResultAsString(string.Format(CONSTVALUE.GET_ATTENDEETYPE, eventID));
@@ -85,6 +68,19 @@ namespace SYJMA.Umbraco.Controllers
             }
             schooResultlList.Sort();
             return Json(schooResultlList);
+        }
+
+        public JsonResult GetJsonData_UniNameList()
+        {
+            List<string> uniResultlList = new List<string>();
+            var jsonResult = GetJsonResultAsString(CONSTVALUE.GET_UNICONTACTS);
+            IEnumerable<API_CONTACT> uniContactList = GetDeserializedJsonDataList<API_CONTACT>(jsonResult);
+            foreach (var uni in uniContactList)
+            {
+                uniResultlList.Add(uni.KEYNAME);
+            }
+            uniResultlList.Sort();
+            return Json(uniResultlList);
         }
 
         /// <summary>
@@ -194,6 +190,25 @@ namespace SYJMA.Umbraco.Controllers
                     }
                 }
             }
+            else if (typeof(T).Equals(new UniversityModel().GetType()))
+            {
+                UniversityModel model = (UniversityModel)obj;
+                if (contactType.Equals(CONTACTTYPE.ORGANISATION))
+                {
+                    MapUniversityContact(contact, model);
+                }
+                else if (contactType.Equals(CONTACTTYPE.INDIVIDUAL))
+                {
+                    if (indivisualType.Equals(INDIVISUALTYPE.GROUPCOORDINATOR))
+                    {
+                        MapCoordinatorContact_University(contact, model);
+                    }
+                    else if (indivisualType.Equals(INDIVISUALTYPE.INVOICEE))
+                    {
+                        MapInvoiceeContact_University(contact, model);
+                    }
+                }
+            }
             string data = new JavaScriptSerializer().Serialize(contact);
             return PostAPI(CONSTVALUE.POST_CONTACT, data);
         }
@@ -289,13 +304,19 @@ namespace SYJMA.Umbraco.Controllers
 
         private void MapSchoolContact(API_CONTACT contact, SchoolModel model)
         {
-            contact.PRIMARYCATEGORY = "Schools"; // For university is University
+            contact.PRIMARYCATEGORY = TOURCATEGORY.SCHOOL + "s"; 
             contact.KEYNAME = model.SchoolName;
+        }
+
+        private void MapUniversityContact(API_CONTACT contact, UniversityModel model)
+        {
+            contact.PRIMARYCATEGORY = TOURCATEGORY.UNIVERSITY; 
+            contact.KEYNAME = model.UniName;
         }
 
         private void MapCoordinatorContact_School(API_CONTACT contact, SchoolModel model)
         {
-            contact.PRIMARYCATEGORY = "Individual";
+            contact.PRIMARYCATEGORY = CONTACTTYPE.INDIVIDUAL;
             contact.FIRSTNAME = model.Event.GroupCoordinator.FirstName;
             contact.KEYNAME = model.Event.GroupCoordinator.SureName;
             contact.TITLE = model.Event.GroupCoordinator.Title;
@@ -304,18 +325,9 @@ namespace SYJMA.Umbraco.Controllers
             contact.DAYTELEPHONE = model.Event.GroupCoordinator.DaytimeNumber;
         }
 
-        private void MapInvoiceeContact_School(API_CONTACT contact, SchoolModel model)
-        {
-            contact.PRIMARYCATEGORY = "Individual";
-            contact.FIRSTNAME = model.Event.Invoice.FirstName;
-            contact.KEYNAME = model.Event.Invoice.SureName;
-            contact.TITLE = model.Event.Invoice.Title;
-            contact.EMAILADDRESS = model.Event.Invoice.Email;
-        }
-
         private void MapCoordinatorContact_Adult(API_CONTACT contact, AdultModel model)
         {
-            contact.PRIMARYCATEGORY = "Individual";
+            contact.PRIMARYCATEGORY = CONTACTTYPE.INDIVIDUAL;
             contact.FIRSTNAME = model.Event.GroupCoordinator.FirstName;
             contact.KEYNAME = model.Event.GroupCoordinator.SureName;
             contact.TITLE = model.Event.GroupCoordinator.Title;
@@ -328,9 +340,42 @@ namespace SYJMA.Umbraco.Controllers
             contact.POSTCODE = model.Event.GroupCoordinator.Postcode;
         }
 
+        private void MapCoordinatorContact_University(API_CONTACT contact, UniversityModel model)
+        {
+            contact.PRIMARYCATEGORY = CONTACTTYPE.INDIVIDUAL;
+            contact.FIRSTNAME = model.Event.GroupCoordinator.FirstName;
+            contact.KEYNAME = model.Event.GroupCoordinator.SureName;
+            contact.TITLE = model.Event.GroupCoordinator.Title;
+            contact.EMAILADDRESS = model.Event.GroupCoordinator.Email;
+            contact.MOBILENUMBER = model.Event.GroupCoordinator.Mobile;
+            contact.DAYTELEPHONE = model.Event.GroupCoordinator.DaytimeNumber;
+            contact.ADDRESSLINE1 = model.Event.GroupCoordinator.Address;
+            contact.SUBURB = model.Event.GroupCoordinator.Suburb;
+            contact.STATE = model.Event.GroupCoordinator.State;
+            contact.POSTCODE = model.Event.GroupCoordinator.Postcode;
+        }
+
+        private void MapInvoiceeContact_School(API_CONTACT contact, SchoolModel model)
+        {
+            contact.PRIMARYCATEGORY = CONTACTTYPE.INDIVIDUAL;
+            contact.FIRSTNAME = model.Event.Invoice.FirstName;
+            contact.KEYNAME = model.Event.Invoice.SureName;
+            contact.TITLE = model.Event.Invoice.Title;
+            contact.EMAILADDRESS = model.Event.Invoice.Email;
+        }
+
         private void MapInvoiceeContact_Adult(API_CONTACT contact, AdultModel model)
         {
-            contact.PRIMARYCATEGORY = "Individual";
+            contact.PRIMARYCATEGORY = CONTACTTYPE.INDIVIDUAL;
+            contact.FIRSTNAME = model.Event.Invoice.FirstName;
+            contact.KEYNAME = model.Event.Invoice.SureName;
+            contact.TITLE = model.Event.Invoice.Title;
+            contact.EMAILADDRESS = model.Event.Invoice.Email;
+        }
+
+        private void MapInvoiceeContact_University(API_CONTACT contact, UniversityModel model)
+        {
+            contact.PRIMARYCATEGORY = CONTACTTYPE.INDIVIDUAL;
             contact.FIRSTNAME = model.Event.Invoice.FirstName;
             contact.KEYNAME = model.Event.Invoice.SureName;
             contact.TITLE = model.Event.Invoice.Title;

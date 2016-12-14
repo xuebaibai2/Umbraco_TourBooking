@@ -30,28 +30,28 @@ namespace SYJMA.Umbraco.Controllers
         public PartialViewResult InitialIdentification(string bookType)
         {
             ViewBag.rootUrl = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"));
-            if (bookType.Equals("School"))
+            if (bookType.Equals(TOURCATEGORY.SCHOOL))
             {
                 Session["idList"] = new List<int>();
                 SchoolModel school = new SchoolModel();
                 school.SubjectList = jsonDataController.GetJsonData_SubjectAreaList();
                 school.YearList = jsonDataController.GetJsonData_YearGroupList();
-                school.type = "School";
+                school.type = bookType;
                 return PartialView(CONSTVALUE.PARTIAL_VIEW_SCHOOL_FOLDER + "_SchoolVisit.cshtml", school);
             }
-            else if (bookType.Equals("Adult"))
+            else if (bookType.Equals(TOURCATEGORY.ADULT))
             {
                 AdultModel adult = new AdultModel();
-                adult.type = "Adult";
+                adult.type = bookType;
                 adult.ProgramList = jsonDataController.GetJsonData_EventNameList(TOURCATEGORY.ADULT);
                 return PartialView(CONSTVALUE.PARTIAL_VIEW_ADULT_FOLDER + "_AdultVisit.cshtml", adult);
             }
-            else if (bookType.Equals("University"))
+            else if (bookType.Equals(TOURCATEGORY.UNIVERSITY))
             {
                 UniversityModel uni = new UniversityModel();
-                uni.type = "University";
-                uni.ProgramList = dataTypeController.GetUniProgramDropdownList();
-                return PartialView("_UniversityVisit", uni);
+                uni.type = bookType;
+                uni.ProgramList = jsonDataController.GetJsonData_EventNameList(TOURCATEGORY.UNIVERSITY);
+                return PartialView(CONSTVALUE.PARTIAL_VIEW_UNIVERSITY_FOLDER + "_UniVisit.cshtml", uni);
             }
             // Return page not found
             return null;
@@ -86,7 +86,7 @@ namespace SYJMA.Umbraco.Controllers
             {
                 return PartialView("_Error");
             }
-            school = contentController.GetSchoolModelById(Convert.ToInt32(id));
+            school = contentController.GetModelById_School(Convert.ToInt32(id));
             school.SubjectList = jsonDataController.GetJsonData_SubjectAreaList();
             school.YearList = jsonDataController.GetJsonData_YearGroupList();
             school.PreferredDate = GetDateTimeForInitial(school as BaseModel).ToString("dd/MM/yyyy");
@@ -131,28 +131,18 @@ namespace SYJMA.Umbraco.Controllers
         #endregion
 
         #region University
-        /// <summary>
-        /// Receive post data form from University partialview and save into University Visits content as a record
-        /// </summary>
-        /// <param name="uni"></param>
-        /// <returns>Redirect to page</returns>
-        //public ActionResult PostInitialPage_Uni(UniversityModel uni)
-        //{
-        //    var uniRecord = Services.ContentService.CreateContent(uni.UniName + " - " + uni.Program, CurrentPage.Id, "University");
-
-        //    int selectedProgramId = dataTypeController.GetUniProgramDropdownList_SelectedID(uni);
-
-        //    uniRecord.SetValue("nameOfUniversity", uni.UniName);
-        //    uniRecord.SetValue("nameOfCampus", uni.CampusName);
-        //    uniRecord.SetValue("program", selectedProgramId);
-        //    uniRecord.SetValue("preferredDate", GetDateTimeForPost(uni));
-        //    uniRecord.SetValue("numberOfStudents", uni.StudentNumber);
-        //    uniRecord.SetValue("numberOfStaff", uni.StaffNumber);
-        //    uniRecord.SetValue("comments", uni.Comments);
-        //    Services.ContentService.SaveAndPublishWithStatus(uniRecord);
-        //    return RedirectToCurrentUmbracoPage();
-        //}
-
+        [ValidateAntiForgeryToken]
+        public ActionResult PostInitialPage_University(UniversityModel uni)
+        {
+            if (ModelState.IsValid)
+            {
+                contentController.SetPostInitialPage_University(uni, CurrentPage);
+                NameValueCollection routeValues = new NameValueCollection();
+                routeValues.Add("id", uni.Id.ToString());
+                return RedirectToUmbracoPage(contentController.GetContentIDFromParent("University Calendar Form", CurrentPage), routeValues);
+            }
+            return CurrentUmbracoPage();
+        }
         #endregion
 
         #region 'Private Region'

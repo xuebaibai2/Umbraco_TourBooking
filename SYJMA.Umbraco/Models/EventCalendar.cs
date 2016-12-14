@@ -11,6 +11,8 @@ namespace SYJMA.Umbraco.Models
         {
             this.IsSameContact = false;
             AdditionalInfo = new AdditionalInfoModel();
+            Invoice = new Invoice();
+            GroupCoordinator = new GroupCoordinator();
         }
         
         public string id { get; set; }

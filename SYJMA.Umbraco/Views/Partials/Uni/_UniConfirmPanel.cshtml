@@ -1,0 +1,49 @@
+﻿@using SYJMA.Umbraco.Controllers;
+@inherits Umbraco.Web.Mvc.UmbracoViewPage<SYJMA.Umbraco.Models.UniversityModel>
+
+@using (Html.BeginUmbracoForm<ConfirmationPanelController>("PostConfirm_University"))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table">
+                <tr>
+                    <td><b>Name of University</b></td>
+                    <td>@Html.DisplayFor(x=>x.UniName)</td>
+                </tr>
+
+                <tr>
+                    <td><b>Name of Campus</b></td>
+                    <td>@Html.DisplayFor(x=>x.CampusName)</td>
+                </tr>
+
+                <tr>
+                    <td><b>Date and Time of Tour</b></td>
+                    <td>@Model.Event.GetDateDescription()</td>
+                </tr>
+
+                <tr>
+                    <td><b>Program / Tour</b></td>
+                    <td>@Html.DisplayFor(x=>x.Event.title)</td>
+                </tr>
+
+                <tr>
+                    <td><b>Number of Staff</b></td>
+                    <td>@Html.DisplayFor(x=>x.StaffNumber)</td>
+                </tr>
+
+                <tr>
+                    <td><b>Number of Students</b></td>
+                    <td>@Html.DisplayFor(x=>x.StudentNumber)</td>
+                </tr>
+            </table>
+        </div>
+        @Html.HiddenFor(x=>x.Id)
+
+        <div class="col-md-12">
+            <a href="@ViewBag.parentUrl" class="btn btn-md btn-primary btn-left">Back</a>
+            <input type="submit" name="submit" value="Next" class="btn btn-md btn-primary pull-right" />
+        </div>
+    </div>
+}

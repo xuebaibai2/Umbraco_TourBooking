@@ -67,10 +67,21 @@ namespace SYJMA.Umbraco.Controllers
                 AdultModel adult = (AdultModel)model;
                 float totalCost = GetTotalPrice(adult.AdultNumber, adult.GetAdultAttendeeCost());
 
-                tourBooking.FORSERIALNUMBER = adult.Event.GroupCoordinator.SerialNumber;
+                tourBooking.FORSERIALNUMBER = adult.Event.GroupCoordinator.SerialNumber; //Need Clarifiction
                 tourBooking.TOTALCOST = totalCost;
-                tourBooking.YEARGROUP = "Adult";
+                tourBooking.YEARGROUP = TOURCATEGORY.ADULT;
                 return PostJsonData_NewTourBooking(adult.Event.id, tourBooking).Trim('"');
+            }
+            else if (typeof(T).Equals(new UniversityModel().GetType()))
+            {
+                UniversityModel uni = (UniversityModel)model;
+                float totalCost = GetTotalPrice(uni.StudentNumber, uni.GetStudentAttendeeCost())
+                + GetTotalPrice(uni.StaffNumber, uni.GetStaffAttendeeCost());
+
+                tourBooking.FORSERIALNUMBER = uni.SerialNumber;
+                tourBooking.TOTALCOST = totalCost;
+                tourBooking.YEARGROUP = TOURCATEGORY.UNIVERSITY;
+                return PostJsonData_NewTourBooking(uni.Event.id, tourBooking).Trim('"');
             }
             return null;
         }
@@ -169,14 +180,64 @@ namespace SYJMA.Umbraco.Controllers
                 attendeeSummary.FINALCOST = GetFinalPrice(attendeeSummary.ATTENDEECOST, attendeeSummary.DISCOUNT);
                 results.Add(PostJsonData_NewTourBookingAttendeeSummary(attendeeSummary));
             }
+            else if (typeof(T).Equals(new UniversityModel().GetType()))
+            {
+                UniversityModel uni = (UniversityModel)model;
+                for (int i = 0; i < uni.AttendeeList.Count; i++)
+                {
+                    if (uni.AttendeeList[i].Type.Equals(ATTENDEETYPE.ATTENDEETYPE_STUDENT))
+                    {
+                        float discount = 0;
+
+                        attendeeSummary.ATTENDEETYPEID = uni.GetStudentAttendeeID();
+                        attendeeSummary.QUANTITYBOOKED = uni.StudentNumber;
+                        attendeeSummary.QUANTITYATTENDED = uni.StudentNumber;
+                        attendeeSummary.ATTENDEECOST = GetTotalPrice(uni.StudentNumber, uni.GetStudentAttendeeCost());
+                        attendeeSummary.DISCOUNT = discount;
+                        attendeeSummary.FINALCOST = GetFinalPrice(attendeeSummary.ATTENDEECOST, attendeeSummary.DISCOUNT);
+                        results.Add(PostJsonData_NewTourBookingAttendeeSummary(attendeeSummary));
+                    }
+                    else if (uni.AttendeeList[i].Type.Equals(ATTENDEETYPE.ATTENDEETYPE_STAFF))
+                    {
+                        float staffPrice = uni.GetStaffAttendeeCost();
+                        int staffNumber = uni.StaffNumber;
+                        float discount = 0;
+
+                        attendeeSummary.ATTENDEETYPEID = uni.GetStaffAttendeeID();
+                        attendeeSummary.QUANTITYBOOKED = uni.StaffNumber;
+                        attendeeSummary.QUANTITYATTENDED = uni.StaffNumber;
+                        attendeeSummary.ATTENDEECOST = GetTotalPrice(staffNumber, staffPrice);
+                        attendeeSummary.DISCOUNT = discount;
+                        attendeeSummary.FINALCOST = GetFinalPrice(attendeeSummary.ATTENDEECOST, attendeeSummary.DISCOUNT);
+                        results.Add(PostJsonData_NewTourBookingAttendeeSummary(attendeeSummary));
+                    }
+                }
+            }
             return results;
         }
 
-        public string CreateNewSchoolContactOnThankQ(SchoolModel school)
-        {
-            school.SerialNumber = PostJsonData_NewContact<SchoolModel>(school, CONTACTTYPE.ORGANISATION).Trim('"');
+        //public string CreateNewSchoolContactOnThankQ(SchoolModel school)
+        //{
+        //    school.SerialNumber = PostJsonData_NewContact<SchoolModel>(school, CONTACTTYPE.ORGANISATION).Trim('"');
 
-            return school.SerialNumber;
+        //    return school.SerialNumber;
+        //}
+
+        public string CreateNewOrganisationContactOnThankQ<T>(BaseModel model)
+        {
+            if (typeof(T).Equals(new SchoolModel().GetType()))
+            {
+                SchoolModel school = (SchoolModel)model;
+                school.SerialNumber = PostJsonData_NewContact<SchoolModel>(school, CONTACTTYPE.ORGANISATION).Trim('"');
+                return school.SerialNumber;
+            }
+            else if (typeof(T).Equals(new UniversityModel().GetType()))
+            {
+                UniversityModel uni = (UniversityModel)model;
+                uni.SerialNumber = PostJsonData_NewContact<UniversityModel>(uni, CONTACTTYPE.ORGANISATION).Trim('"');
+                return uni.SerialNumber;
+            }
+            return "Please Define your Model";
         }
 
         //public void CreateNewContactOnThankQ(SchoolModel school)
@@ -213,6 +274,12 @@ namespace SYJMA.Umbraco.Controllers
             {
                 AdultModel adult = (AdultModel)model;
                 adult.Event.GroupCoordinator.SerialNumber = PostJsonData_NewContact<AdultModel>(adult, CONTACTTYPE.INDIVIDUAL, INDIVISUALTYPE.GROUPCOORDINATOR).Trim('"');
+            }
+            else if (typeof(T).Equals(new UniversityModel().GetType()))
+            {
+                UniversityModel uni = (UniversityModel)model;
+                uni.Event.GroupCoordinator.SerialNumber = PostJsonData_NewContact<UniversityModel>(uni, CONTACTTYPE.INDIVIDUAL, INDIVISUALTYPE.GROUPCOORDINATOR).Trim('"');
+                uni.Event.Invoice.SerialNumber = PostJsonData_NewContact<UniversityModel>(uni, CONTACTTYPE.INDIVIDUAL, INDIVISUALTYPE.INVOICEE).Trim('"');
             }
 
         }

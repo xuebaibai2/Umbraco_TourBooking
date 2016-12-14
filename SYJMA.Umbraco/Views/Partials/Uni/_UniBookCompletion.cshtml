@@ -1,0 +1,132 @@
+﻿@using SYJMA.Umbraco.Controllers;
+@using SYJMA.Umbraco.Models;
+@inherits Umbraco.Web.Mvc.UmbracoViewPage<UniversityModel>
+
+<h2 class="text-center">Your Booking Number is: <b>@Model.TourBookingID</b></h2>
+<div class="row">
+    <div class="col-md-12">
+        <table class="table">
+            <tr>
+                <td colspan="2">
+                    <h3>Tour Info</h3>
+                </td>
+            </tr>
+            <tr>
+                <td><b>Name of University</b></td>
+                <td>@Html.DisplayFor(x => x.UniName)</td>
+            </tr>
+
+            <tr>
+                <td><b>Name of Campus</b></td>
+                <td>@Html.DisplayFor(x => x.CampusName)</td>
+            </tr>
+
+            <tr>
+                <td><b>Date and Time of Tour</b></td>
+                <td>@Model.Event.GetDateDescription()</td>
+            </tr>
+
+            <tr>
+                <td><b>Program / Tour</b></td>
+                <td>@Html.DisplayFor(x => x.Event.title)</td>
+            </tr>
+
+            <tr>
+                <td><b>Number of Student</b></td>
+                <td>@Html.DisplayFor(x => x.StudentNumber)</td>
+            </tr>
+
+            <tr>
+                <td><b>Student total price</b></td>
+                <td>@Model.Event.AdditionalInfo.TotalCost</td>
+            </tr>
+
+            <tr>
+                <td><b>Number of Staff</b></td>
+                <td>@Html.DisplayFor(x => x.StaffNumber)</td>
+            </tr>
+
+            <tr>
+                <td colspan="2">
+                    <h3>Group Coordinator</h3>
+                </td>
+            </tr>
+            <tr>
+                <td><b>Title</b></td>
+                <td>@Html.DisplayFor(x => x.Event.GroupCoordinator.Title)</td>
+            </tr>
+            <tr>
+                <td><b>First Name</b></td>
+                <td>@Html.DisplayFor(x => x.Event.GroupCoordinator.FirstName)</td>
+            </tr>
+            <tr>
+                <td><b>Surename</b></td>
+                <td>@Html.DisplayFor(x => x.Event.GroupCoordinator.SureName)</td>
+            </tr>
+            <tr>
+                <td><b>Email</b></td>
+                <td>@Html.DisplayFor(x => x.Event.GroupCoordinator.Email)</td>
+            </tr>
+            <tr>
+                <td><b>Mobile Number</b></td>
+                <td>@Html.DisplayFor(x => x.Event.GroupCoordinator.Mobile)</td>
+            </tr>
+            <tr>
+                <td><b>Daytime Number</b></td>
+                <td>@Html.DisplayFor(x => x.Event.GroupCoordinator.DaytimeNumber)</td>
+            </tr>
+            <tr>
+                <td><b>Address</b></td>
+                <td>@Html.DisplayFor(x => x.Event.GroupCoordinator.Address)</td>
+            </tr>
+            <tr>
+                <td><b>Suburb</b></td>
+                <td>@Html.DisplayFor(x => x.Event.GroupCoordinator.Suburb)</td>
+            </tr>
+            <tr>
+                <td><b>State</b></td>
+                <td>@Html.DisplayFor(x => x.Event.GroupCoordinator.State)</td>
+            </tr>
+            <tr>
+                <td><b>Post Code</b></td>
+                <td>@Html.DisplayFor(x => x.Event.GroupCoordinator.Postcode)</td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <h3>Invoice to</h3>
+                </td>
+            </tr>
+            <tr>
+                <td><b>Title</b></td>
+                <td>@Html.DisplayFor(x => x.Event.Invoice.Title)</td>
+            </tr>
+            <tr>
+                <td><b>First name</b></td>
+                <td>@Html.DisplayFor(x => x.Event.Invoice.FirstName)</td>
+            </tr>
+            <tr>
+                <td><b>Surename</b></td>
+                <td>@Html.DisplayFor(x => x.Event.Invoice.SureName)</td>
+            </tr>
+            <tr>
+                <td><b>Job Title</b></td>
+                <td>@Html.DisplayFor(x => x.Event.Invoice.Title)</td>
+            </tr>
+            <tr>
+                <td><b>Institution</b></td>
+                <td>@Html.DisplayFor(x => x.Event.Invoice.Institution)</td>
+            </tr>
+            <tr>
+                <td><b>Email</b></td>
+                <td>@Html.DisplayFor(x => x.Event.Invoice.Email)</td>
+            </tr>
+            <tr>
+                <td><b>Daytime Phone Number</b></td>
+                <td>@Html.DisplayFor(x => x.Event.Invoice.Phone)</td>
+            </tr>
+        </table>
+        <div class="text-center">
+            <a href="~/" class="btn btn-md btn-primary">Back to home</a>
+        </div>
+    </div>
+</div>

@@ -32,27 +32,32 @@ namespace SYJMA.Umbraco.Controllers
 
             ViewBag.parentUrl = CurrentPage.Parent.Url + "?id=" + id;
 
-            if (bookType.Equals("School"))
+            if (bookType.Equals(TOURCATEGORY.SCHOOL))
             {
-                SchoolModel school = contentController.GetSchoolModelById(Convert.ToInt32(id));
+                SchoolModel school = contentController.GetModelById_School(Convert.ToInt32(id));
                 if (school == null)
                 {
                     return PartialView("_Error");
                 }
                 return PartialView(CONSTVALUE.PARTIAL_VIEW_SCHOOL_FOLDER + "_SchoolConfirmPanel.cshtml", school);
             }
-            else if (bookType.Equals("Adult"))
+            else if (bookType.Equals(TOURCATEGORY.ADULT))
             {
-                AdultModel adult = contentController.GetAdultModelById(Convert.ToInt32(id));
+                AdultModel adult = contentController.GetModelById_Adult(Convert.ToInt32(id));
                 if (adult == null)
                 {
                     return PartialView("_Error");
                 }
                 return PartialView(CONSTVALUE.PARTIAL_VIEW_ADULT_FOLDER + "_AdultConfirmPanel.cshtml", adult);
             }
-            else if (bookType.Equals("University"))
+            else if (bookType.Equals(TOURCATEGORY.UNIVERSITY))
             {
-
+                UniversityModel uni = contentController.GetModelById_University(Convert.ToInt32(id));
+                if (uni == null)
+                {
+                    return PartialView("_Error");
+                }
+                return PartialView(CONSTVALUE.PARTIAL_VIEW_UNIVERSITY_FOLDER + "_UniConfirmPanel.cshtml", uni);
             }
             return null;
         }
@@ -65,7 +70,7 @@ namespace SYJMA.Umbraco.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult PostConfirm_School(SchoolModel school)
         {
-            school = contentController.GetSchoolModelById(school.Id);
+            school = contentController.GetModelById_School(school.Id);
 
             NameValueCollection routeValues = new NameValueCollection();
             routeValues.Add("id", school.Id.ToString());
@@ -76,12 +81,23 @@ namespace SYJMA.Umbraco.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult PostConfirm_Adult(AdultModel adult)
         {
-            adult = contentController.GetAdultModelById(adult.Id);
+            adult = contentController.GetModelById_Adult(adult.Id);
 
             NameValueCollection routeValues = new NameValueCollection();
             routeValues.Add("id", adult.Id.ToString());
 
             return RedirectToUmbracoPage(contentController.GetContentIDFromSelf("AdultDetail", CurrentPage), routeValues);
+        }
+
+        [ValidateAntiForgeryToken]
+        public ActionResult PostConfirm_University(UniversityModel uni)
+        {
+            uni = contentController.GetModelById_University(uni.Id);
+
+            NameValueCollection routeValues = new NameValueCollection();
+            routeValues.Add("id", uni.Id.ToString());
+
+            return RedirectToUmbracoPage(contentController.GetContentIDFromSelf("UniversityDetail", CurrentPage), routeValues);
         }
 	}
 }

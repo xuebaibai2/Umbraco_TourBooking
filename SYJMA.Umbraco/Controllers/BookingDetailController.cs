@@ -32,9 +32,9 @@ namespace SYJMA.Umbraco.Controllers
 
             ViewBag.parentUrl = CurrentPage.Parent.Url + "?id=" + id;
 
-            if (bookType.Equals("School"))
+            if (bookType.Equals(TOURCATEGORY.SCHOOL))
             {
-                SchoolModel school = contentController.GetSchoolModelById(Convert.ToInt32(id));
+                SchoolModel school = contentController.GetModelById_School(Convert.ToInt32(id));
                 if (school == null)
                 {
                     return PartialView("_Error");
@@ -43,9 +43,9 @@ namespace SYJMA.Umbraco.Controllers
                 school.Event.Invoice.Phone = "0";
                 return PartialView(CONSTVALUE.PARTIAL_VIEW_SCHOOL_FOLDER + "_SchoolBookingDetail.cshtml", school);
             }
-            else if (bookType.Equals("Adult"))
+            else if (bookType.Equals(TOURCATEGORY.ADULT))
             {
-                AdultModel adult = contentController.GetAdultModelById(Convert.ToInt32(id));
+                AdultModel adult = contentController.GetModelById_Adult(Convert.ToInt32(id));
                 if (adult == null)
                 {
                     return PartialView("_Error");
@@ -53,9 +53,15 @@ namespace SYJMA.Umbraco.Controllers
                 adult.PreferredDate = GetDateTimeForInitial(adult as BaseModel).ToString("dd/MM/yyyy");
                 return PartialView(CONSTVALUE.PARTIAL_VIEW_ADULT_FOLDER + "_AdultBookingDetail.cshtml", adult);
             }
-            else if (bookType.Equals("University"))
+            else if (bookType.Equals(TOURCATEGORY.UNIVERSITY))
             {
-
+                UniversityModel uni = contentController.GetModelById_University(Convert.ToInt32(id));
+                if (uni == null)
+                {
+                    return PartialView("_Error");
+                }
+                uni.PreferredDate = GetDateTimeForInitial(uni as BaseModel).ToString("dd/MM/yyyy");
+                return PartialView(CONSTVALUE.PARTIAL_VIEW_UNIVERSITY_FOLDER + "_UniBookingDetail.cshtml", uni);
             }
             return null;
         }
@@ -84,7 +90,7 @@ namespace SYJMA.Umbraco.Controllers
             if (ModelState.IsValid)
             {
                 contentController.SetPostBooking_Adult(adult);
-                adult = contentController.GetAdultModelById(adult.Id);
+                adult = contentController.GetModelById_Adult(adult.Id);
                 NameValueCollection routeValues = new NameValueCollection();
                 routeValues.Add("id", adult.Id.ToString());
 
@@ -100,9 +106,30 @@ namespace SYJMA.Umbraco.Controllers
             return CurrentUmbracoPage();
         }
 
+        [ValidateAntiForgeryToken]
+        public ActionResult PostBooking_University(UniversityModel uni)
+        {
+            if (ModelState.IsValid)
+            {
+                contentController.SetPostBooking_University(uni);
+                uni = contentController.GetModelById_University(uni.Id);
+                NameValueCollection routeValues = new NameValueCollection();
+                routeValues.Add("id", uni.Id.ToString());
+
+                if (uni.Event.IsInvoiceOnly)
+                {
+                    return RedirectToUmbracoPage(contentController.GetContentIDFromSelf("UniversityInvoice", CurrentPage), routeValues);
+                }
+                else
+                {
+                    return RedirectToUmbracoPage(contentController.GetContentIDFromSelf("UniversityPayment", CurrentPage), routeValues);
+                }
+            }
+            return CurrentUmbracoPage();
+        }
         private DateTime GetDateTimeForInitial(BaseModel viewModel)
         {
             return DateTime.ParseExact(viewModel.PreferredDate, "MM/d/yyyy hh:mm:ss tt", new System.Globalization.CultureInfo("en-AU"), System.Globalization.DateTimeStyles.None);
         }
-	}
+    }
 }

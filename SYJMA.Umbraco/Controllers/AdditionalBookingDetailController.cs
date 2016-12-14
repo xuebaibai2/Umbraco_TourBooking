@@ -33,9 +33,9 @@ namespace SYJMA.Umbraco.Controllers
                 return PartialView("_Error");
             }
 
-            if (bookType.Equals("School"))
+            if (bookType.Equals(TOURCATEGORY.SCHOOL))
             {
-                SchoolModel school = contentController.GetSchoolModelById(Convert.ToInt32(id));
+                SchoolModel school = contentController.GetModelById_School(Convert.ToInt32(id));
                 if (school == null)
                 {
                     return PartialView("_Error");
@@ -54,11 +54,11 @@ namespace SYJMA.Umbraco.Controllers
                 ViewBag.parentUrl = CurrentPage.Parent.Url + "?id=" + id;
                 return PartialView(CONSTVALUE.PARTIAL_VIEW_SCHOOL_FOLDER + "_SchoolAdditionalBookingDetail.cshtml", school);
             }
-            else if (bookType.Equals("Adult"))
+            else if (bookType.Equals(TOURCATEGORY.ADULT))
             {
 
             }
-            else if (bookType.Equals("University"))
+            else if (bookType.Equals(TOURCATEGORY.UNIVERSITY))
             {
 
             }
@@ -82,9 +82,9 @@ namespace SYJMA.Umbraco.Controllers
                 return RedirectToUmbracoPage(node.Id, subTourRouteValues);
             }
 
-            school = contentController.GetSchoolModelById(school.Id);
+            school = contentController.GetModelById_School(school.Id);
             //Create new contact with primary category as schools and contacttype as organisation
-            string schoolSerialNumber = jsonDataController.CreateNewSchoolContactOnThankQ(school);
+            string schoolSerialNumber = jsonDataController.CreateNewOrganisationContactOnThankQ<SchoolModel>(school);
 
             school.SubTourIDList = Session["idList"] as List<int>;
             if (school.SubTourIDList == null)
@@ -95,7 +95,7 @@ namespace SYJMA.Umbraco.Controllers
 
             foreach (int id in school.SubTourIDList)
             {
-                SchoolModel tempSchool = contentController.GetSchoolModelById(id);
+                SchoolModel tempSchool = contentController.GetModelById_School(id);
                 tempSchool.SerialNumber = schoolSerialNumber;
                 //Create new contact for Group Coordinator and Invoicee on ThankQ DB
                 jsonDataController.CreateNewContactOnThankQ<SchoolModel>(tempSchool);
@@ -109,7 +109,7 @@ namespace SYJMA.Umbraco.Controllers
             }
             NameValueCollection routeValues = new NameValueCollection();
             routeValues.Add("mainBookingId", school.MainBookingID.ToString());
-            routeValues.Add("type", "School");
+            routeValues.Add("type", TOURCATEGORY.SCHOOL);
             if (school.Event.AdditionalInfo.CafeRequire)
             {
                 //Do Something About Cafe Catering Sending Email?

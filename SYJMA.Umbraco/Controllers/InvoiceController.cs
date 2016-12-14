@@ -27,18 +27,18 @@ namespace SYJMA.Umbraco.Controllers
 
             ViewBag.parentUrl = CurrentPage.Parent.Url + "?id=" + id;
 
-            if (bookType.Equals("School"))
+            if (bookType.Equals(TOURCATEGORY.SCHOOL))
             {
-                SchoolModel school = contentController.GetSchoolModelById(Convert.ToInt32(id));
+                SchoolModel school = contentController.GetModelById_School(Convert.ToInt32(id));
                 if (school == null)
                 {
                     return PartialView("_Error");
                 }
                 return PartialView(CONSTVALUE.PARTIAL_VIEW_SCHOOL_FOLDER + "_SchoolInvoice.cshtml", school);
             }
-            else if (bookType.Equals("Adult"))
+            else if (bookType.Equals(TOURCATEGORY.ADULT))
             {
-                AdultModel adult = contentController.GetAdultModelById(Convert.ToInt32(id));
+                AdultModel adult = contentController.GetModelById_Adult(Convert.ToInt32(id));
                 if (adult == null)
                 {
                     return PartialView("_Error");
@@ -46,20 +46,26 @@ namespace SYJMA.Umbraco.Controllers
                 adult.PreferredDate = GetDateTimeForInitial(adult as BaseModel).ToString("dd/MM/yyyy");
                 return PartialView(CONSTVALUE.PARTIAL_VIEW_ADULT_FOLDER + "_AdultInvoice.cshtml", adult);
             }
-            else if (bookType.Equals("University"))
+            else if (bookType.Equals(TOURCATEGORY.UNIVERSITY))
             {
-
+                UniversityModel uni = contentController.GetModelById_University(Convert.ToInt32(id));
+                if (uni == null)
+                {
+                    return PartialView("_Error");
+                }
+                uni.PreferredDate = GetDateTimeForInitial(uni as BaseModel).ToString("dd/MM/yyyy");
+                return PartialView(CONSTVALUE.PARTIAL_VIEW_UNIVERSITY_FOLDER + "_UniInvoice.cshtml", uni);
             }
             return PartialView("_Error");
         }
-
+        
         [ValidateAntiForgeryToken]
         public ActionResult PostInvoice_Adult(AdultModel adult)
         {
             if (ModelState.IsValid)
             {
                 contentController.SetPostInvoice_Adult(adult);
-                adult = contentController.GetAdultModelById(adult.Id);
+                adult = contentController.GetModelById_Adult(adult.Id);
 
                 //Save Group Coordinator and Invoicee on ThankQ BD
                 jsonDataController.CreateNewContactOnThankQ<AdultModel>(adult);
@@ -71,7 +77,34 @@ namespace SYJMA.Umbraco.Controllers
                 contentController.SetPostAdditionalBooking_Adult(adult);
                 NameValueCollection routeValues = new NameValueCollection();
                 routeValues.Add("mainBookingId", adult.Id.ToString());
-                routeValues.Add("type", "Adult");
+                routeValues.Add("type", TOURCATEGORY.ADULT);
+
+                return RedirectToUmbracoPage(CONSTVALUE.BOOK_COMPLETION_CONTENT_ID, routeValues);
+            }
+            return CurrentUmbracoPage();
+        }
+
+        [ValidateAntiForgeryToken]
+        public ActionResult PostInvoice_University(UniversityModel uni)
+        {
+            if (ModelState.IsValid)
+            {
+                contentController.SetPostInvoice_University(uni);
+                uni = contentController.GetModelById_University(uni.Id);
+
+                //Create new contact with primary category as schools and contacttype as organisation
+                uni.SerialNumber = jsonDataController.CreateNewOrganisationContactOnThankQ<UniversityModel>(uni);
+                //Save Group Coordinator and Invoicee on ThankQ BD
+                jsonDataController.CreateNewContactOnThankQ<UniversityModel>(uni);
+                //Create new Tour Booking Record on ThankQ DB
+                uni.TourBookingID = jsonDataController.CreateNewTourBookingOnThankQ<UniversityModel>(uni);
+                //Create new Attendee Summary on ThankQ DB
+                jsonDataController.CreateNewTourBookingAttendeeSummaryOnThankQ<UniversityModel>(uni);
+                //Save booking record on Umbraco CMS
+                contentController.SetPostAdditionalBooking_University(uni);
+                NameValueCollection routeValues = new NameValueCollection();
+                routeValues.Add("mainBookingId", uni.Id.ToString());
+                routeValues.Add("type", TOURCATEGORY.UNIVERSITY);
 
                 return RedirectToUmbracoPage(CONSTVALUE.BOOK_COMPLETION_CONTENT_ID, routeValues);
             }

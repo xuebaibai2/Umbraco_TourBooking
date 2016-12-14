@@ -27,6 +27,7 @@ namespace SYJMA.Umbraco.Utility
         public const string GET_YEARGROUP = DOMAIN + "LookupValue?lookupname=yeargroup&bomtype=event";//Update bomtype from event to tour
         public const string GET_SUBJECTAREA = DOMAIN + "LookupValue?lookupname=subjectarea&bomtype=event";//Update bomtype from event to tour
         public const string GET_SCHOOLCONTACTS = DOMAIN + "Contacts?primarycategory=Schools";
+        public const string GET_UNICONTACTS = DOMAIN + "Contacts?primarycategory=University";
 
         public const string POST_TOURBOOKING = DOMAIN + "Tour/{0}/TourBooking";
         public const string POST_TOURBOOKINGATTENDEESUMMARY = DOMAIN + "Tour/{0}/TourBooking/{1}/TourBookingAttendeeSummary";
@@ -42,6 +43,7 @@ namespace SYJMA.Umbraco.Utility
         /// </summary>
         public const string SCHOOL_VISITS_CONTENT = "School Visits";
         public const string ADULT_VISITS_CONTENT = "Adult Visits";
+        public const string UNIVERSITY_VISITS_CONTENT = "University Visits";
 
         /// <summary>
         /// Constant partial view folder
