@@ -48,8 +48,8 @@
         @Html.HiddenFor(x => x.Event.id, new { @id = "selectedEventId" })
         @Html.HiddenFor(x => x.Event.IsInvoiceOnly, new { @id = "isInvoiceOnly" })
         @Html.HiddenFor(x => x.Id)
-        @Html.HiddenFor(x => x.StaffNumber)
         @Html.HiddenFor(x => x.StudentsNumber)
+        @Html.HiddenFor(x => x.Comments)
         <div class="col-md-12">
             <a href="@ViewBag.parentUrl" class="btn btn-md btn-primary pull-left">Back</a>
             <input type="submit" name="submit" value="Next" class="btn btn-md btn-primary pull-right" />

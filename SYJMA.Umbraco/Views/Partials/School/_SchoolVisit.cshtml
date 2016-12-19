@@ -8,6 +8,13 @@
 <script>
     var baseUrl = '@ViewBag.rootUrl';
     var category = '@Model.type';
+
+    function validationForm() {
+        if ($('#staffNo').val() == '') {
+            $('#staffNo').val('0');
+        }
+        return true;
+    }
 </script>
 
 <script src="~/Scripts/getnamelist.js"></script>
@@ -15,7 +22,7 @@
 @* Date Pciker jQuery *@
 <script src="~/Scripts/DatePicker.js"></script>
 
-@using (Html.BeginUmbracoForm<InitialController>("PostInitialPage_School"))
+@using (Html.BeginUmbracoForm<InitialController>("PostInitialPage_School", null, new Dictionary<string, object> { { "id", "initialForm" }, { "onsubmit", "return validationForm()" } }))
 {
     @Html.AntiForgeryToken()
 
@@ -59,6 +66,7 @@
         <div class="form-group col-md-12">
             @Html.Label("comment", "Comments / Special Requirements ")
             @Html.TextAreaFor(m => m.Comments, new { @id = "comment", @class = "form-control" })
+            <span style="color: red;">@Html.ValidationMessageFor(m => m.Comments)</span>
         </div>
 
         @Html.HiddenFor(x => x.type)

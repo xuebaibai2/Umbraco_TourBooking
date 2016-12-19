@@ -414,7 +414,6 @@
     <Content Include="Views\Partials\_navi_Home.cshtml" />
     <Content Include="Views\InitialIdentification.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Partials\School\_SchoolVisit.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -522,6 +521,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Payment\" />
+    <Folder Include="Views\Shared\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

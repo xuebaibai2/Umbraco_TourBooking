@@ -20,6 +20,7 @@ namespace SYJMA.Umbraco.Models
         [RegularExpression(@"^[0-9]{2}\/[0-9]{2}\/[0-9]{4}", ErrorMessage="Not a valid date format!")]
         public string PreferredDate { get; set; }
 
+        [Required(ErrorMessage = "Please enter comments before proceeding")]
         public string Comments { get; set; }
 
         public string Program { get; set; }

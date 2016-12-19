@@ -78,6 +78,7 @@
         @Html.HiddenFor(x => x.SchoolName)
         @Html.HiddenFor(x => x.PreferredDate)
         @Html.HiddenFor(x=>x.Event.Invoice.Phone)
+        @Html.HiddenFor(x => x.Comments)
         <div class="col-md-12">
             <a href="@ViewBag.parentUrl" class="btn btn-md btn-primary pull-left">Back</a>
             <input type="submit" name="submit" value="Next" class="btn btn-md btn-primary pull-right" />

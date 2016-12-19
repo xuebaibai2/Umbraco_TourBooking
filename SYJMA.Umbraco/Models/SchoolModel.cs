@@ -12,7 +12,7 @@ namespace SYJMA.Umbraco.Models
     {
         public string SerialNumber { get; set; }
 
-        [Required(ErrorMessage="School name is required to process further")]
+        [Required(ErrorMessage="School Name is required")]
         public string SchoolName { get; set; }
 
         public string Year { get; set; }
@@ -21,10 +21,12 @@ namespace SYJMA.Umbraco.Models
 
         public int MainBookingID { get; set; }
 
-        [Required(ErrorMessage = "Staff Number is required")]
+        //[Required(ErrorMessage = "Staff Number is required")]
+        [RegularExpression(@"^[0-9]+$", ErrorMessage = "Please enter valid integer.")]
         public int StaffNumber { get; set; }
 
         [Required(ErrorMessage = "Student Number is required")]
+        [RegularExpression(@"^[1-9][0-9]*$",ErrorMessage="Please enter valid integer.")]
         public int StudentsNumber { get; set; }
         
         public IEnumerable<SelectListItem> YearList { get; set; }
