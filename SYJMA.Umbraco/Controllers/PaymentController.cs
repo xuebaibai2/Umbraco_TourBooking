@@ -14,31 +14,26 @@ namespace SYJMA.Umbraco.Controllers
 {
     public class PaymentController : SurfaceController
     {
-        private DataTypeController dataTypeController = new DataTypeController();
         private ContentController contentController = new ContentController();
         private JSONDataController jsonDataController = new JSONDataController();
 
         public PartialViewResult Payment(string bookType, string id)
         {
+            ViewBag.rootUrl = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"));
             int result;
             if (!Int32.TryParse(id, out result))
             {
-                return PartialView("_Error");
+                return contentController.GetPartialView_PageNotFound();
             }
 
-            ViewBag.rootUrl = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"));
             ViewBag.parentUrl = CurrentPage.Parent.Url + "?id=" + id;
 
-            if (bookType.Equals("School"))
-            {
-                return PartialView("_Error");
-            }
-            else if (bookType.Equals("Adult"))
+            if (bookType.Equals("Adult"))
             {
                 AdultModel adult = contentController.GetModelById_Adult(Convert.ToInt32(id));
                 if (adult == null)
                 {
-                    return PartialView("_Error");
+                    return contentController.GetPartialView_PageNotFound();
                 }
                 //Save Group Coordinator on ThankQ DB
                 jsonDataController.CreateNewContactOnThankQ<AdultModel>(adult);
@@ -54,9 +49,9 @@ namespace SYJMA.Umbraco.Controllers
             }
             else if (bookType.Equals("University"))
             {
-                return PartialView("_Error");
+                return contentController.GetPartialView_PageNotFound();
             }
-            return PartialView("_Error");
+            return contentController.GetPartialView_PageNotFound();
         }
 
         [ValidateAntiForgeryToken]

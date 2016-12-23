@@ -424,6 +424,7 @@
     <Compile Include="Controllers\ConfirmationPanelController.cs" />
     <Compile Include="Controllers\ContentController.cs" />
     <Compile Include="Controllers\DataTypeController.cs" />
+    <Compile Include="Controllers\ErrorPageController.cs" />
     <Compile Include="Controllers\InitialController.cs" />
     <Compile Include="Controllers\InvoiceController.cs" />
     <Compile Include="Controllers\JSONDataController.cs" />
@@ -436,6 +437,8 @@
     <Compile Include="Models\API\API_TOURBOOKING.cs" />
     <Compile Include="Models\API\API_TOURBOOKINGATTENDEESUMMARY.cs" />
     <Compile Include="Models\Attendee.cs" />
+    <Compile Include="Models\ErrorModel\IErrorPage.cs" />
+    <Compile Include="Models\ErrorModel\PageNotFound.cs" />
     <Compile Include="Models\EventCalendar.cs" />
     <Compile Include="Models\GroupCoordinator.cs" />
     <Compile Include="Models\BaseModel.cs" />
@@ -512,6 +515,8 @@
     <Content Include="Views\Partials\Uni\_UniBookingDetail.cshtml" />
     <Content Include="Views\Partials\Uni\_UniInvoice.cshtml" />
     <Content Include="Views\Partials\Uni\_UniBookCompletion.cshtml" />
+    <Content Include="Views\ErrorPage.cshtml" />
+    <Content Include="Views\Partials\Error\_404.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -520,6 +525,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Views\ErrorPage\" />
     <Folder Include="Views\Payment\" />
     <Folder Include="Views\Shared\" />
   </ItemGroup>

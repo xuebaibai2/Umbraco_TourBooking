@@ -1,0 +1,16 @@
+﻿@using SYJMA.Umbraco.Controllers;
+@inherits Umbraco.Web.Mvc.UmbracoViewPage<SYJMA.Umbraco.Models.ErrorModel.PageNotFound>
+
+<h3 class="text-center">@Model.ErrorTitle</h3>
+
+<div class="row text-center">    
+    <div>
+        @Model.ErrorDescription
+    </div>
+    <br />
+    <br />
+    <br />
+    <div class="col-md-6 col-md-push-3">
+        <a href="@ViewBag.rootUrl" class="btn btn-primary btn-block">Back to Home</a>
+    </div>
+</div>

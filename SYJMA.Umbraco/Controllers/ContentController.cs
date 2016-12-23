@@ -8,31 +8,41 @@ using SYJMA.Umbraco.Models;
 using SYJMA.Umbraco.Utility;
 using Umbraco.Core.Models;
 using Umbraco.Web.Mvc;
+using SYJMA.Umbraco.Models.ErrorModel;
+using umbraco;
 
 namespace SYJMA.Umbraco.Controllers
 {
     public class ContentController : SurfaceController
     {
-        DataTypeController dataType = new DataTypeController();
 
         /// <summary>
         /// Get School object from Umbraco record  
         /// </summary>
         /// <param name="id"></param>
         /// <returns>School Model</returns>
-        public SchoolModel GetModelById_School(int id)
+        internal SchoolModel GetModelById_School(int id)
         {
             var data = ApplicationContext.Services.ContentService.GetById(id);
-            if (data == null)
+            if (data == null || data.Parent() == null)
             {
                 return null;
             }
             else if (!data.Parent().Name.Equals(CONSTVALUE.SCHOOL_VISITS_CONTENT))
             {
-                if (data.GetValue("mainBookingID").Equals(data.Parent().GetValue("recordId")))
+                try
                 {
-                    return GetModel_School(data);
+                    if (data.GetValue("mainBookingID").Equals(data.Parent().GetValue("recordId")))
+                    {
+                        return GetModel_School(data);
+                    }
                 }
+                catch (KeyNotFoundException)
+                {
+
+                    return null;
+                }
+                
                 return null;
             }
             else
@@ -44,7 +54,7 @@ namespace SYJMA.Umbraco.Controllers
         internal AdultModel GetModelById_Adult(int id)
         {
             var data = ApplicationContext.Services.ContentService.GetById(id);
-            if (data == null)
+            if (data == null || data.Parent() == null)
             {
                 return null;
             }
@@ -61,7 +71,7 @@ namespace SYJMA.Umbraco.Controllers
         internal UniversityModel GetModelById_University(int id)
         {
             var data = ApplicationContext.Services.ContentService.GetById(id);
-            if (data == null)
+            if (data == null || data.Parent() == null)
             {
                 return null;
             }
@@ -73,6 +83,19 @@ namespace SYJMA.Umbraco.Controllers
             {
                 return GetModel_University(data);
             }
+        }
+
+        internal PartialViewResult GetPartialView_PageNotFound()
+        {
+            var contentID = uQuery.GetNodesByName(CONSTVALUE.PAGE_NOT_FOUND_CONTENT_NAME).FirstOrDefault().Id; ;
+            IContent data = ApplicationContext.Services.ContentService.GetById(contentID);
+            PageNotFound pageNotFoundModel =  new PageNotFound()
+            {
+                ErrorCode = Convert.ToString(data.GetValue("errorCode")),
+                ErrorTitle = Convert.ToString(data.GetValue("errorTitle")),
+                ErrorDescription = Convert.ToString(data.GetValue("errorDescription")),
+            };
+            return PartialView(CONSTVALUE.PARTIAL_VIEW_ERROR_FOLDER + "_404.cshtml", pageNotFoundModel);
         }
 
         public void CreateNewSchoolModel(SchoolModel school)
@@ -190,7 +213,6 @@ namespace SYJMA.Umbraco.Controllers
             Services.ContentService.Save(schoolRecord);
         }
 
-
         internal void SetPostCalendarForm_Adult(AdultModel adult)
         {
             var adultRecord = Services.ContentService.GetById(adult.Id);
@@ -204,8 +226,6 @@ namespace SYJMA.Umbraco.Controllers
             adultRecord.SetValue("isInvoiceOnly", adult.Event.IsInvoiceOnly);
             Services.ContentService.Save(adultRecord);
         }
-
-
 
         internal void SetPostCalendarForm_University(UniversityModel uni)
         {
@@ -343,29 +363,14 @@ namespace SYJMA.Umbraco.Controllers
         }
 
         /// <summary>
-        /// Search Content ID by content name from parent path
-        /// </summary>
-        /// <param name="contentName"></param>
-        /// <param name="page">The current published content</param>
-        /// <returns>Content ID</returns>
-        public int GetContentIDFromParent(string contentName, IPublishedContent page)
-        {
-            return Services.ContentService.GetChildren(page.Parent.Id)
-                .First(x => x.Name == contentName).Id;
-        }
-
-        /// <summary>
         /// Get Content ID based on content name
         /// </summary>
         /// <param name="contentName"></param>
-        /// <param name="page">The current published content</param>
         /// <returns>Content ID</returns>
-        public int GetContentIDFromSelf(string contentName, IPublishedContent page)
+        internal int GetContentIDByName(string contentName)
         {
-            return Services.ContentService.GetChildren(page.Id)
-                .First(x => x.Name == contentName).Id;
+            return uQuery.GetNodesByName(contentName).FirstOrDefault().Id;
         }
-
 
         #region 'Private Region'
 

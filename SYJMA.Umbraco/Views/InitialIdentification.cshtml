@@ -6,7 +6,7 @@
     string id = Request.QueryString.Get("id");
 }
 
-<h3 class="well">@CurrentPage.bookTypeDescription</h3>
+<h3>@CurrentPage.bookTypeDescription</h3>
 @if (id == null || id.Equals(""))
 {
     @Html.Action("InitialIdentification", "Initial", new { bookType = bookType })

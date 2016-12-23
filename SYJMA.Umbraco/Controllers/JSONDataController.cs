@@ -263,7 +263,7 @@ namespace SYJMA.Umbraco.Controllers
                     wc.Headers[HttpRequestHeader.Authorization] = GetClientCredential();
                     jsonResult = wc.DownloadString(apiURL);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     return null;
                 }

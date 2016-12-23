@@ -12,29 +12,6 @@ namespace SYJMA.Umbraco.Controllers
 {
     public partial class JSONDataController : SurfaceController
     {
-        //public string CreateNewTourBookingOnThankQ(SchoolModel school)
-        //{
-        //    float totalCost = GetTotalPrice(school.StudentsNumber, school.GetStudentAttendeeCost())
-        //        + GetTotalPrice(school.StaffNumber, school.GetStaffAttendeeCost());
-
-        //    API_TOURBOOKING tourBooking = new API_TOURBOOKING();
-        //    tourBooking.REFERENCE = "";
-        //    tourBooking.TOURID = school.Event.id;
-        //    tourBooking.STARTDATE = Convert.ToDateTime(school.Event.start).ToShortDateString();
-        //    tourBooking.STARTTIME = Convert.ToDateTime(school.Event.start).ToString("HH:mm:ffff");
-        //    tourBooking.ENDDATE = Convert.ToDateTime(school.Event.end).ToShortDateString();
-        //    tourBooking.ENDTIME = Convert.ToDateTime(school.Event.end).ToString("HH:mm:ffff");
-        //    tourBooking.STATUS = TOURBOOKINGSTATUS.BOOKED;
-        //    tourBooking.BOOKERSERIALNUMBER = school.Event.GroupCoordinator.SerialNumber;
-        //    tourBooking.FORSERIALNUMBER = school.SerialNumber;
-        //    tourBooking.INVOICEESERIALNUMBER = school.Event.Invoice.SerialNumber;
-        //    tourBooking.TOTALCOST = totalCost;
-        //    tourBooking.YEARGROUP = school.Year;
-        //    tourBooking.SUBJECT = school.SubjectArea;
-        //    tourBooking.BOOKINGCOMMENT = school.Comments;
-        //    return PostJsonData_NewTourBooking(school.Event.id, tourBooking).Trim('"');
-        //}
-
         public string CreateNewTourBookingOnThankQ<T>(BaseModel model)
         {
             API_TOURBOOKING tourBooking = new API_TOURBOOKING();
@@ -85,47 +62,6 @@ namespace SYJMA.Umbraco.Controllers
             }
             return null;
         }
-
-        //public List<string> CreateNewTourBookingAttendeeSummaryOnThankQ(SchoolModel school)
-        //{
-        //    List<string> results = new List<string>();
-        //    API_TOURBOOKINGATTENDEESUMMARY attendeeSummary = new API_TOURBOOKINGATTENDEESUMMARY();
-        //    attendeeSummary.TOURID = school.Event.id;
-        //    attendeeSummary.TOURBOOKINGID = school.TourBookingID;
-
-        //    for (int i = 0; i < school.AttendeeList.Count; i++)
-        //    {
-        //        if (school.AttendeeList[i].Type.Equals(ATTENDEETYPE.ATTENDEETYPE_STUDENT))
-        //        {
-        //            float studentPrice = school.GetStudentAttendeeCost();
-        //            int studentNumber = school.StudentsNumber;
-        //            float discount = 0;
-
-        //            attendeeSummary.ATTENDEETYPEID = school.GetStudentAttendeeID();
-        //            attendeeSummary.QUANTITYBOOKED = school.StudentsNumber;
-        //            attendeeSummary.QUANTITYATTENDED = school.StudentsNumber;
-        //            attendeeSummary.ATTENDEECOST = GetTotalPrice(studentNumber, studentPrice);
-        //            attendeeSummary.DISCOUNT = discount;
-        //            attendeeSummary.FINALCOST = GetFinalPrice(attendeeSummary.ATTENDEECOST, attendeeSummary.DISCOUNT);
-        //            results.Add(PostJsonData_NewTourBookingAttendeeSummary(attendeeSummary));
-        //        }
-        //        else if (school.AttendeeList[i].Type.Equals(ATTENDEETYPE.ATTENDEETYPE_STAFF))
-        //        {
-        //            float staffPrice = school.GetStaffAttendeeCost();
-        //            int staffNumber = school.StaffNumber;
-        //            float discount = 0;
-
-        //            attendeeSummary.ATTENDEETYPEID = school.GetStaffAttendeeID();
-        //            attendeeSummary.QUANTITYBOOKED = school.StaffNumber;
-        //            attendeeSummary.QUANTITYATTENDED = school.StaffNumber;
-        //            attendeeSummary.ATTENDEECOST = GetTotalPrice(staffNumber, staffPrice);
-        //            attendeeSummary.DISCOUNT = discount;
-        //            attendeeSummary.FINALCOST = GetFinalPrice(attendeeSummary.ATTENDEECOST, attendeeSummary.DISCOUNT);
-        //            results.Add(PostJsonData_NewTourBookingAttendeeSummary(attendeeSummary));
-        //        }
-        //    }
-        //    return results;
-        //}
 
         public List<string> CreateNewTourBookingAttendeeSummaryOnThankQ<T>(BaseModel model)
         {
@@ -216,13 +152,6 @@ namespace SYJMA.Umbraco.Controllers
             return results;
         }
 
-        //public string CreateNewSchoolContactOnThankQ(SchoolModel school)
-        //{
-        //    school.SerialNumber = PostJsonData_NewContact<SchoolModel>(school, CONTACTTYPE.ORGANISATION).Trim('"');
-
-        //    return school.SerialNumber;
-        //}
-
         public string CreateNewOrganisationContactOnThankQ<T>(BaseModel model)
         {
             if (typeof(T).Equals(new SchoolModel().GetType()))
@@ -239,20 +168,6 @@ namespace SYJMA.Umbraco.Controllers
             }
             return "Please Define your Model";
         }
-
-        //public void CreateNewContactOnThankQ(SchoolModel school)
-        //{
-        //    if (school.Event.IsSameContact)
-        //    {
-        //        school.Event.GroupCoordinator.SerialNumber = PostJsonData_NewContact<SchoolModel>(school, CONTACTTYPE.INDIVIDUAL, INDIVISUALTYPE.GROUPCOORDINATOR).Trim('"');
-        //        school.Event.Invoice.SerialNumber = school.Event.GroupCoordinator.SerialNumber;
-        //    }
-        //    else
-        //    {
-        //        school.Event.GroupCoordinator.SerialNumber = PostJsonData_NewContact<SchoolModel>(school, CONTACTTYPE.INDIVIDUAL, INDIVISUALTYPE.GROUPCOORDINATOR).Trim('"');
-        //        school.Event.Invoice.SerialNumber = PostJsonData_NewContact<SchoolModel>(school, CONTACTTYPE.INDIVIDUAL, INDIVISUALTYPE.INVOICEE).Trim('"');
-        //    }
-        //}
 
         public void CreateNewContactOnThankQ<T>(BaseModel model)
         {

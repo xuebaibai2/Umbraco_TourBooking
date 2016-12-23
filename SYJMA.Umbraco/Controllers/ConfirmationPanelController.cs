@@ -12,7 +12,6 @@ namespace SYJMA.Umbraco.Controllers
 {
     public class ConfirmationPanelController : SurfaceController
     {
-        private DataTypeController dataTypeController = new DataTypeController();
         private ContentController contentController = new ContentController();
 
         /// <summary>
@@ -23,11 +22,12 @@ namespace SYJMA.Umbraco.Controllers
         /// <returns>Partial view based on the booktype and the model</returns>
         public PartialViewResult ConfirmationPanel(string bookType, string id)
         {
+            ViewBag.rootUrl = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"));
             //If id is not an Integer type will redirect to error page
             int result;
             if (!Int32.TryParse(id, out result))
             {
-                return PartialView("_Error");
+                return contentController.GetPartialView_PageNotFound();
             }
 
             ViewBag.parentUrl = CurrentPage.Parent.Url + "?id=" + id;
@@ -37,7 +37,7 @@ namespace SYJMA.Umbraco.Controllers
                 SchoolModel school = contentController.GetModelById_School(Convert.ToInt32(id));
                 if (school == null)
                 {
-                    return PartialView("_Error");
+                    return contentController.GetPartialView_PageNotFound();
                 }
                 return PartialView(CONSTVALUE.PARTIAL_VIEW_SCHOOL_FOLDER + "_SchoolConfirmPanel.cshtml", school);
             }
@@ -46,7 +46,7 @@ namespace SYJMA.Umbraco.Controllers
                 AdultModel adult = contentController.GetModelById_Adult(Convert.ToInt32(id));
                 if (adult == null)
                 {
-                    return PartialView("_Error");
+                    return contentController.GetPartialView_PageNotFound();
                 }
                 return PartialView(CONSTVALUE.PARTIAL_VIEW_ADULT_FOLDER + "_AdultConfirmPanel.cshtml", adult);
             }
@@ -55,7 +55,7 @@ namespace SYJMA.Umbraco.Controllers
                 UniversityModel uni = contentController.GetModelById_University(Convert.ToInt32(id));
                 if (uni == null)
                 {
-                    return PartialView("_Error");
+                    return contentController.GetPartialView_PageNotFound();
                 }
                 return PartialView(CONSTVALUE.PARTIAL_VIEW_UNIVERSITY_FOLDER + "_UniConfirmPanel.cshtml", uni);
             }
@@ -75,7 +75,7 @@ namespace SYJMA.Umbraco.Controllers
             NameValueCollection routeValues = new NameValueCollection();
             routeValues.Add("id", school.Id.ToString());
 
-            return RedirectToUmbracoPage(contentController.GetContentIDFromSelf("SchoolDetail", CurrentPage), routeValues);
+            return RedirectToUmbracoPage(contentController.GetContentIDByName("SchoolDetail"), routeValues);
         }
 
         [ValidateAntiForgeryToken]
@@ -86,7 +86,7 @@ namespace SYJMA.Umbraco.Controllers
             NameValueCollection routeValues = new NameValueCollection();
             routeValues.Add("id", adult.Id.ToString());
 
-            return RedirectToUmbracoPage(contentController.GetContentIDFromSelf("AdultDetail", CurrentPage), routeValues);
+            return RedirectToUmbracoPage(contentController.GetContentIDByName("AdultDetail"), routeValues);
         }
 
         [ValidateAntiForgeryToken]
@@ -97,7 +97,7 @@ namespace SYJMA.Umbraco.Controllers
             NameValueCollection routeValues = new NameValueCollection();
             routeValues.Add("id", uni.Id.ToString());
 
-            return RedirectToUmbracoPage(contentController.GetContentIDFromSelf("UniversityDetail", CurrentPage), routeValues);
+            return RedirectToUmbracoPage(contentController.GetContentIDByName("UniversityDetail"), routeValues);
         }
 	}
 }

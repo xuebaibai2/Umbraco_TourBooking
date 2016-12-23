@@ -7,34 +7,35 @@ using System.Web.Mvc;
 using SYJMA.Umbraco.Models;
 using SYJMA.Umbraco.Utility;
 using Umbraco.Web.Mvc;
+using SYJMA.Umbraco.Models.ErrorModel;
 namespace SYJMA.Umbraco.Controllers
 {
     public class BookCompletionController : SurfaceController
     {
-        private DataTypeController dataTypeController = new DataTypeController();
         private ContentController contentController = new ContentController();
         private JSONDataController jsonDataController = new JSONDataController();
 
         public PartialViewResult BookCompletion(string type, string mainBookingId)
         {
+            ViewBag.rootUrl = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"));
             int result;
             if (!Int32.TryParse(mainBookingId, out result))
             {
-                return PartialView("_Error");
+                return contentController.GetPartialView_PageNotFound();
             }
             if (type.Equals(TOURCATEGORY.SCHOOL))
             {
                 SchoolModel school = contentController.GetModelById_School(Convert.ToInt32(mainBookingId));
                 if (school == null)
                 {
-                    return PartialView("_Error");
+                    return contentController.GetPartialView_PageNotFound();
                 }
                 List<SchoolModel> schoolList = new List<SchoolModel>() ;
                 schoolList.Add(school);
                 var childIdList = Services.ContentService.GetChildren(Convert.ToInt32(mainBookingId)).Select(x=>x.Id).ToList();
                 if (childIdList == null)
                 {
-                    return PartialView("_Error");
+                    return contentController.GetPartialView_PageNotFound();
                 }
                 foreach (int id in childIdList)
                 {
@@ -47,7 +48,7 @@ namespace SYJMA.Umbraco.Controllers
                 AdultModel adult = contentController.GetModelById_Adult(Convert.ToInt32(mainBookingId));
                 if (adult == null)
                 {
-                    return PartialView("_Error");
+                    return contentController.GetPartialView_PageNotFound();
                 }
                 return PartialView(CONSTVALUE.PARTIAL_VIEW_ADULT_FOLDER + "_AdultBookCompletion.cshtml", adult);
             }
@@ -56,7 +57,7 @@ namespace SYJMA.Umbraco.Controllers
                 UniversityModel uni = contentController.GetModelById_University(Convert.ToInt32(mainBookingId));
                 if (uni == null)
                 {
-                    return PartialView("_Error");
+                    return contentController.GetPartialView_PageNotFound();
                 }
                 return PartialView(CONSTVALUE.PARTIAL_VIEW_UNIVERSITY_FOLDER + "_UniBookCompletion.cshtml", uni);
             }

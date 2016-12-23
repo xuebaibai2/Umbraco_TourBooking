@@ -10,12 +10,13 @@ using SYJMA.Umbraco.Utility;
 using umbraco;
 using umbraco.NodeFactory;
 using Umbraco.Web.Mvc;
+using Umbraco.Core.Models;
+using SYJMA.Umbraco.Models.ErrorModel;
 
 namespace SYJMA.Umbraco.Controllers
 {
     public class AdditionalBookingDetailController : SurfaceController
     {
-        private DataTypeController dataTypeController = new DataTypeController();
         private ContentController contentController = new ContentController();
         private JSONDataController jsonDataController = new JSONDataController();
 
@@ -27,10 +28,11 @@ namespace SYJMA.Umbraco.Controllers
         /// <returns>Partial view based on the booktype and the model</returns>
         public PartialViewResult AdditionalBookingDetail(string bookType, string id)
         {
+            ViewBag.rootUrl = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"));
             int result;
             if (!Int32.TryParse(id, out result))
             {
-                return PartialView("_Error");
+                return contentController.GetPartialView_PageNotFound();
             }
 
             if (bookType.Equals(TOURCATEGORY.SCHOOL))
@@ -38,7 +40,7 @@ namespace SYJMA.Umbraco.Controllers
                 SchoolModel school = contentController.GetModelById_School(Convert.ToInt32(id));
                 if (school == null)
                 {
-                    return PartialView("_Error");
+                    return contentController.GetPartialView_PageNotFound();
                 }
 
                 school.SubTourIDList = Session["idList"] as List<int>;

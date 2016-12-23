@@ -16,7 +16,6 @@ namespace SYJMA.Umbraco.Controllers
 {
     public class InitialController : SurfaceController
     {
-        private DataTypeController dataTypeController = new DataTypeController();
         private ContentController contentController = new ContentController();
         private JSONDataController jsonDataController = new JSONDataController();
 
@@ -72,7 +71,7 @@ namespace SYJMA.Umbraco.Controllers
                 contentController.SetPostInitialPage_School(school, CurrentPage);
                 NameValueCollection routeValues = new NameValueCollection();
                 routeValues.Add("id", school.Id.ToString());
-                return RedirectToUmbracoPage(contentController.GetContentIDFromParent("School Calendar Form", CurrentPage), routeValues);
+                return RedirectToUmbracoPage(contentController.GetContentIDByName("School Calendar Form"), routeValues);
             }
             return CurrentUmbracoPage();
         }
@@ -104,7 +103,7 @@ namespace SYJMA.Umbraco.Controllers
             contentController.SetPostSubTourInitialPage_School(school);
             NameValueCollection routeValues = new NameValueCollection();
             routeValues.Add("id", school.Id.ToString());
-            return RedirectToUmbracoPage(contentController.GetContentIDFromParent("School Calendar Form", CurrentPage), routeValues);
+            return RedirectToUmbracoPage(contentController.GetContentIDByName("School Calendar Form"), routeValues);
         }
 
         #endregion
@@ -123,7 +122,7 @@ namespace SYJMA.Umbraco.Controllers
                 contentController.SetPostInitialPage_Adult(adult, CurrentPage);
                 NameValueCollection routeValues = new NameValueCollection();
                 routeValues.Add("id", adult.Id.ToString());
-                return RedirectToUmbracoPage(contentController.GetContentIDFromParent("Adult Calendar Form", CurrentPage), routeValues);
+                return RedirectToUmbracoPage(contentController.GetContentIDByName("Adult Calendar Form"), routeValues);
             }
             return CurrentUmbracoPage();
         }
@@ -139,7 +138,7 @@ namespace SYJMA.Umbraco.Controllers
                 contentController.SetPostInitialPage_University(uni, CurrentPage);
                 NameValueCollection routeValues = new NameValueCollection();
                 routeValues.Add("id", uni.Id.ToString());
-                return RedirectToUmbracoPage(contentController.GetContentIDFromParent("University Calendar Form", CurrentPage), routeValues);
+                return RedirectToUmbracoPage(contentController.GetContentIDByName("University Calendar Form"), routeValues);
             }
             return CurrentUmbracoPage();
         }

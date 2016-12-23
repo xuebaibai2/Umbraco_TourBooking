@@ -12,7 +12,6 @@ namespace SYJMA.Umbraco.Controllers
 {
     public class BookingDetailController : SurfaceController
     {
-        private DataTypeController dataTypeController = new DataTypeController();
         private ContentController contentController = new ContentController();
         private JSONDataController jsonDataController = new JSONDataController();
 
@@ -24,10 +23,11 @@ namespace SYJMA.Umbraco.Controllers
         /// <returns>Partial view based on the booktype and the model</returns>
         public PartialViewResult BookingDetail(string bookType, string id)
         {
+            ViewBag.rootUrl = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"));
             int result;
             if (!Int32.TryParse(id, out result))
             {
-                return PartialView("_Error");
+                return contentController.GetPartialView_PageNotFound();
             }
 
             ViewBag.parentUrl = CurrentPage.Parent.Url + "?id=" + id;
@@ -37,7 +37,7 @@ namespace SYJMA.Umbraco.Controllers
                 SchoolModel school = contentController.GetModelById_School(Convert.ToInt32(id));
                 if (school == null)
                 {
-                    return PartialView("_Error");
+                    return contentController.GetPartialView_PageNotFound();
                 }
                 school.PreferredDate = GetDateTimeForInitial(school as BaseModel).ToString("dd/MM/yyyy");
                 school.Event.Invoice.Phone = "0";
@@ -48,7 +48,7 @@ namespace SYJMA.Umbraco.Controllers
                 AdultModel adult = contentController.GetModelById_Adult(Convert.ToInt32(id));
                 if (adult == null)
                 {
-                    return PartialView("_Error");
+                    return contentController.GetPartialView_PageNotFound();
                 }
                 adult.PreferredDate = GetDateTimeForInitial(adult as BaseModel).ToString("dd/MM/yyyy");
                 return PartialView(CONSTVALUE.PARTIAL_VIEW_ADULT_FOLDER + "_AdultBookingDetail.cshtml", adult);
@@ -58,7 +58,7 @@ namespace SYJMA.Umbraco.Controllers
                 UniversityModel uni = contentController.GetModelById_University(Convert.ToInt32(id));
                 if (uni == null)
                 {
-                    return PartialView("_Error");
+                    return contentController.GetPartialView_PageNotFound();
                 }
                 uni.PreferredDate = GetDateTimeForInitial(uni as BaseModel).ToString("dd/MM/yyyy");
                 return PartialView(CONSTVALUE.PARTIAL_VIEW_UNIVERSITY_FOLDER + "_UniBookingDetail.cshtml", uni);
@@ -79,7 +79,7 @@ namespace SYJMA.Umbraco.Controllers
                 contentController.SetPostBooking_School(school);
                 NameValueCollection routeValues = new NameValueCollection();
                 routeValues.Add("id", school.Id.ToString());
-                return RedirectToUmbracoPage(contentController.GetContentIDFromSelf("SchoolAdditionalDetail", CurrentPage), routeValues);
+                return RedirectToUmbracoPage(contentController.GetContentIDByName("SchoolAdditionalDetail"), routeValues);
             }
             return CurrentUmbracoPage();
         }
@@ -96,11 +96,11 @@ namespace SYJMA.Umbraco.Controllers
 
                 if (adult.Event.IsInvoiceOnly)
                 {
-                    return RedirectToUmbracoPage(contentController.GetContentIDFromSelf("AdultInvoice", CurrentPage), routeValues);
+                    return RedirectToUmbracoPage(contentController.GetContentIDByName("AdultInvoice"), routeValues);
                 }
                 else
                 {
-                    return RedirectToUmbracoPage(contentController.GetContentIDFromSelf("AdultPayment", CurrentPage), routeValues);
+                    return RedirectToUmbracoPage(contentController.GetContentIDByName("AdultPayment"), routeValues);
                 }
             }
             return CurrentUmbracoPage();
@@ -118,11 +118,11 @@ namespace SYJMA.Umbraco.Controllers
 
                 if (uni.Event.IsInvoiceOnly)
                 {
-                    return RedirectToUmbracoPage(contentController.GetContentIDFromSelf("UniversityInvoice", CurrentPage), routeValues);
+                    return RedirectToUmbracoPage(contentController.GetContentIDByName("UniversityInvoice"), routeValues);
                 }
                 else
                 {
-                    return RedirectToUmbracoPage(contentController.GetContentIDFromSelf("UniversityPayment", CurrentPage), routeValues);
+                    return RedirectToUmbracoPage(contentController.GetContentIDByName("UniversityPayment"), routeValues);
                 }
             }
             return CurrentUmbracoPage();

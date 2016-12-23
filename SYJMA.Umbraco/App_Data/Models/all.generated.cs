@@ -8,7 +8,7 @@ using  Umbraco.Web;
 using  Umbraco.ModelsBuilder;
 using  Umbraco.ModelsBuilder.Umbraco;
 [assembly: PureLiveAssembly]
-[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "2a2669a6836f2da3")]
+[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "1f78c089044c67a0")]
 [assembly:System.Reflection.AssemblyVersion("0.0.0.1")]
 
 
@@ -1652,6 +1652,59 @@ namespace Umbraco.Web.PublishedContentModels
 		public object BookType
 		{
 			get { return this.GetPropertyValue("bookType"); }
+		}
+	}
+
+	/// <summary>Error Page</summary>
+	[PublishedContentModel("errorPage")]
+	public partial class ErrorPage : Master
+	{
+#pragma warning disable 0109 // new is redundant
+		public new const string ModelTypeAlias = "errorPage";
+		public new const PublishedItemType ModelItemType = PublishedItemType.Content;
+#pragma warning restore 0109
+
+		public ErrorPage(IPublishedContent content)
+			: base(content)
+		{ }
+
+#pragma warning disable 0109 // new is redundant
+		public new static PublishedContentType GetModelContentType()
+		{
+			return PublishedContentType.Get(ModelItemType, ModelTypeAlias);
+		}
+#pragma warning restore 0109
+
+		public static PublishedPropertyType GetModelPropertyType<TValue>(Expression<Func<ErrorPage, TValue>> selector)
+		{
+			return PublishedContentModelUtility.GetModelPropertyType(GetModelContentType(), selector);
+		}
+
+		///<summary>
+		/// Error Code
+		///</summary>
+		[ImplementPropertyType("errorCode")]
+		public string ErrorCode
+		{
+			get { return this.GetPropertyValue<string>("errorCode"); }
+		}
+
+		///<summary>
+		/// Error Description
+		///</summary>
+		[ImplementPropertyType("errorDescription")]
+		public string ErrorDescription
+		{
+			get { return this.GetPropertyValue<string>("errorDescription"); }
+		}
+
+		///<summary>
+		/// Error Title
+		///</summary>
+		[ImplementPropertyType("errorTitle")]
+		public string ErrorTitle
+		{
+			get { return this.GetPropertyValue<string>("errorTitle"); }
 		}
 	}
 

@@ -1,0 +1,11 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage<ContentModels.ErrorPage>
+@using ContentModels = Umbraco.Web.PublishedContentModels;
+@{
+	Layout = "Master.cshtml";
+}
+@Html.Action("PageNotFound", "ErrorPage",  new SYJMA.Umbraco.Models.ErrorModel.IErrorPage()
+    {
+        ErrorCode = CurrentPage.errorCode,
+        ErrorDescription = CurrentPage.errorDescription,
+        ErrorTitle = CurrentPage.errorTitle
+    })

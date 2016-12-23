@@ -4,5 +4,5 @@
 	Layout = "Master.cshtml";
     string bookType = CurrentPage.bookType;
 }
-<h3 class="well">@CurrentPage.pageHeader</h3>
+<h3>@CurrentPage.pageHeader</h3>
 @Html.Action("BookingDetail", "BookingDetail", new {bookType = bookType, id = Request.QueryString.Get("id")})
