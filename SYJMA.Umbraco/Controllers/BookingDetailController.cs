@@ -129,7 +129,7 @@ namespace SYJMA.Umbraco.Controllers
         }
         private DateTime GetDateTimeForInitial(BaseModel viewModel)
         {
-            return DateTime.ParseExact(viewModel.PreferredDate, "MM/d/yyyy hh:mm:ss tt", new System.Globalization.CultureInfo("en-AU"), System.Globalization.DateTimeStyles.None);
+            return DateTime.ParseExact(viewModel.PreferredDate, "M/d/yyyy hh:mm:ss tt", new System.Globalization.CultureInfo("en-AU"), System.Globalization.DateTimeStyles.None);
         }
     }
 }

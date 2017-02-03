@@ -189,6 +189,7 @@ namespace SYJMA.Umbraco.Controllers
             {
                 AdultModel adult = (AdultModel)model;
                 adult.Event.GroupCoordinator.SerialNumber = PostJsonData_NewContact<AdultModel>(adult, CONTACTTYPE.INDIVIDUAL, INDIVISUALTYPE.GROUPCOORDINATOR).Trim('"');
+                adult.Event.Invoice.SerialNumber = PostJsonData_NewContact<AdultModel>(adult, CONTACTTYPE.INDIVIDUAL, INDIVISUALTYPE.INVOICEE).Trim('"');
             }
             else if (typeof(T).Equals(new UniversityModel().GetType()))
             {

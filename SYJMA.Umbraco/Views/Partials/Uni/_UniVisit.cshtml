@@ -4,6 +4,13 @@
 <script>
     var baseUrl = '@ViewBag.rootUrl';
     var category = '@Model.type';
+
+    function validationForm() {
+        if ($('#staffNo').val() == '') {
+            $('#staffNo').val('0');
+        }
+        return true;
+    }
 </script>
 
 <script src="~/Scripts/getnamelist.js"></script>
@@ -11,33 +18,36 @@
 @* Date Pciker jQuery *@
 <script src="~/Scripts/DatePicker.js"></script>
 
-@using (Html.BeginUmbracoForm<InitialController>("PostInitialPage_University"))
+@using (Html.BeginUmbracoForm<InitialController>("PostInitialPage_University", null, new Dictionary<string, object> { { "onsubmit", "return validationForm()" } }))
 {
     @Html.AntiForgeryToken()
-
+    
     <div class="row form-input">
         <div class="form-group col-md-12">
-            @Html.Label("Name", "Name of University ")
+            @Html.Label("Name", "Name of University *")
             @Html.TextBoxFor(m => m.UniName, new { @id = "Name", @class = "form-control", @placeholder = "Start typing to select your university" })
+            <span style="color: red;">@Html.ValidationMessageFor(m => m.UniName)</span>
         </div>
 
         <div class="form-group col-md-12">
-            @Html.Label("CampusName", "Name of Campus ")
-            @Html.TextBoxFor(m => m.CampusName, new { @id = "CampusName", @class = "form-control"})
+            @Html.Label("CampusName", "Name of Campus *")
+            @Html.TextBoxFor(m => m.CampusName, new { @id = "CampusName", @class = "form-control" })
+            <span style="color: red;">@Html.ValidationMessageFor(m => m.CampusName)</span>
         </div>
 
         <div class="form-group col-md-12">
-            @Html.Label("Program", "Program / Tour Required ")
+            @Html.Label("Program", "Program / Tour Required *")
             @Html.DropDownListFor(m => m.Program, Model.ProgramList, new { @id = "Program", @class = "form-control" })
         </div>
 
         <div class="form-group col-sm-12">
-            @Html.Label("datepicker", "Preferred Date (you can check availability on the next page) ")
+            @Html.Label("datepicker", "Preferred Date *(you can check availability on the next page) ")
             @Html.TextBoxFor(m => m.PreferredDate, new { @id = "datepicker", @class = "form-control" })
+            <span style="color: red;">@Html.ValidationMessageFor(m => m.PreferredDate)</span>
         </div>
 
         <div class="form-group col-md-6">
-            @Html.Label("studentNo", "Number of Students ")
+            @Html.Label("studentNo", "Number of Students *")
             @Html.TextBoxFor(m => m.StudentNumber, new { @id = "studentNo", @class = "form-control" })
             <span style="color: red;">@Html.ValidationMessageFor(m => m.StudentNumber)</span>
         </div>
@@ -45,12 +55,12 @@
         <div class="form-group col-md-6">
             @Html.Label("staffNo", "Number of Staff ")
             @Html.TextBoxFor(m => m.StaffNumber, new { @id = "staffNo", @class = "form-control" })
-            <span style="color: red;">@Html.ValidationMessageFor(m => m.StaffNumber)</span>
         </div>
 
         <div class="form-group col-md-12">
-            @Html.Label("comment", "Comments / Special Requirements ")
+            @Html.Label("comment", "Comments / Special Requirements *")
             @Html.TextAreaFor(m => m.Comments, new { @id = "comment", @class = "form-control" })
+            <span style="color: red;">@Html.ValidationMessageFor(m => m.Comments)</span>
         </div>
 
         @Html.HiddenFor(x => x.type)

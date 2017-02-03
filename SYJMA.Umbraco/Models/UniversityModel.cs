@@ -19,13 +19,13 @@ namespace SYJMA.Umbraco.Models
         [Required(ErrorMessage = "University name is required to process further")]
         public string UniName { get; set; }
 
+        [Required(ErrorMessage = "Campus name is required to process further")]
         public string CampusName { get; set; }
-
-        [Required(ErrorMessage = "Staff Number is required")]
-        public int StaffNumber { get; set; }
 
         [Required(ErrorMessage = "Student Number is required")]
         public int StudentNumber { get; set; }
+
+        public int StaffNumber { get; set; }
 
         public Payment Payment { get; set; }
 

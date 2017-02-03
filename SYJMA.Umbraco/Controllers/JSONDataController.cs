@@ -17,9 +17,10 @@ namespace SYJMA.Umbraco.Controllers
     public partial class JSONDataController : SurfaceController
     {
         #region 'Get'
+
         /// <summary>
         /// Retrieve available Event/Tour information throught web services and return JSON data
-        /// Called from calendar.control.js, _AdultCalendar.cshtml file
+        /// Called from calendar.control.js, _AdultCalendar.cshtml
         /// </summary>
         /// <param name="eventName"></param>
         /// <returns></returns>
@@ -42,6 +43,11 @@ namespace SYJMA.Umbraco.Controllers
             return Json(eventList);
         }
 
+        /// <summary>
+        /// Get Attendee Type associated to corresponding event/tour ID 
+        /// </summary>
+        /// <param name="eventID"></param>
+        /// <returns></returns>
         public List<API_TOURATTENDEETYPE> GetJsonData_AttendeeType(string eventID)
         {
             var attendeeTypeResult = GetJsonResultAsString(string.Format(CONSTVALUE.GET_ATTENDEETYPE, eventID));

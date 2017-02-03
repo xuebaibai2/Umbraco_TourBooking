@@ -416,7 +416,6 @@ namespace SYJMA.Umbraco.Controllers
             return model;
         }
 
-
         private UniversityModel GetModel_University(IContent data)
         {
             EventCalendar eventCalendar = GetEventCalendar_University(data);
@@ -437,7 +436,6 @@ namespace SYJMA.Umbraco.Controllers
             };
             return model;
         }
-
 
         private DateTime GetDateTimeForPost(BaseModel viewModel)
         {
@@ -688,9 +686,5 @@ namespace SYJMA.Umbraco.Controllers
             };
         }
         #endregion
-
-
-
-
     }
 }
