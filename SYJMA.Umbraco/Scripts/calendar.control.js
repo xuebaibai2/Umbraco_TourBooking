@@ -1,9 +1,14 @@
 ﻿$(document).ready(function () {
     $('#calendar').fullCalendar({
         header: {
-            left: 'prev agendaWeek',
+            left: 'prev',
             center: 'title',
-            right: 'month next'
+            right: 'agendaWeek month next'
+        },
+        views: {
+            agendaWeek: {
+                columnFormat: 'ddd DD/M'
+            }
         },
         defaultView: 'agendaWeek',
         editable: true,
@@ -14,7 +19,7 @@
         maxTime: '17:00',
         firstDay: 1,
         weekends: false,
-        height: 250,
+        height: 240,
         timezone: 'local',
         titleFormat: 'D MMM YYYY',
         eventStartEditable: false,
@@ -31,8 +36,12 @@
             $('#selectedEventStart').val(calEvent.start.format());
             $('#selectedEventEnd').val(calEvent.end.format());
             $('#isInvoiceOnly').val(calEvent.IsInvoiceOnly);
+            addSelectionClass('.fc-content-skeleton table tbody tr', this, 'eventSelected');
         }
     });
+
+    $('button.fc-agendaWeek-button').text('Week View');
+    $('button.fc-month-button').text('Month View');
 
     $('#calendarForm input').on('change', function () {
         removeEvents();
@@ -42,6 +51,15 @@
         $('#externalLink').show();
     });
 });
+
+function addSelectionClass(parentNode, targetElement, className) {
+    $(parentNode).find($(targetElement).get(0).tagName.toLowerCase()).each(function () {
+        if ($(this).is('.' + className)) {
+            $(this).removeClass(className);
+        }
+    });
+    $(targetElement).addClass(className);
+}
 
 function addEvents(url) {
     $.ajax({

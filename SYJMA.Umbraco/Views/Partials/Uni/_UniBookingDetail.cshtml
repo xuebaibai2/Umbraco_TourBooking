@@ -15,13 +15,13 @@
             </div>
 
             <div class="form-group col-md-4">
-                @Html.Label("firstname", "Firtst Name *")
+                @Html.Label("firstname", "First Name *")
                 @Html.TextBoxFor(x => x.Event.GroupCoordinator.FirstName, new { @id = "firstname", @class = "form-control" })
                 <span style="color: red;">@Html.ValidationMessageFor(x => x.Event.GroupCoordinator.FirstName)</span>
             </div>
 
             <div class="form-group col-md-4">
-                @Html.Label("surename", "Surename *")
+                @Html.Label("surename", "Surname *")
                 @Html.TextBoxFor(x => x.Event.GroupCoordinator.SureName, new { @id = "surename", @class = "form-control" })
                 <span style="color: red;">@Html.ValidationMessageFor(x => x.Event.GroupCoordinator.SureName)</span>
             </div>

@@ -408,6 +408,7 @@
     <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\toggleField_displayData.js" />
     <Content Include="Scripts\toggleField_replicateData.js" />
+    <Content Include="Scripts\validation.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

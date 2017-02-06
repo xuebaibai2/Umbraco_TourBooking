@@ -4,19 +4,15 @@
 @{
     SelectListItem year = new SelectListItem() { Text = Model.Year, Value = Model.Year };
     SelectListItem subject = new SelectListItem() { Text = Model.SubjectArea, Value = Model.SubjectArea };
+    
+    var contactURL = Umbraco.Field("contactUsURL");        
+    
 }
 <script>
     var baseUrl = '@ViewBag.rootUrl';
     var category = '@Model.type';
-
-    function validationForm() {
-        if ($('#staffNo').val() == '') {
-            $('#staffNo').val('0');
-        }
-        return true;
-    }
 </script>
-
+<script src="~/Scripts/validation.js"></script>
 <script src="~/Scripts/getnamelist.js"></script>
 
 @* Date Pciker jQuery *@
@@ -25,55 +21,54 @@
 @using (Html.BeginUmbracoForm<InitialController>("PostInitialPage_School", null, new Dictionary<string, object> { { "id", "initialForm" }, { "onsubmit", "return validationForm()" } }))
 {
     @Html.AntiForgeryToken()
-
     <div class="row form-input">
         <div class="form-group col-md-12">
             @Html.Label("Name", "Name of School *")
             @Html.TextBoxFor(m => m.SchoolName, new { @id = "Name", @class = "form-control" })
-            <span style="color: red;">@Html.ValidationMessageFor(m => m.SchoolName)</span>
-            <small class="form-text text-muted help-block">If your school does not appear on this list, please contact us.</small>
+            <span id="Name-Validation" style="color: red;"></span>
+            <small class="form-text text-muted help-block">If your school does not appear on this list, please <a href="@contactURL" target="_blank">contact us</a>.</small>
         </div>
 
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-2 year-div">
             @Html.Label("Year", "Year *")
             @Html.DropDownListFor(m => m.Year, Model.YearList, new { @id = "Year", @class = "form-control" })
+        </div>
+
+        <div class="form-group col-md-push-2 col-md-6 datepicker-div">
+            @Html.Label("datepicker", "Preferred Date *(you can check availability on the next page) ")
+            @Html.TextBoxFor(m => m.PreferredDate, new { @id = "datepicker", @class = "form-control", @readonly = "readonly" })
+            <span id="datepicker-Validation" style="color: red;"></span>
+        </div>
+        <div class="col-md-12">
             <small class="form-text text-muted help-block">To book separate tours for different year groups, complete this form and then click Add Another booking on the last page.</small>
         </div>
-
-        <div class="form-group col-md-6">
-            @Html.Label("datepicker", "Preferred Date *(you can check availability on the next page) ")
-            @Html.TextBoxFor(m => m.PreferredDate, new { @id = "datepicker", @class = "form-control" })
-            <span style="color: red;">@Html.ValidationMessageFor(m => m.PreferredDate)</span>
-        </div>
-
         <div class="form-group col-md-12">
             @Html.Label("Subject", "Subject Area *")
             @Html.DropDownListFor(m => m.SubjectArea, Model.SubjectList, new { @id = "Subject", @class = "form-control" })
         </div>
 
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-3 number-div">
             @Html.Label("studentNo", "Number of Students *")
             @Html.TextBoxFor(m => m.StudentsNumber, new { @id = "studentNo", @class = "form-control" })
-            <span style="color: red;">@Html.ValidationMessageFor(m => m.StudentsNumber)</span>
+            <span id="studentNo-Validation" style="color: red;"></span>
         </div>
 
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-push-1 col-md-6 number-div">
             @Html.Label("staffNo", "Number of Staff ")
             @Html.TextBoxFor(m => m.StaffNumber, new { @id = "staffNo", @class = "form-control" })
-            <span style="color: red;">@Html.ValidationMessageFor(m => m.StaffNumber)</span>
+            <span id="staffNo-Validation" style="color: red;"></span>
         </div>
 
         <div class="form-group col-md-12">
-            @Html.Label("comment", "Comments / Special Requirements *")
+            @Html.Label("comment", "Comments / Special Requirements")
             @Html.TextAreaFor(m => m.Comments, new { @id = "comment", @class = "form-control" })
-            <span style="color: red;">@Html.ValidationMessageFor(m => m.Comments)</span>
         </div>
 
         @Html.HiddenFor(x => x.type)
         <input type="submit" name="submit" value="Next" class="btn btn-md btn-primary pull-right" />
     </div>
-    
-    
-    
-    
+
+
+
+
 }

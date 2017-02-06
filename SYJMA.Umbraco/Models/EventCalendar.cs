@@ -29,7 +29,7 @@ namespace SYJMA.Umbraco.Models
         {
             var start_time = Convert.ToDateTime(start);
             var end_time = Convert.ToDateTime(end);
-            return start_time.ToString("dddd dd MMMM") + " from " + start_time.ToString("htt") + " to " + end_time.ToString("htt");
+            return start_time.ToString("dddd dd MMMM") + " from " + start_time.ToString("h:mmtt") + " to " + end_time.ToString("h:mmtt");
                 
         }
     }

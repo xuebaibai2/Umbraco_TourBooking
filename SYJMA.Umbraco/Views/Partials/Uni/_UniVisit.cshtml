@@ -4,15 +4,8 @@
 <script>
     var baseUrl = '@ViewBag.rootUrl';
     var category = '@Model.type';
-
-    function validationForm() {
-        if ($('#staffNo').val() == '') {
-            $('#staffNo').val('0');
-        }
-        return true;
-    }
 </script>
-
+<script src="~/Scripts/validation.js"></script>
 <script src="~/Scripts/getnamelist.js"></script>
 
 @* Date Pciker jQuery *@
@@ -26,13 +19,13 @@
         <div class="form-group col-md-12">
             @Html.Label("Name", "Name of University *")
             @Html.TextBoxFor(m => m.UniName, new { @id = "Name", @class = "form-control", @placeholder = "Start typing to select your university" })
-            <span style="color: red;">@Html.ValidationMessageFor(m => m.UniName)</span>
+            <span id="Name-Validation" style="color: red;"></span>
         </div>
 
         <div class="form-group col-md-12">
             @Html.Label("CampusName", "Name of Campus *")
             @Html.TextBoxFor(m => m.CampusName, new { @id = "CampusName", @class = "form-control" })
-            <span style="color: red;">@Html.ValidationMessageFor(m => m.CampusName)</span>
+            <span id="CampusName-Validation" style="color: red;"></span>
         </div>
 
         <div class="form-group col-md-12">
@@ -42,25 +35,25 @@
 
         <div class="form-group col-sm-12">
             @Html.Label("datepicker", "Preferred Date *(you can check availability on the next page) ")
-            @Html.TextBoxFor(m => m.PreferredDate, new { @id = "datepicker", @class = "form-control" })
-            <span style="color: red;">@Html.ValidationMessageFor(m => m.PreferredDate)</span>
+            @Html.TextBoxFor(m => m.PreferredDate, new { @id = "datepicker", @class = "form-control", @readonly = "readonly" })
+            <span id="datepicker-Validation" style="color: red;"></span>
         </div>
 
         <div class="form-group col-md-6">
             @Html.Label("studentNo", "Number of Students *")
             @Html.TextBoxFor(m => m.StudentNumber, new { @id = "studentNo", @class = "form-control" })
-            <span style="color: red;">@Html.ValidationMessageFor(m => m.StudentNumber)</span>
+            <span id="studentNo-Validation" style="color: red;"></span>
         </div>
 
         <div class="form-group col-md-6">
             @Html.Label("staffNo", "Number of Staff ")
             @Html.TextBoxFor(m => m.StaffNumber, new { @id = "staffNo", @class = "form-control" })
+            <span id="staffNo-Validation" style="color: red;"></span>
         </div>
 
         <div class="form-group col-md-12">
-            @Html.Label("comment", "Comments / Special Requirements *")
+            @Html.Label("comment", "Comments / Special Requirements")
             @Html.TextAreaFor(m => m.Comments, new { @id = "comment", @class = "form-control" })
-            <span style="color: red;">@Html.ValidationMessageFor(m => m.Comments)</span>
         </div>
 
         @Html.HiddenFor(x => x.type)

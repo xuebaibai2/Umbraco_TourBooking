@@ -34,10 +34,10 @@
         <div class="form-group col-md-4">
             @Html.Label("cafe", "Café Catering Required? ")
             @Html.CheckBoxFor(x => x.Event.AdditionalInfo.CafeRequire, new { @id = "cafe" })
-            <a href="@Umbraco.Field("cafeMenuLink")">Link to Menu</a>
+            <a href="@Umbraco.Field("cafeMenuLink")" target="_blank">Link to Menu</a>
         </div>
         <div class="form-group col-md-8">
-            Risk Assessment Form <a href="@Umbraco.Field("riskAssessmentFormLink")">Link</a>
+            Risk Assessment Form <a href="@Umbraco.Field("riskAssessmentFormLink")" target="_blank">Link</a>
         </div>
         <div class="form-group col-md-12">
             @Html.Label("officer", "SJM Officer Email / Phone")

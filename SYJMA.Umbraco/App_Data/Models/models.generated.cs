@@ -19,8 +19,8 @@ using Umbraco.ModelsBuilder;
 using Umbraco.ModelsBuilder.Umbraco;
 
 [assembly: PureLiveAssembly]
-[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "1f78c089044c67a0")]
-[assembly:System.Reflection.AssemblyVersion("0.0.0.4")]
+[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "3f61851ecded9968")]
+[assembly:System.Reflection.AssemblyVersion("0.0.0.2")]
 
 namespace Umbraco.Web.PublishedContentModels
 {
@@ -144,6 +144,15 @@ namespace Umbraco.Web.PublishedContentModels
 		public string BookTypeDescription
 		{
 			get { return this.GetPropertyValue<string>("bookTypeDescription"); }
+		}
+
+		///<summary>
+		/// Contact Us URL: Link to contact us page
+		///</summary>
+		[ImplementPropertyType("contactUsURL")]
+		public string ContactUsUrl
+		{
+			get { return this.GetPropertyValue<string>("contactUsURL"); }
 		}
 	}
 

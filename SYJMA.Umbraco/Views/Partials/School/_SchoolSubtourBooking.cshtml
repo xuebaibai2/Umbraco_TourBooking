@@ -4,6 +4,7 @@
 
 @* Date Pciker jQuery *@
 <script src="~/Scripts/DatePicker.js"></script>
+<script src="~/Scripts/validation.js"></script>
 <script>
     $(document).ready(function () {
         $('#Name').val('@Model.SchoolName');
@@ -29,6 +30,7 @@
         <div class="form-group col-md-6">
             @Html.Label("datepicker", "Preferred Date (you can check availability on the next page) ")
             @Html.TextBoxFor(m => m.PreferredDate, new { @id = "datepicker", @class = "form-control" })
+            <span id="datepicker-Validation" style="color: red;"></span>
         </div>
 
         <div class="form-group col-md-12">
@@ -39,11 +41,13 @@
         <div class="form-group col-md-6">
             @Html.Label("studentNo", "Number of Students ")
             @Html.TextBoxFor(m => m.StudentsNumber, new { @id = "studentNo", @class = "form-control" })
+            <span id="studentNo-Validation" style="color: red;"></span>
         </div>
 
         <div class="form-group col-md-6">
             @Html.Label("staffNo", "Number of Staff ")
             @Html.TextBoxFor(m => m.StaffNumber, new { @id = "staffNo", @class = "form-control" })
+            <span id="staffNo-Validation" style="color: red;"></span>
         </div>
 
         <div class="form-group col-md-12">

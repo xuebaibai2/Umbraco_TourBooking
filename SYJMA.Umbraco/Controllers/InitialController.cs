@@ -36,6 +36,7 @@ namespace SYJMA.Umbraco.Controllers
                 school.SubjectList = jsonDataController.GetJsonData_SubjectAreaList();
                 school.YearList = jsonDataController.GetJsonData_YearGroupList();
                 school.type = bookType;
+
                 return PartialView(CONSTVALUE.PARTIAL_VIEW_SCHOOL_FOLDER + "_SchoolVisit.cshtml", school);
             }
             else if (bookType.Equals(TOURCATEGORY.ADULT))

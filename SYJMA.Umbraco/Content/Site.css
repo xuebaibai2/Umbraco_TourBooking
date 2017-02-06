@@ -190,3 +190,44 @@ textarea {
 #footer_div{
     font-family:'sofia_promedium';
 }
+
+#datepicker, #staffNo, #studentNo, #adultNo{
+    max-width: 127px !important;
+}
+
+.datepicker-div, .year-div{
+    margin-bottom:0px;
+}
+
+#datepicker{
+    background-color: #ffffff;
+}
+
+.fc-center h2{
+    font-size:18px;
+    margin-top:7px !important;
+}
+button.fc-agendaWeek-button,
+button.fc-month-button,
+button.fc-next-button,
+button.fc-prev-button{
+    font-size:x-small !important;
+    margin-top:5px !important;
+}
+
+.fc-head{
+    color:white;
+    background-color:#5b9bd5 !important;
+}
+
+.fc-agendaWeek-view .fc-bg table tbody tr td:nth-child(1){
+    background-color:#eaeff7 !important;
+}
+
+.eventSelected{
+    background-color:#183b5a !important;
+}
+
+.radio{
+    padding-left:0px;
+}

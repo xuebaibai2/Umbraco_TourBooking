@@ -10,6 +10,7 @@ using Umbraco.Core.Models;
 using Umbraco.Web.Mvc;
 using SYJMA.Umbraco.Models.ErrorModel;
 using umbraco;
+using umbraco.NodeFactory;
 
 namespace SYJMA.Umbraco.Controllers
 {

@@ -1,17 +1,18 @@
 ﻿@using SYJMA.Umbraco.Controllers;
 @inherits Umbraco.Web.Mvc.UmbracoViewPage<SYJMA.Umbraco.Models.AdultModel>
-
+<script src="~/Scripts/validation.js"></script>
 @* Date Pciker jQuery *@
 <script src="~/Scripts/DatePicker.js"></script>
 
-@using (Html.BeginUmbracoForm<InitialController>("PostInitialPage_Adult"))
+@using (Html.BeginUmbracoForm<InitialController>("PostInitialPage_Adult", null, new Dictionary<string, object> { { "id", "initialForm" }, { "onsubmit", "return validationForm()" } }))
 {
     @Html.AntiForgeryToken()
 
     <div class="row form-input">
         <div class="form-group col-md-12">
-            @Html.Label("Name", "Name of Group *")
-            @Html.TextBoxFor(m => m.GroupName, new { @id = "Name", @class = "form-control" })
+            @Html.Label("AdultGroupName", "Name of Group *")
+            @Html.TextBoxFor(m => m.GroupName, new { @id = "AdultGroupName", @class = "form-control" })
+            <span id="Name-Validation" style="color: red;"></span>
         </div>
 
         <div class="form-group col-md-12">
@@ -21,16 +22,18 @@
 
         <div class="form-group col-sm-12">
             @Html.Label("datepicker", "Preferred Date *(you can check availability on the next page) ")
-            @Html.TextBoxFor(m => m.PreferredDate, new { @id = "datepicker", @class = "form-control" })
+            @Html.TextBoxFor(m => m.PreferredDate, new { @id = "datepicker", @class = "form-control", @readonly = "readonly" })
+            <span id="datepicker-Validation" style="color: red;"></span>
         </div>
 
-        <div class="form-group col-md-12">
+        <div class="form-group col-md-12 number-div">
             @Html.Label("adultNo", "Number of Adult *")
             @Html.TextBoxFor(m => m.AdultNumber, new { @id = "adultNo", @class = "form-control" })
+            <span id="adultNo-Validation" style="color: red;"></span>
         </div>
 
         <div class="form-group col-md-12">
-            @Html.Label("comment", "Comments / Special Requirements *")
+            @Html.Label("comment", "Comments / Special Requirements")
             @Html.TextAreaFor(m => m.Comments, new { @id = "comment", @class = "form-control" })
         </div>
 
