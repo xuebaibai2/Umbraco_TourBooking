@@ -220,6 +220,10 @@ button.fc-prev-button{
     background-color:#5b9bd5 !important;
 }
 
+.fc-agendaWeek-view .fc-bg table tbody tr td {
+    background-color:#88c874 !important;
+}
+
 .fc-agendaWeek-view .fc-bg table tbody tr td:nth-child(1){
     background-color:#eaeff7 !important;
 }
