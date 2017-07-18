@@ -14,8 +14,13 @@ x64/
 build/
 [Bb]in/
 [Oo]bj/
+SYJMA.Umbraco/App_Data/Logs/
+SYJMA.Umbraco/App_Data/preview/
 SYJMA.Umbraco/App_Data/TEMP/
-
+SYJMA.Umbraco/App_Data/NuGetBackup/
+SYJMA.Umbraco/App_Data/umbraco.config/
+SYJMA.Umbraco/App_Data/cache/
+Umbraco
 # Enable "build/" folder in the NuGet Packages folder since NuGet packages use it for MSBuild targets
 !packages/*/build/
 
