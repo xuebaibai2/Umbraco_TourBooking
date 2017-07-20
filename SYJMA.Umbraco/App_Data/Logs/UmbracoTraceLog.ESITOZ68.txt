@@ -47,3 +47,44 @@
  2017-07-20 11:37:30,949 [P24948/D2/T42] WARN  Umbraco.Web.Mvc.RenderRouteHandler - The current Document Type calendarForm matches a locally declared controller of type SYJMA.Umbraco.Controllers.CalendarFormController. Custom Controllers for Umbraco routing must implement 'Umbraco.Web.Mvc.IRenderController' and inherit from 'System.Web.Mvc.ControllerBase'.
  2017-07-20 11:37:52,984 [P24948/D2/T42] WARN  Umbraco.Web.Mvc.RenderRouteHandler - The current Document Type calendarForm matches a locally declared controller of type SYJMA.Umbraco.Controllers.CalendarFormController. Custom Controllers for Umbraco routing must implement 'Umbraco.Web.Mvc.IRenderController' and inherit from 'System.Web.Mvc.ControllerBase'.
  2017-07-20 11:41:11,956 [P24948/D2/T38] WARN  Umbraco.Web.Mvc.RenderRouteHandler - The current Document Type calendarForm matches a locally declared controller of type SYJMA.Umbraco.Controllers.CalendarFormController. Custom Controllers for Umbraco routing must implement 'Umbraco.Web.Mvc.IRenderController' and inherit from 'System.Web.Mvc.ControllerBase'.
+ 2017-07-20 13:18:13,376 [P24252/D2/T1] INFO  Umbraco.Core.CoreBootManager - Umbraco 7.5.4 application starting on ESITOZ68
+ 2017-07-20 13:18:13,463 [P24252/D2/T1] INFO  Umbraco.Core.PluginManager - Determining hash of code files on disk
+ 2017-07-20 13:18:13,508 [P24252/D2/T1] INFO  Umbraco.Core.PluginManager - Hash determined (took 44ms)
+ 2017-07-20 13:18:13,652 [P24252/D2/T1] INFO  Umbraco.Core.PluginManager - Starting resolution types of umbraco.interfaces.IApplicationStartupHandler
+ 2017-07-20 13:18:14,593 [P24252/D2/T1] INFO  Umbraco.Core.PluginManager - Completed resolution of types of umbraco.interfaces.IApplicationStartupHandler, found 0 (took 940ms)
+ 2017-07-20 13:18:14,610 [P24252/D2/T1] INFO  Umbraco.Core.PluginManager - Starting resolution types of Umbraco.Core.PropertyEditors.IPropertyEditorValueConverter
+ 2017-07-20 13:18:14,619 [P24252/D2/T1] INFO  Umbraco.Core.PluginManager - Completed resolution of types of Umbraco.Core.PropertyEditors.IPropertyEditorValueConverter, found 0 (took 9ms)
+ 2017-07-20 13:18:14,620 [P24252/D2/T1] INFO  Umbraco.Core.PluginManager - Starting resolution types of Umbraco.Core.PropertyEditors.IPropertyValueConverter
+ 2017-07-20 13:18:14,628 [P24252/D2/T1] INFO  Umbraco.Core.PluginManager - Completed resolution of types of Umbraco.Core.PropertyEditors.IPropertyValueConverter, found 0 (took 8ms)
+ 2017-07-20 13:18:14,645 [P24252/D2/T1] INFO  Umbraco.Core.PluginManager - Starting resolution types of Umbraco.Web.Mvc.SurfaceController
+ 2017-07-20 13:18:14,658 [P24252/D2/T1] INFO  Umbraco.Core.PluginManager - Completed resolution of types of Umbraco.Web.Mvc.SurfaceController, found 0 (took 12ms)
+ 2017-07-20 13:18:14,658 [P24252/D2/T1] INFO  Umbraco.Core.PluginManager - Starting resolution types of Umbraco.Web.WebApi.UmbracoApiController
+ 2017-07-20 13:18:14,668 [P24252/D2/T1] INFO  Umbraco.Core.PluginManager - Completed resolution of types of Umbraco.Web.WebApi.UmbracoApiController, found 0 (took 9ms)
+ 2017-07-20 13:18:14,754 [P24252/D2/T1] INFO  Umbraco.Core.PluginManager - Starting resolution types of Umbraco.Core.Media.IThumbnailProvider
+ 2017-07-20 13:18:14,760 [P24252/D2/T1] INFO  Umbraco.Core.PluginManager - Completed resolution of types of Umbraco.Core.Media.IThumbnailProvider, found 0 (took 6ms)
+ 2017-07-20 13:18:14,761 [P24252/D2/T1] INFO  Umbraco.Core.PluginManager - Starting resolution types of Umbraco.Core.Media.IImageUrlProvider
+ 2017-07-20 13:18:14,769 [P24252/D2/T1] INFO  Umbraco.Core.PluginManager - Completed resolution of types of Umbraco.Core.Media.IImageUrlProvider, found 0 (took 8ms)
+ 2017-07-20 13:18:16,228 [P24252/D2/T1] INFO  Umbraco.Core.DatabaseContext - CanConnect = True
+ 2017-07-20 13:18:16,644 [P24252/D2/T1] INFO  Umbraco.Core.DatabaseContext - CanConnect = True
+ 2017-07-20 13:18:16,646 [P24252/D2/T1] INFO  Umbraco.Core.DatabaseContext - CanConnect = True
+ 2017-07-20 13:18:16,710 [P24252/D2/T1] INFO  Umbraco.Web.Cache.CacheRefresherEventHandler - Initializing Umbraco internal event handlers for cache refreshing
+ 2017-07-20 13:18:16,871 [P24252/D2/T1] INFO  Umbraco.Web.Search.ExamineEvents - Initializing Examine and binding to business logic events
+ 2017-07-20 13:18:16,872 [P24252/D2/T1] INFO  Umbraco.Web.Search.ExamineEvents - Adding examine event handlers for index providers: 3
+ 2017-07-20 13:18:16,935 [P24252/D2/T1] INFO  Umbraco.Core.CoreBootManager - Umbraco application startup complete (took 3703ms)
+ 2017-07-20 13:18:18,814 [P24252/D2/T8] INFO  Umbraco.Core.Sync.ApplicationUrlHelper - ApplicationUrl: http://localhost:60437/umbraco (UmbracoModule request)
+ 2017-07-20 13:18:19,259 [P24252/D2/T8] INFO  umbraco.content - Load Xml from file...
+ 2017-07-20 13:18:19,321 [P24252/D2/T8] INFO  umbraco.content - Loaded Xml from file.
+ 2017-07-20 13:18:21,322 [P24252/D2/T8] INFO  Umbraco.Core.PluginManager - Starting resolution types of Umbraco.Core.PropertyEditors.IParameterEditor
+ 2017-07-20 13:18:21,335 [P24252/D2/T8] INFO  Umbraco.Core.PluginManager - Completed resolution of types of Umbraco.Core.PropertyEditors.IParameterEditor, found 0 (took 12ms)
+ 2017-07-20 13:18:34,093 [P24252/D2/T8] WARN  Umbraco.Web.UmbracoModule - Status code is 404 yet TrySkipIisCustomErrors is false - IIS will take over.
+ 2017-07-20 13:18:34,094 [P24252/D2/T8] WARN  Umbraco.Web.Mvc.RenderRouteHandler - The current Document Type errorPage matches a locally declared controller of type SYJMA.Umbraco.Controllers.ErrorPageController. Custom Controllers for Umbraco routing must implement 'Umbraco.Web.Mvc.IRenderController' and inherit from 'System.Web.Mvc.ControllerBase'.
+ 2017-07-20 13:19:19,560 [P24252/D2/T14] INFO  umbraco.BusinessLogic.Log - Log scrubbed.  Removed all items older than 2017-07-19 13:19:19
+ 2017-07-20 13:19:19,860 [P24252/D2/T14] INFO  Umbraco.Core.PluginManager - Starting resolution types of Umbraco.Core.Persistence.Mappers.BaseMapper
+ 2017-07-20 13:19:19,870 [P24252/D2/T14] INFO  Umbraco.Core.PluginManager - Completed resolution of types of Umbraco.Core.Persistence.Mappers.BaseMapper, found 0 (took 9ms)
+ 2017-07-20 13:22:40,181 [P24252/D2/T7] INFO  Umbraco.Core.Publishing.PublishingStrategy - Content 'Forrestdale Primary School - English' with Id '0' has been published.
+ 2017-07-20 13:22:41,108 [P24252/D2/T7] INFO  Umbraco.Core.PluginManager - Starting resolution types of umbraco.interfaces.ICacheRefresher
+ 2017-07-20 13:22:41,121 [P24252/D2/T7] INFO  Umbraco.Core.PluginManager - Completed resolution of types of umbraco.interfaces.ICacheRefresher, found 0 (took 13ms)
+ 2017-07-20 13:22:42,053 [P24252/D2/T26] WARN  Umbraco.Web.Mvc.RenderRouteHandler - The current Document Type calendarForm matches a locally declared controller of type SYJMA.Umbraco.Controllers.CalendarFormController. Custom Controllers for Umbraco routing must implement 'Umbraco.Web.Mvc.IRenderController' and inherit from 'System.Web.Mvc.ControllerBase'.
+ 2017-07-20 13:22:45,240 [P24252/D2/T12] INFO  umbraco.content - Save Xml to file...
+ 2017-07-20 13:22:45,250 [P24252/D2/T12] INFO  umbraco.content - Saved Xml to file.
+ 2017-07-20 13:23:31,831 [P24252/D2/T23] WARN  Umbraco.Web.Mvc.RenderRouteHandler - The current Document Type calendarForm matches a locally declared controller of type SYJMA.Umbraco.Controllers.CalendarFormController. Custom Controllers for Umbraco routing must implement 'Umbraco.Web.Mvc.IRenderController' and inherit from 'System.Web.Mvc.ControllerBase'.
