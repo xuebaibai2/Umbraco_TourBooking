@@ -15,8 +15,8 @@ body {
 
 /* Set padding to keep content from hitting the edges */
 .body-content {
-    padding-left: 10%;
-    padding-right: 10%;
+    /*padding-left: 10%;
+    padding-right: 10%;*/
     min-height: 550px;
     padding-bottom: 40px;
 }

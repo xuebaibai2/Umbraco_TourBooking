@@ -1,0 +1,107 @@
+﻿#syjma_calendar {
+    padding: 0;
+}
+
+.calendarTbl {
+    border: 1px solid black;
+}
+
+    .calendarTbl tr:nth-child(1) {
+        border-bottom: 5px solid white;
+    }
+
+    .calendarTbl tr th {
+        border: 2px solid white;
+        background-color: #5b9bd5;
+        padding-left: 15px;
+        height: 30px;
+        color: white;
+    }
+
+    .calendarTbl tr:nth-child(even) {
+        background-color: #d2deef;
+    }
+
+    .calendarTbl tr:nth-child(odd) {
+        background-color: #eaeff7;
+    }
+
+    .calendarTbl tr td {
+        min-width: 150px;
+        height: 40px;
+        border: 2px solid white;
+        text-align: center;
+    }
+
+#nextWeekBtn, 
+#preWeekBtn {
+    background-color: #dbdbdc;
+    cursor: pointer;
+    text-decoration: none;
+    padding: 4px 25px 4px 25px;
+    border: 1px solid black;
+    height:30px;
+}
+
+#preWeekBtn {
+    float: left;
+    border-left: none;
+}
+
+    #preWeekBtn::after {
+        top: 0px;
+        content: " ";
+        position: absolute;
+        left: -14px;
+        border-top: 15px solid transparent;
+        border-bottom: 15px solid transparent;
+        border-right: 15px solid #dbdbdc;
+    }
+
+    #preWeekBtn::before {
+        top: 0px;
+        content: " ";
+        position: absolute;
+        left: -15px;
+        border-top: 15px solid transparent;
+        border-bottom: 15px solid transparent;
+        border-right: 15px solid black;
+    }
+
+#nextWeekBtn {
+    float: right;
+    border-right:none;
+}
+
+    #nextWeekBtn::after {
+        top: 0px;
+        content: " ";
+        position: absolute;
+        right: -14px;
+        border-top: 15px solid transparent;
+        border-bottom: 15px solid transparent;
+        border-left: 15px solid #dbdbdc;
+    }
+
+    #nextWeekBtn::before {
+        top: 0px;
+        content: " ";
+        position: absolute;
+        right: -15px;
+        border-top: 15px solid transparent;
+        border-bottom: 15px solid transparent;
+        border-left: 15px solid black;
+    }
+
+td.enable {
+    cursor: pointer;
+    background-color: #92d050;
+}
+
+td.selected {
+    background-color: #92d050;
+}
+
+@media (min-width: 0px) and (max-width: 830px) {
+
+}
