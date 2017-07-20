@@ -1,50 +1,27 @@
 ﻿$(document).ready(function () {
-    $('#calendar').fullCalendar({
-        header: {
-            left: 'prev',
-            center: 'title',
-            right: 'agendaWeek month next'
-        },
-        views: {
-            agendaWeek: {
-                columnFormat: 'ddd DD/M'
-            }
-        },
-        defaultView: 'agendaWeek',
-        editable: true,
-        eventLimit: true, // allow "more" link when too many events
-        allDaySlot: false,
-        slotDuration: '01:00:00',
-        minTime: '9:00',
-        maxTime: '17:00',
-        firstDay: 1,
-        weekends: false,
-        height: 240,
-        timezone: 'local',
-        titleFormat: 'D MMM YYYY',
-        eventStartEditable: false,
-        eventDurationEditable: false,
-        eventClick: function (calEvent, jsEvent, view) {
-            removeerrorMSGDiv();
-            $('#externalLink').hide();
-            $('#selectionConfirm').show();
-            $('#selectionConfirm').html(
-                'You have chosen <b>' + calEvent.title + '</b> from ' + calEvent.start.format('hh:mma') + ' until ' + calEvent.end.format('hh:mma') + ' on ' + calEvent.start.format('DD MMMM YYYY') + '.  Click Next to confirm.'
+    
+    calendar.onTourCellHoverIn = function ($currentCell) {
+        $currentCell.addClass("enable");
+    }
+    calendar.onTourCellHoverOut = function ($currentCell) {
+        $currentCell.removeClass("enable");
+    }
+    calendar.onTourClick = function (tourObj, $currentCell) {
+        removeerrorMSGDiv();
+        $('#externalLink').hide();
+        $('#selectionConfirm').show();
+        $('#selectionConfirm').html(
+            'You have chosen <b>' + tourObj.title + '</b> from ' + moment(tourObj.start).format('hh:mma') + ' until ' + moment(tourObj.end).format('hh:mma') + ' on ' + moment(tourObj.start).format('DD MMMM YYYY') + '.  Click Next to confirm.'
         );
-            $('#selectedEventId').val(calEvent.id);
-            $('#selectedEventTitle').val(calEvent.title);
-            $('#selectedEventStart').val(calEvent.start.format());
-            $('#selectedEventEnd').val(calEvent.end.format());
-            $('#isInvoiceOnly').val(calEvent.IsInvoiceOnly);
-            addSelectionClass('.fc-content-skeleton table tbody tr', this, 'eventSelected');
-        }
-    });
 
-    $('button.fc-agendaWeek-button').text('Week View');
-    $('button.fc-month-button').text('Month View');
-
+        $('#selectedEventId').val(tourObj.id);
+        $('#selectedEventTitle').val(tourObj.title);
+        $('#selectedEventStart').val(moment(tourObj.start).format());
+        $('#selectedEventEnd').val(moment(tourObj.end).format());
+        $('#isInvoiceOnly').val(tourObj.IsInvoiceOnly);
+    }
     $('#calendarForm input').on('change', function () {
-        removeEvents();
+        //removeEvents();
         removeerrorMSGDiv();
         addEvents($('input[name=Program]:checked', '#calendarForm').val());
         $('#selectionConfirm').hide();
@@ -61,23 +38,14 @@ function addSelectionClass(parentNode, targetElement, className) {
     $(targetElement).addClass(className);
 }
 
-function addEvents(url) {
+function addEvents(eventname) {
     $.ajax({
         type: 'POST',
-        url: baseUrl + 'umbraco/Surface/JSONData/GetJsonData_Event?eventName=' + url + '&category=' + category,
+        url: baseUrl + 'umbraco/Surface/JSONData/GetJsonData_Event?eventName=' + eventname + '&category=' + category,
         success: function (result) {
-            removeEvents();
-            addEvent(result);
+            calendar.addEventSource(result);
         }
     });
-}
-
-function removeEvents() {
-    $('#calendar').fullCalendar('removeEvents')
-}
-
-function addEvent(events) {
-    $('#calendar').fullCalendar('addEventSource', events);
 }
 
 function removeerrorMSGDiv() {
@@ -86,6 +54,7 @@ function removeerrorMSGDiv() {
 
 function validationForm() {
     if ($('#selectedEventId').val() == '') {
+        $('span[id^="errorMSG"]').remove();
         $('#externalLink').append('<span id="errorMSG" style="color:red;">Please select one event before continue</span>');
         return false;
     }

@@ -20,6 +20,7 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -317,6 +318,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\calendar.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\fullcalendar.css" />
@@ -408,6 +410,7 @@
     <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\toggleField_displayData.js" />
     <Content Include="Scripts\toggleField_replicateData.js" />
+    <Content Include="Scripts\ui.helper.js" />
     <Content Include="Scripts\validation.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

@@ -160,3 +160,7 @@ $RECYCLE.BIN/
 
 # Mac desktop service store files
 .DS_Store
+
+UmbracoTraceLog.*.txt
+segments.gen
+SYJMA.Umbraco/App_Data/TEMP/PluginCache/*
