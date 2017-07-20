@@ -9,8 +9,11 @@
     init: function (date) {
         this.cacheDom();
         this.generateCalendarTbl();
+        this.generateVerticalCalendarTbl();
+        this.displayCalendar();
         this.momentJsSetting();
         this.fillDateInfoToTbl(date);
+        this.fillDataInfoToVerticalTbl(date);
     },
     cacheDom: function () {
         this.$mainDiv = $("#syjma_calendar");
@@ -18,8 +21,32 @@
         this.$preWeekBtn = $("<a />", { id: "preWeekBtn", text: "Previous Week", click: this.eventPreBtnClicked.bind(this) }).appendTo(this.$navBtnDiv);
         this.$nextWeekBtn = $("<a />", { id: "nextWeekBtn", text: "Next Week", click: this.eventNextBtnClicked.bind(this) }).appendTo(this.$navBtnDiv);
         this.$calendarTbl = $("<table />", { class: "calendarTbl" }).appendTo(this.$mainDiv);
+        this.$verticalCalendarTbl = $("<table />", { class: "verticalCalendarTbl" }).appendTo(this.$mainDiv);
         this.$calendarTblHeader = $("<tr>", { id: "calendar_header" }).appendTo(this.$calendarTbl);
-        
+
+    },
+    displayCalendar: function () {
+        var self = this;
+        if ($(window).width() > 830) {
+            $(".calendarTbl").show();
+            $(".verticalCalendarTbl").hide();
+            this.$mainDiv.css("max-width", this.$calendarTbl.outerWidth());
+        } else {
+            $(".calendarTbl").hide();
+            $(".verticalCalendarTbl").show();
+            this.$mainDiv.css("max-width", this.$verticalCalendarTbl.outerWidth());
+        }
+        $(window).resize(function () {
+            if ($(window).width() > 830) {
+                $(".calendarTbl").show();
+                $(".verticalCalendarTbl").hide();
+                self.$mainDiv.css("max-width", self.$calendarTbl.outerWidth());
+            } else {
+                $(".calendarTbl").hide();
+                $(".verticalCalendarTbl").show();
+                self.$mainDiv.css("max-width", self.$verticalCalendarTbl.outerWidth());
+            }
+        });
     },
     generateCalendarTbl: function () {
         //Table header
@@ -37,14 +64,29 @@
                 $dayTr.append($dateTd);
             }
         }
-        this.$mainDiv.css("max-width", this.$calendarTbl.outerWidth());
-        //console.log(this.$calendarTbl.width());
+    },
+    generateVerticalCalendarTbl: function () {
+        //Table body
+        for (var i = 0; i < 5; i++) {
+            var $eventSessionTr = $("<tr>", { id: this.weekConvertor[i] + "-tr" });
+            this.$verticalCalendarTbl.append($eventSessionTr);
+            for (var j = -1; j < 2; j++) {
+                if (j !== -1) {
+                    var $dateTd = $("<td>", { id: this.weekConvertor[i] + "-" + this.dayConvertor[j] + "-v" });
+                } else {
+                    var $dateTd = $("<td>", { id: this.weekConvertor[i] + "-v" })
+                }
+                $eventSessionTr.append($dateTd);
+            }
+        }
     },
     addEventSource: function (eventSourceArray) {
         this.resetCalendar();
+        this.resetVerticalCalendar();
         this.model.eventSourceArray = eventSourceArray;
         this.filterStagingEvents();
         this.renderEvents();
+        this.renderVerticalCalendarEvents();
     },
     resetCalendar: function () {
         this.model.displayEvents = { am: {}, pm: {} };
@@ -54,6 +96,16 @@
             var $currentRow = i === 0 ? $amTr : $pmTr;
             for (var j = 0; j < 5; j++) {
                 var $tempTd = $($currentRow[j]);
+                $tempTd.removeClass();
+                $tempTd.off("click");
+                $tempTd.unbind("mouseenter mouseleave");
+            }
+        }
+    },
+    resetVerticalCalendar: function () {
+        for (var i = 0; i < 5; i++) {
+            for (var j = 0; j < 2; j++) {
+                var $tempTd = $("#" + this.weekConvertor[i] + "-" + this.dayConvertor[j] + "-v");
                 $tempTd.removeClass();
                 $tempTd.off("click");
                 $tempTd.unbind("mouseenter mouseleave");
@@ -106,7 +158,7 @@
         var $pmTr = $("#pm td");
         for (var i = 0; i < 2; i++) {
             var $insertRow = i === 0 ? $amTr : $pmTr;
-            var displayTourGroup = i === 0 ? self.model.displayEvents.am : self.model.displayEvents.pm
+            var displayTourGroup = i === 0 ? self.model.displayEvents.am : self.model.displayEvents.pm;
             for (var j = 0; j < 5; j++) {
                 var $tempTd = $($insertRow[j]);
                 $tempTd.text("");
@@ -114,8 +166,8 @@
                 var tempDate = this.model.date.weekday(j).format("YYYY-MM-DD");
                 for (var tour in displayTourGroup) {
                     var tempTour = displayTourGroup[tour];
-                    var tempEventDate = moment(tempTour.start).format("YYYY-MM-DD");
-                    if (self.isSameDateTime(tempDate, tempEventDate)) {
+                    var tempTourDate = moment(tempTour.start).format("YYYY-MM-DD");
+                    if (self.isSameDateTime(tempDate, tempTourDate)) {
                         var renderText = moment(tempTour.start).format("h:mm a") + " - " + moment(tempTour.end).format("h:mm a");
                         //var renderText = tempTour.title;
                         $tempTd.text(renderText);
@@ -127,8 +179,39 @@
             }
         }
     },
+    renderVerticalCalendarEvents: function () {
+        var self = this;
+        for (var i = 0; i < 5; i++) {
+            for (var j = 0; j < 2; j++) {
+                var tempDate = this.model.date.weekday(i).format("YYYY-MM-DD");
+                var displayTourGroup = j === 0 ? self.model.displayEvents.am : self.model.displayEvents.pm;
+                var $tempTd = $("#" + this.weekConvertor[i] + "-" + this.dayConvertor[j] + "-v");
+                $tempTd.text("");
+                $tempTd.removeClass();
+                for (var tour in displayTourGroup) {
+                    var tempTour = displayTourGroup[tour];
+                    var tempTourDate = moment(tempTour.start).format("YYYY-MM-DD");
+                    if (self.isSameDateTime(tempDate, tempTourDate)) {
+                        var renderText = moment(tempTour.start).format("h:mm a") + " - " + moment(tempTour.end).format("h:mm a");
+                        $tempTd.text(renderText);
+                        $tempTd.addClass(tempTour.id);
+                        $tempTd.off("click").on("click", this.eventTourClick.bind(this));
+                        $tempTd.hover(this.eventTourCellHoverIn.bind(this), this.eventTourCellHoverOut.bind(this));
+                    }
+                }
+            }
+        }
+    },
     eventTourClick: function (e) {
         var $self = $(e.currentTarget);
+        $("td.selected").removeClass("selected");
+        var idElements = $self.attr("id").split("-"); // "am" "pm" or "v" if vertical calendar
+        var lastIdElements = idElements[idElements.length - 1];
+        var $correspondingOtherTd = lastIdElements === "v" ?
+            $("#" + idElements.slice(0, -1).join("-")) :
+            $("#" + idElements.join("-") + "-v");
+        $self.addClass("selected");
+        $correspondingOtherTd.addClass("selected");
         for (var i = 0; i < this.model.eventSourceArray.length; i++) {
             if ($self.hasClass(this.model.eventSourceArray[i].id)) {
                 this.onTourClick(this.model.eventSourceArray[i], $self)
@@ -145,18 +228,24 @@
     },
     eventPreBtnClicked: function () {
         this.resetCalendar();
+        this.resetVerticalCalendar();
         this.model.date = this.model.date.weekday(-7);
         this.updateCalendarHeader();
+        this.updateVerticalCalendarFirstTd();
         this.filterStagingEvents();
         this.renderEvents();
+        this.renderVerticalCalendarEvents();
         return false;
     },
     eventNextBtnClicked: function () {
         this.resetCalendar();
+        this.resetVerticalCalendar();
         this.model.date = this.model.date.weekday(7);
         this.updateCalendarHeader();
+        this.updateVerticalCalendarFirstTd();
         this.filterStagingEvents();
         this.renderEvents();
+        this.renderVerticalCalendarEvents();
         return false;
     },
     onTourClick: function (tourObj, $currentCell) {
@@ -172,6 +261,9 @@
         this.model.date = moment(date);//"2017-07-20"
         this.updateCalendarHeader();
     },
+    fillDataInfoToVerticalTbl: function (data) {
+        this.updateVerticalCalendarFirstTd();
+    },
     momentJsSetting: function () {
         moment.locale("en-AU", {
             week: {
@@ -181,7 +273,13 @@
     },
     updateCalendarHeader: function () {
         for (var i = 0; i < this.$headerTrs.length; i++) {
-            this.$headerTrs[i].innerText = this.model.date.weekday(i).format("ddd DD/MM")
+            this.$headerTrs[i].innerText = this.model.date.weekday(i).format("ddd DD/MM");
+        }
+    },
+    updateVerticalCalendarFirstTd: function () {
+        for (var i = 0; i < 5; i++) {
+            $("#" + this.weekConvertor[i] + "-v").html("");
+            $("#" + this.weekConvertor[i] + "-v").append(this.model.date.weekday(i).format("ddd DD/MM"));
         }
     },
     weekConvertor: {

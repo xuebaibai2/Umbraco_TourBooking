@@ -19,8 +19,6 @@
         $('#selectedEventStart').val(moment(tourObj.start).format());
         $('#selectedEventEnd').val(moment(tourObj.end).format());
         $('#isInvoiceOnly').val(tourObj.IsInvoiceOnly);
-        $("td.selected").removeClass("selected");
-        $currentCell.addClass("selected");
     }
     $('#calendarForm input').on('change', function () {
         //removeEvents();
